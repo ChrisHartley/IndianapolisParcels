@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+
+{% load render_table from django_tables2 %}
+{% load crispy_forms_tags %}
+
+{% block left %}
+		<div class="panel panel-success">
+            <div class="panel-heading">
+              <h3 class="panel-title">Search Criteria</h3>
+            </div>
+            <div class="panel-body">
+			{% if parcelDoesNotExist %}
+				<span id="helpBlock" class="help-block has-error">That parcel does not exist in our inventory.</span>
+			{% endif %}
+		    {% crispy form %}
+            </div>
+          </div>
+{% endblock left %}
+
+{% block center %}
+	{% render_table table %}
+{% endblock center %}
+

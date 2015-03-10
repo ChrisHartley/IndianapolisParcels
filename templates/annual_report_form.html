@@ -1,0 +1,48 @@
+{% extends 'wp-template.html' %}
+{% load crispy_forms_tags %}
+{% block center %}
+As part of the Project Agreement attached to each purchase from Renew Indianapolis, 
+buyers agree to submit an annual, written report by April 1st detailing their progress 
+on the purchased property. From Section 3(d) of Attachment A, Project Agreement:
+<blockquote>
+The Grantee shall submit annual, written reports (“Annual Report”) to the
+Disposing Agent no later than April 1 of each year during the term of this 
+Agreement stating the progress/status/projected timeline of the development and 
+construction of Improvements for the Property, including those properties where 
+construction of Improvements has not yet commenced. The Grantee shall include 
+any additional information in the Annual Report as requested by the Disposing 
+Agent.
+</blockquote>
+<p>
+For your convience you may submit your annual report using this form, one for each property purchased.
+</p>
+{% crispy form %}
+<script>
+// watch the parcel number property inquiry form for changes and submit
+$(function(){
+	$('#id_parcel').change(function(){
+		if ( /[0-9]{7}/.test( $("#id_parcel").val() ) )
+			{
+				var $form = $("#annualReportForm"), 
+					term = $form.find( "input[name='parcel']" ).val(),
+					url = "/lookup_street_address/"
+
+				var posting = $.get( url, { parcel: term } );
+	 
+				// Put the results in a div
+				posting.done(function( data ) {
+					try {
+						var obj = $.parseJSON(data);
+					}
+					catch (e){
+						$( "#result" ).text("No such parcel in our inventory");
+					}
+					$( "#result" ).text(data.streetAddress);
+				});
+		
+			}
+	});
+});
+</script>
+
+{% endblock center %}

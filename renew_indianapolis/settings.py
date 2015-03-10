@@ -36,6 +36,16 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.gis', # added 20150225
+	'crispy_forms', # added 20150225
+	'django_tables2', # added 20150225
+	'django_tables2_reports', # added 20150225
+	'django_filters', # added 20150225
+
+	'property_inventory',
+	'annual_report_form',
+	'property_inquiry',
+	'neighborhood_associations'
 )
 
 MIDDLEWARE_CLASSES = (
@@ -58,8 +68,12 @@ WSGI_APPLICATION = 'renew_indianapolis.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'ENGINE': 'django.contrib.gis.db.backends.postgis', 
+        'NAME': 'geodjango',
+        'USER': 'chris',
+        'PASSWORD': 'huck',
+        'HOST': '',
+        'PORT': '',
     }
 }
 
@@ -81,3 +95,35 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.7/howto/static-files/
 
 STATIC_URL = '/static/'
+
+# custom things added by Chris 
+CRISPY_TEMPLATE_PACK = 'bootstrap3'
+
+TEMPLATE_LOADERS = (
+    'django.template.loaders.filesystem.Loader',
+    'django.template.loaders.app_directories.Loader',
+#     'django.template.loaders.eggs.Loader',
+)
+
+TEMPLATE_DIRS = (
+    # Put strings here, like "/home/html/django_templates" or "C:/www/django/templates".
+    # Always use forward slashes, even on Windows.
+    # Don't forget to use absolute paths, not relative paths.
+	BASE_DIR + '/templates',
+)
+
+TEMPLATE_CONTEXT_PROCESSORS = (
+	"django.contrib.auth.context_processors.auth",
+	"django.core.context_processors.debug",
+	"django.core.context_processors.i18n",
+	"django.core.context_processors.media",
+	"django.core.context_processors.static",
+	"django.core.context_processors.tz",
+	"django.contrib.messages.context_processors.messages",
+	"django.core.context_processors.request"
+)
+
+
+MEDIA_ROOT = '/home/chris/Projects/geodjango/renew_indianapolis/'
+
+from settings_gmail import *
