@@ -16,4 +16,5 @@ urlpatterns = patterns('',
 	url(r'admin-inquiry-list/$', 'property_inquiry.views.inquiry_list'),
 	url(r'property-inquiry/$', 'property_inquiry.views.submitPropertyInquiry'),
 	url(r'search-neighborhood-association/$', get_relevant_neighborhood_assocations.as_view() ),
+	url(r'application_status/$', 'property_inventory.views.showApplications'),
 )

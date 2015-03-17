@@ -40,14 +40,17 @@ class annualReportForm(ModelForm):
 			),
 			Fieldset("Remaining Work",
 				PrependedText('future_expenses','$', active=True, placeholder="0.00"),
-				'work_remaining'
+				'work_remaining',
+				'certificate_of_completion_ready',
+				'property_occupied'
 
 			),
 			Fieldset("Photos",
 				'front_exterior_picture',
 				'back_exterior_picture',
 				'kitchen_picture',
-				'bathroom_picture'
+				'bathroom_picture',
+				'other_picture'
 			),
 			Fieldset("Feedback and comments",
 				'feedback'

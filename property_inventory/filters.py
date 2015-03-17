@@ -13,7 +13,6 @@ class AllValuesNoneFilter(django_filters.ChoiceFilter):
 		self.extra['choices'].insert(0, ('', u'------',))
 		return super(AllValuesNoneFilter, self).field
 
-
 class ApplicationStatusFilters(django_filters.FilterSet):
 	streetAddress = django_filters.CharFilter(lookup_type='icontains')
 	all_applicants = AllValuesNoneFilter(name='applicant', label="Applicant")

@@ -8,7 +8,7 @@ class NeighborhoodAssocationSearchForm(forms.Form):
 	def __init__(self, *args, **kwargs):
 		super(NeighborhoodAssocationSearchForm, self).__init__(*args, **kwargs)
 		self.helper = FormHelper()
-		self.helper.form_id = 'propertyInquiryForm'
+		self.helper.form_id = 'neighborhoodAssocationSearchForm'
 		self.helper.form_class = 'form-horizontal'
 		self.helper.label_class = 'col-lg-3'
 		self.helper.field_class = 'col-lg-8'

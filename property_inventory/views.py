@@ -2,8 +2,11 @@ from django.shortcuts import render
 from django.http import HttpResponse
 import json
 from django.core import serializers
+from django_tables2_reports.config import RequestConfigReport as RequestConfig
 
 from property_inventory.models import Property
+from property_inventory.filters import ApplicationStatusFilters
+from property_inventory.tables import PropertyStatusTable
 
 def getAddressFromParcel(request):
 	response_data = {}
@@ -40,3 +43,19 @@ def getMatchingAddresses(request):
 		return HttpResponse(response_data, content_type="application/json")
 	return HttpResponse("Please submit a search term")
 
+# Show a table with property statuses by sold and approved (in-progress). 
+def	showApplications(request):
+	config = RequestConfig(request)
+
+	soldProperties = Property.objects.all().filter(status__exact='Sold').order_by('status', 'applicant')
+	approvedProperties = Property.objects.all().filter(status__istartswith='Sale').order_by('status', 'applicant')
+
+	soldFilter = ApplicationStatusFilters(request.GET, queryset=soldProperties, prefix="sold-") 
+	approvedFilter = ApplicationStatusFilters(request.GET, queryset=approvedProperties, prefix="approved-") 
+
+	soldTable = PropertyStatusTable(soldFilter, prefix="sold-")
+	approvedTable = PropertyStatusTable(approvedFilter, prefix="approved-")
+
+	config.configure(soldTable)
+	config.configure(approvedTable)
+	return render(request, 'app_status_template.html', {'soldTable': soldTable, 'approvedTable': approvedTable, 'title': 'applications & sale activity', 'soldFilter': soldFilter, 'approvedFilter': approvedFilter})
