@@ -9,7 +9,7 @@ class PropertyStatusTable(TableReport):
 		fields = ("parcel", "streetAddress", "zipcode", "structureType", "applicant", "status", )
 
 
-class PropertySearchResultsTable(TableReport):
+class PropertySearchTable(TableReport):
 	class Meta:
 		model = Property
 		attrs = {"class": "paleblue"}

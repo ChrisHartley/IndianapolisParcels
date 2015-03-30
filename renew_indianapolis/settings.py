@@ -56,6 +56,7 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.auth.middleware.SessionAuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+	'django_tables2_reports.middleware.TableReportMiddleware',
 )
 
 ROOT_URLCONF = 'renew_indianapolis.urls'
@@ -96,6 +97,11 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
+STATICFILES_DIRS = (
+    os.path.join(BASE_DIR, "static"),
+    '/home/chris/Projects/geodjango/renew_indianapolis/static/',
+)
+
 # custom things added by Chris 
 CRISPY_TEMPLATE_PACK = 'bootstrap3'
 
@@ -126,4 +132,11 @@ TEMPLATE_CONTEXT_PROCESSORS = (
 
 MEDIA_ROOT = '/home/chris/Projects/geodjango/renew_indianapolis/'
 
+# for django-tables2-reports
+EXCEL_SUPPORT = 'xlwt'
+
+# for custom_user
+
+
+# import gmail settings and password for sending mail
 from settings_gmail import *

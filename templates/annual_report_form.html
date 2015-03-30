@@ -14,9 +14,14 @@ any additional information in the Annual Report as requested by the Disposing
 Agent.
 </blockquote>
 <p>
-For your convience you may submit your annual report using this form, one for each property purchased.
+For your convenience you may submit your annual report using this form, one for each property purchased.
 </p>
-{% crispy form %}
+{% if success %}
+	<div class="alert alert-success" role ="alert">Thank you for your submission.</div>
+{% elif %}
+	{% crispy form %}
+{% endif %}
+
 <script>
 // watch the parcel number property inquiry form for changes and submit
 $(function(){

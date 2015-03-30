@@ -2,6 +2,7 @@ import django_filters
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Submit
 from property_inventory.models import Property
+from property_inventory.forms import PropertySearchForm
 
 # this allows a None option with the AllValues dropdown.
 class AllValuesNoneFilter(django_filters.ChoiceFilter):
@@ -27,3 +28,15 @@ class ApplicationStatusFilters(django_filters.FilterSet):
 	class Meta:
 		model = Property
 		fields = ['all_applicants', 'streetAddress']
+
+class PropertySearchFilter(django_filters.FilterSet):
+	streetAddress = django_filters.CharFilter(lookup_type='icontains')
+	structureType = django_filters.MultipleChoiceFilter()
+
+	class Meta:
+		model = Property
+		fields = ['parcel', 'streetAddress', 'nsp', 'structureType', 'cdc', 'zone', 'zipcode', 'sidelot_eligible', 'homestead_only', 'bep_demolition']
+		form = PropertySearchForm
+
+
+
