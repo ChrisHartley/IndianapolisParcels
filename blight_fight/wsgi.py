@@ -1,5 +1,5 @@
 """
-WSGI config for renew_indianapolis project.
+WSGI config for blight_fight project.
 
 It exposes the WSGI callable as a module-level variable named ``application``.
 
@@ -8,7 +8,7 @@ https://docs.djangoproject.com/en/1.7/howto/deployment/wsgi/
 """
 
 import os
-os.environ.setdefault("DJANGO_SETTINGS_MODULE", "renew_indianapolis.settings")
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "blight_fight.settings")
 
 from django.core.wsgi import get_wsgi_application
 application = get_wsgi_application()

@@ -3,7 +3,7 @@ import os
 import sys
 
 if __name__ == "__main__":
-    os.environ.setdefault("DJANGO_SETTINGS_MODULE", "renew_indianapolis.settings")
+    os.environ.setdefault("DJANGO_SETTINGS_MODULE", "blight_fight.settings")
 
     from django.core.management import execute_from_command_line
 

@@ -1,5 +1,5 @@
 """
-Django settings for renew_indianapolis project.
+Django settings for blight_fight project.
 
 For more information on this file, see
 https://docs.djangoproject.com/en/1.7/topics/settings/
@@ -59,9 +59,9 @@ MIDDLEWARE_CLASSES = (
 	'django_tables2_reports.middleware.TableReportMiddleware',
 )
 
-ROOT_URLCONF = 'renew_indianapolis.urls'
+ROOT_URLCONF = 'blight_fight.urls'
 
-WSGI_APPLICATION = 'renew_indianapolis.wsgi.application'
+WSGI_APPLICATION = 'blight_fight.wsgi.application'
 
 
 # Database
@@ -99,7 +99,7 @@ STATIC_URL = '/static/'
 
 STATICFILES_DIRS = (
     os.path.join(BASE_DIR, "static"),
-    '/home/chris/Projects/geodjango/renew_indianapolis/static/',
+    '/home/chris/Projects/geodjango/blight_fight/static/',
 )
 
 # custom things added by Chris 
@@ -130,7 +130,7 @@ TEMPLATE_CONTEXT_PROCESSORS = (
 )
 
 
-MEDIA_ROOT = '/home/chris/Projects/geodjango/renew_indianapolis/'
+MEDIA_ROOT = '/home/chris/Projects/geodjango/blight_fight/'
 
 # for django-tables2-reports
 EXCEL_SUPPORT = 'xlwt'

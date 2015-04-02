@@ -6,7 +6,7 @@ from neighborhood_associations.views import get_relevant_neighborhood_assocation
 
 urlpatterns = patterns('',
     # Examples:
-    # url(r'^$', 'renew_indianapolis.views.home', name='home'),
+    # url(r'^$', 'blight_fight.views.home', name='home'),
     # url(r'^blog/', include('blog.urls')),
 
     url(r'^admin/', include(admin.site.urls)),
