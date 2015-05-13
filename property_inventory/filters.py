@@ -1,4 +1,5 @@
 import django_filters
+from django.db.models import Count
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Submit
 from property_inventory.models import Property
@@ -30,8 +31,9 @@ class ApplicationStatusFilters(django_filters.FilterSet):
 		fields = ['all_applicants', 'streetAddress']
 
 class PropertySearchFilter(django_filters.FilterSet):
-	streetAddress = django_filters.CharFilter(lookup_type='icontains')
-	structureType = django_filters.MultipleChoiceFilter()
+	streetAddress = django_filters.CharFilter(lookup_type='icontains', label="Street address")
+#	structureType = django_filters.ModelMultipleChoiceFilter(queryset=Property.objects.order_by('structureType').distinct('structureType'), to_field_name="structureType")
+	structureType = django_filters.ModelMultipleChoiceFilter(queryset=Property.objects.values_list('structureType', flat=True).distinct('structureType').order_by('structureType'), to_field_name="structureType", label="Structure Type")
 
 	class Meta:
 		model = Property

@@ -8,6 +8,7 @@ class PropertySearchForm(forms.ModelForm):
 	class Meta:
 		model = Property
 		fields = ['parcel', 'streetAddress', 'nsp', 'structureType', 'cdc', 'zone', 'zipcode', 'sidelot_eligible', 'homestead_only', 'bep_demolition']
+		
 	
 	def __init__(self, *args, **kwargs):
 		super(PropertySearchForm, self).__init__(*args, **kwargs)

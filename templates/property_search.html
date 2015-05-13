@@ -1,15 +1,12 @@
-{% extends 'wp-template.html' %}
+{% extends 'base.html' %}
 
 {% load render_table from django_tables2 %}
 {% load crispy_forms_tags %}
 
 {% block center %}
 <div id="map" style="width: 900px; height: 700px; position:relative;"></div>
-{% load staticfiles %}
 
-	<link rel="stylesheet" href="{% static "map.css" %}" type="text/css" />
-	<script src="{% static "jquery.validate.min.js" %}"></script>
-
+&nbsp;
 		<div class="panel panel-success">
             <div class="panel-heading">
               <h3 class="panel-title">Search Criteria</h3>
@@ -19,7 +16,23 @@
             </div>
           </div>
 <div  style="overflow: auto; overflow-y: hidden;">
-	{% render_table table %}
+	<table cellpadding="0" cellspacing="0" border="0" id="example" class="paleblue">
+		 <thead>
+			<tr>
+				<th>Parcel</th>
+				<th>Street Address</th>
+				<th>Zipcode</th>
+				<th>Structure Type</th>
+				<th>NSP</th>
+				<th>Sidelot Eligible</th>
+				<th>Homestead Only</th>
+				<th>Status</th>
+				<th>Price</th>
+			</tr>
+		 </thead>
+		 <tbody></tbody>
+	</table>
+
 </div>
 {% endblock center %}
 

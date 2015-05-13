@@ -18,7 +18,7 @@ For your convenience you may submit your annual report using this form, one for 
 </p>
 {% if success %}
 	<div class="alert alert-success" role ="alert">Thank you for your submission.</div>
-{% elif %}
+{% else %}
 	{% crispy form %}
 {% endif %}
 

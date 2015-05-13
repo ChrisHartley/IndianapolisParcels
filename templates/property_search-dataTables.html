@@ -1,0 +1,73 @@
+{% extends 'base.html' %}
+
+{% load render_table from django_tables2 %}
+{% load crispy_forms_tags %}
+
+{% block center %}
+
+{% load staticfiles %}
+
+&nbsp;
+		<div class="panel panel-success">
+            <div class="panel-heading">
+              <h3 class="panel-title">Search Criteria</h3>
+            </div>
+            <div class="panel-body">
+
+            </div>
+          </div>
+<div  style="overflow: auto; overflow-y: hidden;">
+
+	<table cellpadding="0" cellspacing="0" border="0" id="example">
+		 <thead>
+			<tr>
+				<th>Parcel</th>
+				<th>Street Address</th>
+				<th>zipcode</th>
+				<th>structure type</th>
+				<th>cdc</th>
+				<th>zoned</th>
+				<th>nsp</th>
+				<th>quiet_title_complete</th>
+				<th>side_lot_eligible</th>
+				<th>area</th>
+				<th>status</th>
+				<th>price</th>
+
+			</tr>
+		 </thead>
+		 <tbody></tbody>
+	</table>
+<link rel="stylesheet" href="//cdn.datatables.net/1.10.6/css/jquery.dataTables.min.css">
+<script src="//cdn.datatables.net/1.10.6/js/jquery.dataTables.min.js"></script>
+	<script type="text/javascript" language="javascript" class="init">
+		 $(document).ready(function() {
+		     $('#example').dataTable( {
+		         "processing": true,
+		         "ajax": {
+		             "processing": true,
+		             "url": "{% url 'properties_ajax_url' %}",
+		             "dataSrc": ""
+		         },
+
+		         "columns": [
+		                 { "data": "fields.parcel" },
+		                 { "data": "fields.streetAddress" },
+		                 { "data": "fields.zipcode" },
+		                 { "data": "fields.structureType" },
+		                 { "data": "fields.cdc" },	
+		                 { "data": "fields.zone" },
+		                 { "data": "fields.nsp" },
+		                 { "data": "fields.quiet_title_complete" },
+		                 { "data": "fields.sidelot_eligible" },
+		                 { "data": "fields.area" },
+		                 { "data": "fields.status" },
+		                 { "data": "fields.price" },
+
+		             ]
+		     } );
+		 } );
+	</script>
+</div>
+{% endblock center %}
+

@@ -5,15 +5,43 @@ var map, OSMlayer, gmap, gypb, statemLayer, stamenTerrainLayer, drawControls, po
 var selectControl, selectedFeature, selectedFill, selectedLayer;
 var lbStyle, lbStyleMap;
 var searchArea = new Array();
-var clusterStrategy = new OpenLayers.Strategy.Cluster({distance: 15, threshold: 4});
-
-var stamenAttribution = 'Map tiles by <a href="http://stamen.com">Stamen Design</a>, under <a href="http://creativecommons.org/licenses/by/3.0">CC BY 3.0</a>. Data by <a href="http://openstreetmap.org">OpenStreetMap</a>, under <a href="http://creativecommons.org/licenses/by-sa/3.0">CC BY SA</a>.';
-
 
 var geojson_format = new OpenLayers.Format.GeoJSON({
                     'internalProjection': new OpenLayers.Projection("EPSG:900913"),
                     'externalProjection': new OpenLayers.Projection("EPSG:4326")
 });   
+
+var table = $('#example').DataTable({
+					dom: 'T<"clear">lrtip',
+					tableTools: {
+						"sSwfPath": "https://cdn.datatables.net/tabletools/2.2.4/swf/copy_csv_xls.swf",
+						"aButtons": [ "copy",
+										{
+											"sExtends":    "collection",
+											"sButtonText": "Save",
+											"aButtons":    [ "csv", "xls", "pdf" ]             
+										}, "print"
+									]
+					},
+
+					"columns": [
+						{"data": "properties.parcel"},
+						{"data": "properties.streetAddress"},
+						{"data": "properties.zipcode"},
+						{"data": "properties.structureType"},
+						{"data": "properties.nsp"},
+						{"data": "properties.sidelot_eligible"},
+						{"data": "properties.homestead_only"},
+						{"data": "properties.status"},
+						{"data": "properties.price"}
+
+					]
+	});
+
+var stamenAttribution = 'Map tiles by <a href="http://stamen.com">Stamen Design</a>, under <a href="http://creativecommons.org/licenses/by/3.0">CC BY 3.0</a>. Data by <a href="http://openstreetmap.org">OpenStreetMap</a>, under <a href="http://creativecommons.org/licenses/by-sa/3.0">CC BY SA</a>.';
+
+
+
 
 function toggleDraw(element) {
 	if(element.value == "polygon" && element.checked) {
@@ -36,28 +64,12 @@ function onPopupClose(evt) {
 function onFeatureSelect(feature) {
     selectedFeature = feature;
 	selectedLayer = feature.layer;
-	// for regular features we show a nice popup with additional information
-	if (!feature.cluster) {
-		selectedLayer.drawFeature(feature, {fillColor: "#ffff00", strokeColor: "black"});
-    	popup = new OpenLayers.Popup.FramedCloud("chicken", 
-                             feature.geometry.getBounds().getCenterLonLat(),
-                             null,
-                             "<div style='font-size:.8em'>Parcel: " + feature.attributes.parcel +"<br>Address: " + feature.attributes.streetAddress+"<br>Status: " +feature.attributes.status + "<br>Structure Type: "+ feature.attributes.structureType + "<br>Side lot Eligible: "+ feature.attributes.sidelot_eligible + "<br>Homestead only: " + feature.attributes.homestead_only + "</div>",
-                             null, true, onPopupClose);
-	} else { // for feature clusters we show a popup listing the properties contained within.
-		var addresses ="";
-		for (var i=0; i < feature.cluster.length; i++){
-			addresses += feature.cluster[i].attributes.streetAddress + ", " + feature.cluster[i].attributes.parcel +"<br/>"; 
-
-		}
-
-		popup = new OpenLayers.Popup.FramedCloud("chicken", 
-                             feature.geometry.getBounds().getCenterLonLat(),
-                             null,
-                             "<div style='font-size:.8em'>Properties: " + addresses +"</div>",
-                             null, true, onPopupClose);
-	}
-		
+	selectedLayer.drawFeature(feature, {fillColor: "#ffff00", strokeColor: "black"});
+	popup = new OpenLayers.Popup.FramedCloud("chicken", 
+                         feature.geometry.getBounds().getCenterLonLat(),
+                         null,
+						 $.ajax({ type: "GET", url: '/propertyPopup/', data: {parcel: feature.attributes.parcel}, async: false}).responseText,
+                         null, true, onPopupClose);		
     feature.popup = popup;
     map.addPopup(popup);
 	
@@ -124,18 +136,10 @@ $(function() {
 		strokeWidth: '.05', 
 		strokeColor: 'black', 
 		pointRadius: '8', 
-		label:"${label}",
 		fontColor: "#ffffff",
         fontOpacity: 0.8,
 		fillOpacity: 1,
-        fontSize: "12px" 
-	}, {
-		context: {
-			label: function(feature) {
-				// clustered features count or blank if feature is not a cluster
-				return feature.cluster ? feature.cluster.length : "";  
-      		}	
-		}
+        fontSize: "12px"
 	}); 
 
 	var surplusStyleMap = new OpenLayers.StyleMap({fillColor: '#A6CEE3', strokeWidth: '.05', strokeColor: 'black'});
@@ -194,6 +198,11 @@ function getCSV(){
 }
 
 function getSearchResults(data)  {
+	jsonData = JSON.parse(data);
+	table.clear();
+	searchResultsLayer.destroyFeatures();
+	table.rows.add(jsonData.features);
+	table.draw();
 	if (data.length > 60){ // aprox length of geojson string with no features
 		searchResultsLayer.addFeatures(geojson_format.read(data));
 		console.log("Post search extent: " + searchResultsLayer.getDataExtent());
@@ -221,40 +230,6 @@ function toggleSearchOptions(){
 	
 }
 
-function toggleClustering(){
-
-	selectControl.deactivate();
-	map.removeControl(selectControl);
-	map.removeLayer(lbLayer);
-
-	var strategies = [];
-
-	if ( document.getElementById("toggleClustersCheckbox").checked ) {
-		strategies.push(new OpenLayers.Strategy.Fixed());
-		strategies.push(clusterStrategy);
-	}else {
-		strategies.push(new OpenLayers.Strategy.Fixed());
-	}
-
-	lbLayer = new OpenLayers.Layer.Vector("Landbank Properties", {
-		protocol: new OpenLayers.Protocol.HTTP({
-			url: "/search_property/?returnType=geojson",
-			format: new OpenLayers.Format.GeoJSON()
-		}),
-		strategies: strategies,
-		styleMap: lbStyleMap,
-		rendererOptions: { zIndexing: true }
-	});
-	
-	map.addLayer(lbLayer);
-	map.setLayerIndex(lbLayer, 1);
-
-	selectControl = new OpenLayers.Control.SelectFeature([lbLayer, searchResultsLayer],
-		{onSelect: onFeatureSelect, onUnselect: onFeatureUnselect});
-	map.addControl(selectControl);
-	selectControl.activate(); 
-
-}
 
 //jquery ajax form
 $(function(){
@@ -263,6 +238,7 @@ $(function(){
 			getSearchArea();
 			console.log("Pre search extent: " + searchResultsLayer.getDataExtent());
 		},		
+		data: { returnType: 'geojson' },
 		dataType: 'html', // because it makes it a json javascript object if you chose json
 		success: getSearchResults
 	};
@@ -277,7 +253,6 @@ $(function(){
 		    $('#myTable')
 				.empty()
 				.append(data)
-				.endlessPaginate(); 
 		} 
 	};
 
@@ -292,7 +267,7 @@ $(function(){
 			}
 		},
 		submitHandler: function(form) {
-			$(form).ajaxSubmit(optionsTable);
+			//$(form).ajaxSubmit(optionsTable);
 			$(form).ajaxSubmit(options);
 			return false;
 		},
@@ -309,7 +284,8 @@ $(function() {
     });
 	$('#searchToggle').click(function() { toggleSearchOptions(); });
 	$('#downloadButton').click(function() { getCSV(); } );
-	$('#toggleClustersCheckbox').change(function() { toggleClustering(); } );
+	
+
 
  });
 

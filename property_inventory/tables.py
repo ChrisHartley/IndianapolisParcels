@@ -12,5 +12,5 @@ class PropertyStatusTable(TableReport):
 class PropertySearchTable(TableReport):
 	class Meta:
 		model = Property
-		attrs = {"class": "paleblue"}
+		attrs = {"class": "paleblue", "id": "myTable"}
 		fields = ("parcel", "streetAddress", "zipcode", "structureType", "cdc", "zoning", "nsp", "quiet_title_complete", "side_lot_eligible", "area", "status", "bep_demolition", "urban_garden", "price" )

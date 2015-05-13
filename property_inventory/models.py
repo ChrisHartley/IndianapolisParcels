@@ -12,6 +12,9 @@ class Overlay(models.Model):
 
 	def __unicode__(self):
 		return '%s' % (self.name)
+
+	def natural_key(self):
+		return self.name
 	
 	class Meta:
 		abstract = True
@@ -46,12 +49,13 @@ class Property(models.Model):
 	urban_garden = models.BooleanField(default=False, help_text="If the property is currently licensed as an urban garden through the Office of Sustainability")
 	status = models.CharField(max_length=255, null=True, blank=True, help_text="The property's status with Renew Indianapolis")
 	sidelot_eligible = models.BooleanField(default=False, help_text="If the property is currently elgibile for the side-lot program")
-	#sidelot_eligible = models.CharField(max_length=255, null=True, blank=True, help_text="If the property is currently elgibile for the side-lot program")
 	price = models.DecimalField(max_digits=8, decimal_places=2, help_text="The price of the property", null=True)
 	area = models.FloatField(help_text="The parcel area in square feet")
 	applicant = models.CharField(max_length=255, null=True, help_text="Name of current applicant for status page")
 	homestead_only = models.BooleanField(default=False, help_text="Only available for homestead applications")
-	bep_demolition = models.BooleanField(default=False, help_text="Slated for demolition under the Blight Elimination Program")
+	bep_demolition = models.BooleanField(default=False, help_text="Slated for demolition under the Blight Elimination Program", verbose_name="Slated for BEP demolition")
+	project_agreement_released = models.BooleanField(default=False, help_text="Has the project agreement on a sold property been released?")	
+
 
 	class Meta:
 		verbose_name_plural = "properties"
