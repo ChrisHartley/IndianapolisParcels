@@ -61,4 +61,5 @@ class Property(models.Model):
 		verbose_name_plural = "properties"
 	
 	def __unicode__(self):
-		return '%s' % (self.parcel)
+		return '%s - %s' % (self.streetAddress, self.parcel)
+

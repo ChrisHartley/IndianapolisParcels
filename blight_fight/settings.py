@@ -45,7 +45,8 @@ INSTALLED_APPS = (
 	'property_inventory',
 	'annual_report_form',
 	'property_inquiry',
-	'neighborhood_associations'
+	'neighborhood_associations',
+	'property_condition'
 )
 
 MIDDLEWARE_CLASSES = (

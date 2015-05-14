@@ -21,5 +21,6 @@ urlpatterns = patterns('',
 	url(r'propertiesJSON/$', 'property_inventory.views.propertiesAsJSON',  name='properties_ajax_url'),
 	url(r'search_propertyAJAX/$', 'property_inventory.views.searchPropertiesAJAX'),
 	url(r'propertyPopup/$', 'property_inventory.views.propertyPopup'),
+	url(r'condition_report/$', 'property_condition.views.submitConditionReport'),
 
 )
