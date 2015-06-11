@@ -51,10 +51,11 @@ class Property(models.Model):
 	sidelot_eligible = models.BooleanField(default=False, help_text="If the property is currently elgibile for the side-lot program")
 	price = models.DecimalField(max_digits=8, decimal_places=2, help_text="The price of the property", null=True)
 	area = models.FloatField(help_text="The parcel area in square feet")
-	applicant = models.CharField(max_length=255, null=True, help_text="Name of current applicant for status page")
+	applicant = models.CharField(max_length=255, null=True, help_text="Name of current applicant for status page")	# change to foreign key when ready
 	homestead_only = models.BooleanField(default=False, help_text="Only available for homestead applications")
 	bep_demolition = models.BooleanField(default=False, help_text="Slated for demolition under the Blight Elimination Program", verbose_name="Slated for BEP demolition")
 	project_agreement_released = models.BooleanField(default=False, help_text="Has the project agreement on a sold property been released?")	
+	is_active = models.BooleanField(default=True, help_text="Is this property listing active?")
 
 
 	class Meta:

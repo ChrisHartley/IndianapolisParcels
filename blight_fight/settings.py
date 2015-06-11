@@ -1,28 +1,17 @@
 """
 Django settings for blight_fight project.
 
-For more information on this file, see
-https://docs.djangoproject.com/en/1.7/topics/settings/
-
-For the full list of settings and their values, see
-https://docs.djangoproject.com/en/1.7/ref/settings/
 """
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 import os
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 
-
-# Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/1.7/howto/deployment/checklist/
-
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = 'n!ri)qh6@-3&qgzj(&#6a#1-lsbb!j!vh^41ds5&d-f09nv=4*'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
-
-TEMPLATE_DEBUG = True
 
 ALLOWED_HOSTS = []
 
@@ -41,12 +30,15 @@ INSTALLED_APPS = (
 	'django_tables2', # added 20150225
 	'django_tables2_reports', # added 20150225
 	'django_filters', # added 20150225
-
+	'allauth',	# added 20150526
+	'allauth.account', # added 20150526
+	'endless_pagination', # added 20150610 for old style map search.
 	'property_inventory',
 	'annual_report_form',
 	'property_inquiry',
 	'neighborhood_associations',
-	'property_condition'
+	'property_condition',
+	'applicants'
 )
 
 MIDDLEWARE_CLASSES = (
@@ -106,38 +98,74 @@ STATICFILES_DIRS = (
 # custom things added by Chris 
 CRISPY_TEMPLATE_PACK = 'bootstrap3'
 
-TEMPLATE_LOADERS = (
-    'django.template.loaders.filesystem.Loader',
-    'django.template.loaders.app_directories.Loader',
-#     'django.template.loaders.eggs.Loader',
+
+# django-allauth required added 20150526
+TEMPLATES = [
+    {
+        'BACKEND': 'django.template.backends.django.DjangoTemplates',
+        'DIRS': [
+            	BASE_DIR + '/templates',
+        ],
+        'APP_DIRS': True,
+        'OPTIONS': {
+            'context_processors': [
+                # Insert your TEMPLATE_CONTEXT_PROCESSORS here or use this
+                # list if you haven't customized them:
+                'django.contrib.auth.context_processors.auth',
+                'django.template.context_processors.debug',
+                'django.template.context_processors.i18n',
+                'django.template.context_processors.media',
+                'django.template.context_processors.static',
+                'django.template.context_processors.tz',
+                'django.contrib.messages.context_processors.messages',
+				"django.core.context_processors.request",
+				'allauth.account.context_processors.account',
+#				'allauth.socialaccount.context_processors.socialaccount',
+            ],
+        },
+    },
+]
+
+# django all-auth related
+AUTHENTICATION_BACKENDS = (
+
+    # Needed to login by username in Django admin, regardless of `allauth`
+    'django.contrib.auth.backends.ModelBackend',
+
+    # `allauth` specific authentication methods, such as login by e-mail
+    'allauth.account.auth_backends.AuthenticationBackend',
+
 )
 
-TEMPLATE_DIRS = (
-    # Put strings here, like "/home/html/django_templates" or "C:/www/django/templates".
-    # Always use forward slashes, even on Windows.
-    # Don't forget to use absolute paths, not relative paths.
-	BASE_DIR + '/templates',
-)
+#AUTH_USER_MODEL = 'applicants.ApplicantUser'
 
-TEMPLATE_CONTEXT_PROCESSORS = (
-	"django.contrib.auth.context_processors.auth",
-	"django.core.context_processors.debug",
-	"django.core.context_processors.i18n",
-	"django.core.context_processors.media",
-	"django.core.context_processors.static",
-	"django.core.context_processors.tz",
-	"django.contrib.messages.context_processors.messages",
-	"django.core.context_processors.request"
-)
+#django all-auth related
+SITE_ID = 1
+
+# set all-auth to use email as username
+ACCOUNT_USER_MODEL_USERNAME_FIELD = None
+ACCOUNT_EMAIL_REQUIRED = True
+ACCOUNT_USERNAME_REQUIRED = False
+ACCOUNT_AUTHENTICATION_METHOD = 'email'
+
+# used by django-passwords
+PASSWORD_COMPLEXITY = { # You can omit any or all of these for no limit for that particular set
+    "UPPER": 1,        # Uppercase
+    "LOWER": 1,        # Lowercase
+    "LETTERS": 0,       # Either uppercase or lowercase letters
+    "DIGITS": 1,       # Digits
+    "PUNCTUATION": 0,  # Punctuation (string.punctuation)
+    "SPECIAL": 0,      # Not alphanumeric, space or punctuation character
+    "WORDS": 0         # Words (alphanumeric sequences separated by a whitespace or punctuation character)
+}
 
 
+# media settings
 MEDIA_ROOT = '/home/chris/Projects/geodjango/blight_fight/'
+MEDIA_URL = '/media/'
 
 # for django-tables2-reports
 EXCEL_SUPPORT = 'xlwt'
-
-# for custom_user
-
 
 # import gmail settings and password for sending mail
 from settings_gmail import *

@@ -1,0 +1,45 @@
+{% extends 'base-simple.html' %}
+{% load crispy_forms_tags %}
+{% block center %}
+<div class="col-md-6 text-left">{% if pre %}<a href="{% url 'view_annual_report' pre.pk %}">Previous Report</a></p>{% else %}<span class="disabled">At First Report</span>{% endif %}</div>
+<div class="col-md-6 text-right">{% if next %}<a href="{% url 'view_annual_report' next.pk %}">Next Report</a></p>{% else %}<span class="disabled">At Last Report</span>{% endif %}</div>
+
+<h1 class="text-center">{{ record.Property.streetAddress }}</h1>
+
+<dl class="dl-horizontal">
+<dt>Parcel</dt> <dd>{{ record.parcel }}</dd>
+<dt>Buyer name</dt> <dd>{{ record.name }}</dd>
+<dt>Buyer organization</dt> <dd>{{ record.organization }}</dd>
+<dt>Buyer email</dt> <dd>{{ record.email }}</dd>
+<dt>Buyer phone</dt> <dd>{{ record.phone }}</dd>
+</dl>
+<dl class="dl-horizontal">
+<dt>Percent completed</dt> <dd>{{ record.percent_completed }}</dd>
+<dt>Past Expenses</dt> <dd>{{ record.past_expenses }}</dd>
+<dt>Work completed</dt> <dd>{{ record.work_completed }}</dd>
+<dt>Work remaining</dt> <dd>{{ record.work_remaining }}</dd>
+<dt>Future expenses</dt> <dd>{{ record.future_expenses }}</dd>
+<dt>Feedback</dt> <dd>{{ record.feedback }}</dd>
+</dl>
+<dl class="dl-horizontal">
+<dt>Ready for inspection</dt> <dd>{{ record.certificate_of_completion_ready }}</dd>
+<dt>Property occupied</dt><dd>{{ record.property_occupied }}</dd>
+</dl>
+<div class="col-md-6">Front:
+<img src="{{ MEDIA_URL }}{{ record.front_exterior_picture }}" class="img-responsive img-thumbnail"/>
+</div>
+<div class="col-md-6">Back:
+<img src="{{ MEDIA_URL }}{{ record.back_exterior_picture }}" class="img-responsive img-thumbnail"/>
+</div>
+<div class="col-md-6">Kitchen:
+<img src="{{ MEDIA_URL }}{{ record.kitchen_picture }}" class="img-responsive img-thumbnail"/>
+</div>
+<div class="col-md-6">Bathroom:
+<img src="{{ MEDIA_URL }}{{ record.bathroom_picture }}" class="img-responsive img-thumbnail"/>
+</div>
+{% if record.other_picture %}
+<div class="col-md-6">Other:
+<img src="{{ MEDIA_URL }}{{ record.other_picture }}" class="img-responsive img-thumbnail"/>
+</div>
+{% endif %}
+{% endblock center %}

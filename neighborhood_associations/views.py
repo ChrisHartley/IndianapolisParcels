@@ -14,11 +14,11 @@ from property_inventory.models import Property
 # return neighborhood association contacts for given parcel
 class get_relevant_neighborhood_assocations(View):
 
-	def get(self, request):
+	def get(self, request, parcel=None):
 		config = RequestConfig(request)
 		parcelDoesNotExist = False
-		if 'parcel' in request.GET:
-			parcelNumber = request.GET.__getitem__('parcel')
+		if parcel:
+			parcelNumber = parcel
 			form = NeighborhoodAssocationSearchForm(request.GET)
 			try:			
 				selected_property = Property.objects.get(parcel=parcelNumber)

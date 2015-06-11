@@ -11,11 +11,19 @@ from vectorformats.Formats import Django, GeoJSON    # used for geojson display 
 from django.core.serializers import serialize # new in 1.8 supports geojson
 from django.http import JsonResponse
 
-from property_inventory.models import Property
+# these used for search() function, can be removed when that is removed
+from vectorformats.Formats import Django, GeoJSON    # used for geojson display of search results
+import csv # used for csv return of search results
+from django.views.decorators.csrf import csrf_exempt
+from django.db.models import Q
+import operator
+from django.contrib.gis.geos import GEOSGeometry # used for centroid calculation
+
+from property_inventory.models import Property, Zipcode, CDC, Zoning
 from property_inventory.filters import ApplicationStatusFilters
 from property_inventory.tables import PropertyStatusTable
 from property_inventory.tables import PropertySearchTable
-from property_inventory.forms import PropertySearchForm
+from property_inventory.forms import PropertySearchForm, SearchForm
 from property_inventory.filters import PropertySearchFilter
 
 
@@ -71,6 +79,113 @@ def	showApplications(request):
 	config.configure(approvedTable)
 	return render(request, 'app_status_template.html', {'soldTable': soldTable, 'approvedTable': approvedTable, 'title': 'applications & sale activity', 'soldFilter': soldFilter, 'approvedFilter': approvedFilter})
 
+# old search function from renew-django - will be removed in v2.0 
+@csrf_exempt
+def search(request):
+	queries = []
+	properties = Property.objects.all()
+	if request.GET.items():
+		if 'searchType' in request.GET and request.GET['searchType']:
+			searchType = request.GET.__getitem__('searchType')
+			if searchType == "lb":
+				queries.append(Q(propertyType__exact=searchType))				
+			if searchType == "sp":
+				queries.append(Q(propertyType__exact=searchType))
+		if 'parcel' in request.GET and request.GET['parcel']:
+			parcelNumber = request.GET.__getitem__('parcel')
+			queries.append(Q(parcel__exact=parcelNumber))
+		if 'streetAddress' in request.GET and request.GET['streetAddress']:
+			streetAddress = request.GET.__getitem__('streetAddress')
+			queries.append(Q(streetAddress__icontains=streetAddress))
+		if 'minsize' in request.GET and request.GET['minsize']:
+			minsize = request.GET.__getitem__('minsize')
+			queries.append(Q(area__gte=minsize))
+		if 'maxsize' in request.GET and request.GET['maxsize']:
+			minsize = request.GET.__getitem__('maxsize')
+			queries.append(Q(area__lte=minsize))
+		if 'zipcode' in request.GET and request.GET['zipcode']:
+			zipcode = request.GET.getlist('zipcode')
+			queries.append(Q(zipcode__in=Zipcode.objects.filter(id__in=zipcode)))
+		if 'cdc' in request.GET and request.GET['cdc']:
+			cdc = request.GET.getlist('cdc')
+			queries.append(Q(cdc__in=CDC.objects.filter(id__in=cdc)))
+		if 'zone' in request.GET and request.GET['zone']:
+			zone = request.GET.getlist('zone')
+			queries.append(Q(zone__in=Zoning.objects.filter(id__in=zone)))
+		if 'structureType' in request.GET and request.GET['structureType']:
+			structureType = request.GET.getlist('structureType')
+			queries.append(Q(structureType__in=structureType))
+		if 'nsp' in request.GET and request.GET['nsp']:
+			nsp = request.GET.__getitem__('nsp')
+			queries.append(Q(nsp=nsp))
+		if 'sidelot_eligible' in request.GET and request.GET['sidelot_eligible']:
+			sidelot_eligible = request.GET.__getitem__('sidelot_eligible')
+			queries.append(Q(sidelot_eligible=sidelot_eligible))
+		if 'homestead_only' in request.GET and request.GET['homestead_only']:
+			homestead_only = request.GET.__getitem__('homestead_only')
+			queries.append(Q(homestead_only=homestead_only))
+		if 'bep_demolition' in request.GET and request.GET['bep_demolition']:
+			bep_demolition = request.GET.__getitem__('bep_demolition')
+			queries.append(Q(bep_demolition=bep_demolition))
+		if 'searchArea' in request.GET and request.GET['searchArea']:
+			searchArea = request.GET.__getitem__('searchArea')
+			try: 
+				searchGeometry = GEOSGeometry(searchArea, srid=900913)
+			except Exception: 
+				pass
+			else:
+				queries.append(Q(geometry__within=searchGeometry))
+		if 'returnType' in request.GET and request.GET['returnType']:
+			returnType = request.GET.__getitem__('returnType')
+			try:
+				properties = Property.objects.filter(reduce(operator.and_, queries))
+			except:
+				pass # search engines keep sending malformed queries with no search criteria so we want to just return everything in that case
+			if returnType == "html":				
+				return render(request, 'property_search_table_template.html', {'table': properties})
+			if returnType == "csv": 	
+				response = HttpResponse(content_type='text/csv')
+				response['Content-Disposition'] = 'attachment; filename="renew-properties.csv"'
+				writer = csv.writer(response)
+				writer.writerow(["Parcel Number", "Street Address", "Zipcode", "Structure Type", "CDC", "Zoned", "NSP", "Licensed Urban Garden", "Quiet Title", "Sidelot Eligible", "Homestead Only", "BEP Demolition Slated", "Parcel Area ft^2", "Status", "Price", "Lat/Lon"])
+				for row in properties:
+					if row.nsp:
+						nspValue = "Yes"
+					else:
+						nspValue = "No"
+					if row.urban_garden:
+						ugValue = "Yes"
+					else:
+						ugValue = "No"
+					if row.quiet_title_complete:
+						qtValue = "Yes"
+					else:
+						qtValue = "No"
+					if row.sidelot_eligible:
+						slValue = "Yes"
+					else:
+						slValue = "No"
+					if row.homestead_only:
+						hstdValue = "Yes"
+					else:
+						hstdValue = "No"
+					if row.bep_demolition:
+						bepDemolition = "Yes"
+					else:
+						bepDemolition = "No"
+
+					writer.writerow([row.parcel, row.streetAddress, row.zipcode, row.structureType, row.cdc, row.zone, nspValue, ugValue, qtValue, slValue, hstdValue, bepDemolition, row.area, row.status, row.price, GEOSGeometry(row.geometry).centroid])
+				return response	
+
+	try:
+		properties = Property.objects.filter(reduce(operator.and_, queries))
+	except:
+		pass
+	djf = Django.Django(geodjango='geometry', properties=['streetAddress', 'parcel', 'status', 'structureType', 'sidelot_eligible', 'homestead_only', 'price'])
+	geoj = GeoJSON.GeoJSON()
+	s = geoj.encode(djf.decode(properties))
+	return HttpResponse(s)
+
 # search property inventory
 def searchProperties(request):
 #	config = RequestConfig(request)
@@ -116,5 +231,14 @@ def propertyPopup(request):
 	content = "<div style='font-size:.8em'>Parcel: " + str(object_list.parcel) +"<br>Address: " + str(object_list.streetAddress)+"<br>Status: " +str(object_list.status) + "<br>Structure Type: "+ str(object_list.structureType) + "<br>Side lot Eligible: "+ str(object_list.sidelot_eligible) + "<br>Homestead only: " + str(object_list.homestead_only) + "</div>"
 	return HttpResponse(content, content_type='text/plain; charset=utf8')
 #	return HttpResponse(json, content_type='application/json')
+
+# for old style search page - remove in v2.0
+def showMap(request):
+	form = SearchForm()
+	return render_to_response('show_map.html', {
+		'form': form,
+		'title': 'Property Search'
+	}, context_instance=RequestContext(request))
+	
 
 

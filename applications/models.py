@@ -66,10 +66,12 @@ class Application(models.Model):
 
 	HOMESTEAD = 1
 	STANDARD = 2
+	SIDELOT = 3
 
 	APPLICATION_TYPES = ( 
 		(HOMESTEAD, 'Homestead'), 
-		(STANDARD, 'Standard')
+		(STANDARD, 'Standard'),
+		(SIDELOT, 'Sidelot')
 	) 
 
 	WITHDRAWN_STATUS = 1
@@ -143,9 +145,14 @@ class Application(models.Model):
 		blank=False
 	)
 
-	staff_recommendation = models.CharField(
-		max_length=255, 
+	staff_recommendation = models.BooleanField(
 		help_text="Staff recommendation to Review Comittee", 
+		null=True
+	)
+
+	staff_recommendation_notes = models.CharField(
+		max_length=255, 
+		help_text="Explanation of staff recommendation to Review Comittee", 
 		null=True
 	)
 

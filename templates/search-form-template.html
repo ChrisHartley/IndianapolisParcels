@@ -1,0 +1,30 @@
+<!-- <div style='width: 900px;'> -->
+
+<form id="myForm" action="/map/search/" method="get">
+	<ul>
+		<li><input type="checkbox" onclick="toggleDraw(this);" name="searchPolygon" value="polygon">Draw search area on map</input></li>
+		<li><input type="checkbox" id="toggleClustersCheckbox" name="toggleClustersCheckbox"/>Enable marker clustering (faster)</input></li>
+			{% for formItem in form %}
+				{% if forloop.counter0 == 2 %}
+					<!-- <button type="button" id="searchToggle">Show more search options</button></li> -->
+					<h5 id="searchToggle">Show more search options >>></h5>
+					<div id="moreSearchOptions" style="display:none">
+						<em>Hold down Control or Command to select or unselect multiple options.</em>
+				{% endif %}
+					<li><div  class="searchLine">
+						<span class="formLabel">{{ formItem.label_tag }} <a href="#" class="tooltip">[ ? ]
+							<span>{{ formItem.help_text }}</span></a></span>
+						<span class="formField">{{ formItem }} </span>
+					</div></li>			
+			{% endfor %}		
+			</div>				
+		</ul>
+	
+	<input type="hidden" name="searchArea" value="">
+	<input type="hidden" name="searchType" value="lb"/>	
+	<input type="submit" value="Search" name="Search">
+	<button type="button" id="downloadButton">Search and Download Results to an Excel document</button>
+	<input type="reset" value="New Search" onclick="clearDrawn(); clearSearchResults();">	
+
+</form>
+</div>

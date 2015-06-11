@@ -52,5 +52,5 @@ def inquiry_list(request):
 	return render_to_response('property_inquiry_admin.html', {
 		'filter': f, 
 		'title': 'Property Inquiry Admin',
-		'propertyInquiries': table
+		'table': table
 	}, context_instance=RequestContext(request))

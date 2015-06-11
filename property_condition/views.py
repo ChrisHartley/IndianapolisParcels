@@ -14,11 +14,10 @@ def submitConditionReport(request):
 		if form.is_valid():
 			form.save()
 			success = True
-			
 	form = ConditionReportForm()
 	return render_to_response('condition_report.html', {
 		'form': form,
-		'title': 'property inquiry',
+		'title': 'condition report',
 		'success': success
 	}, context_instance=RequestContext(request))
 

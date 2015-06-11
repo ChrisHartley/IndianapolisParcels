@@ -1,0 +1,11 @@
+{% extends 'base-simple.html' %}
+{% load crispy_forms_tags %}
+{% block center %}
+
+	{% if success %}
+		<div class="alert alert-success" role ="alert">Record saved.</div>
+	{% endif %}
+
+	{% crispy form %}
+
+{% endblock center %}
