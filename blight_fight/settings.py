@@ -58,8 +58,6 @@ WSGI_APPLICATION = 'blight_fight.wsgi.application'
 
 
 # Database
-# https://docs.djangoproject.com/en/1.7/ref/settings/#databases
-
 DATABASES = {
     'default': {
         'ENGINE': 'django.contrib.gis.db.backends.postgis', 
@@ -72,8 +70,6 @@ DATABASES = {
 }
 
 # Internationalization
-# https://docs.djangoproject.com/en/1.7/topics/i18n/
-
 LANGUAGE_CODE = 'en-us'
 
 TIME_ZONE = 'UTC'
@@ -148,6 +144,10 @@ ACCOUNT_EMAIL_REQUIRED = True
 ACCOUNT_USERNAME_REQUIRED = False
 ACCOUNT_AUTHENTICATION_METHOD = 'email'
 
+
+# Email settings - for development. Typically over-written by production settings for production use
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+
 # used by django-passwords
 PASSWORD_COMPLEXITY = { # You can omit any or all of these for no limit for that particular set
     "UPPER": 1,        # Uppercase
@@ -168,4 +168,17 @@ MEDIA_URL = '/media/'
 EXCEL_SUPPORT = 'xlwt'
 
 # import gmail settings and password for sending mail
-from settings_gmail import *
+#try:
+#	from settings_gmail import *
+#	EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+#except ImportError:
+#	# if custom email settings aren't defined in the separate file (which has passwords) then just the dummy console backend.
+#	EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+
+
+# Production settings are kept in a separate file, settings_production.py which overrides db, email, secret key, etc with production values
+try:
+	from settings_production import *
+except ImportError:	# 
+	pass	
+
