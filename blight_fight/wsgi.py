@@ -21,7 +21,7 @@ site.addsitedir('/home/django/.virtualenvs/blight_fight/local/lib/python2.7/site
 sys.path.append('/home/django/blight_fight')
 sys.path.append('/home/django/blight_fight/blight_fight')
 
-os.environ['DJANGO_SETTINGS_MODULE'] = 'myproject.settings'
+os.environ['DJANGO_SETTINGS_MODULE'] = 'blight_fight.settings'
 
 # Activate your virtual env
 activate_env=os.path.expanduser("/home/django/.virtualenvs/blight_fight/bin/activate_this.py")
