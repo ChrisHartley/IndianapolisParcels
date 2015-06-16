@@ -186,6 +186,7 @@ def search(request):
 	s = geoj.encode(djf.decode(properties))
 	return HttpResponse(s)
 
+
 # search property inventory
 def searchProperties(request):
 #	config = RequestConfig(request)
