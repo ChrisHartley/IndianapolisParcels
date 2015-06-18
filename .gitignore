@@ -1,4 +1,2 @@
-settings-gmail.py
-settings_gmail.py
+settings_production.py
 *.pyc
-
