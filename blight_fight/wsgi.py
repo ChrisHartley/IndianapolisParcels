@@ -13,6 +13,9 @@ import site
 
 os.environ['DJANGO_SETTINGS_MODULE'] = 'blight_fight.settings'
 
+# in production server we have an extra settings file that overwrites devel settings.
+# If we can import it then we are on production server and need to set up
+# the virtualenv. Sucks that these paths are hard-coded.
 try:
 	from settings_production import *
 
@@ -33,4 +36,3 @@ except ImportError:
 
 from django.core.wsgi import get_wsgi_application
 application = get_wsgi_application()
-
