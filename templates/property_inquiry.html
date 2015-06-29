@@ -44,7 +44,7 @@ We recommend completing a scope of work document during your visit to the proper
 		Search by street name above and then select the property below. If you haven't found a property you are interested in yet, please use our <a href="http://www.renewindianapolis.org/search-map/">Property Map</a>.</br>
 		<select size=6 id="options" style="width: 300px">
 		</select><br/><br/>
-		<label for="result" class="control-label"">Parcel Street Address: </label>
+		<label for="result" class="control-label">Parcel Street Address: </label>
 		<div id="result" class="form-control-static"></div>
 		<div id="structureType"></div>
 		<div id="status"></div>
@@ -81,7 +81,7 @@ $('#id_parcel').change(function(){
 				$( "#result" ).text(data.streetAddress);
 				$( "#structureType" ).text(data.structureType);
 				$( "#status" ).text(data.status);
-				if (data.status == "Sold" || data.status.indexOf('Sale approved by MDC') > -1) {
+				if (data.status.indexOf('Sold') > -1 || data.status.indexOf('Sale approved by MDC') > -1) {
 					$("#status_alert").show("fast");
 					$('#propertyInquiryForm :submit').attr("disabled", "disabled"); // disable form submission
 				}
