@@ -44,11 +44,11 @@ def getAddressFromParcel(request):
 		try:
 			SearchResult = Property.objects.get(streetAddress__iexact=streetAddress)
 		except Property.DoesNotExist:
-			return HttpResponse("No such address in our inventory", content_type="text/plain") 
+			return HttpResponse("No such address in our inventory", content_type="text/plain")
 		return HttpResponse(SearchResult.parcel)
 	return HttpResponse("Please submit a search term")
 
-# Given a street name, return a json object with all the properties in inventory 
+# Given a street name, return a json object with all the properties in inventory
 def getMatchingAddresses(request):
 #	response_data = {}
 	if 'street_name' in request.GET and request.GET['street_name']:
@@ -62,15 +62,15 @@ def getMatchingAddresses(request):
 		return HttpResponse(response_data, content_type="application/json")
 	return HttpResponse("Please submit a search term")
 
-# Show a table with property statuses by sold and approved (in-progress). 
+# Show a table with property statuses by sold and approved (in-progress).
 def	showApplications(request):
 	config = RequestConfig(request)
 
-	soldProperties = Property.objects.all().filter(status__exact='Sold').order_by('status', 'applicant')
+	soldProperties = Property.objects.all().filter(status__istartswith='Sold').order_by('status', 'applicant')
 	approvedProperties = Property.objects.all().filter(status__istartswith='Sale').order_by('status', 'applicant')
 
-	soldFilter = ApplicationStatusFilters(request.GET, queryset=soldProperties, prefix="sold-") 
-	approvedFilter = ApplicationStatusFilters(request.GET, queryset=approvedProperties, prefix="approved-") 
+	soldFilter = ApplicationStatusFilters(request.GET, queryset=soldProperties, prefix="sold-")
+	approvedFilter = ApplicationStatusFilters(request.GET, queryset=approvedProperties, prefix="approved-")
 
 	soldTable = PropertyStatusTable(soldFilter, prefix="sold-")
 	approvedTable = PropertyStatusTable(approvedFilter, prefix="approved-")
@@ -79,7 +79,7 @@ def	showApplications(request):
 	config.configure(approvedTable)
 	return render(request, 'app_status_template.html', {'soldTable': soldTable, 'approvedTable': approvedTable, 'title': 'applications & sale activity', 'soldFilter': soldFilter, 'approvedFilter': approvedFilter})
 
-# old search function from renew-django - will be removed in v2.0 
+# old search function from renew-django - will be removed in v2.0
 @csrf_exempt
 def search(request):
 	queries = []
@@ -88,7 +88,7 @@ def search(request):
 		if 'searchType' in request.GET and request.GET['searchType']:
 			searchType = request.GET.__getitem__('searchType')
 			if searchType == "lb":
-				queries.append(Q(propertyType__exact=searchType))				
+				queries.append(Q(propertyType__exact=searchType))
 			if searchType == "sp":
 				queries.append(Q(propertyType__exact=searchType))
 		if 'parcel' in request.GET and request.GET['parcel']:
@@ -129,9 +129,9 @@ def search(request):
 			queries.append(Q(bep_demolition=bep_demolition))
 		if 'searchArea' in request.GET and request.GET['searchArea']:
 			searchArea = request.GET.__getitem__('searchArea')
-			try: 
+			try:
 				searchGeometry = GEOSGeometry(searchArea, srid=900913)
-			except Exception: 
+			except Exception:
 				pass
 			else:
 				queries.append(Q(geometry__within=searchGeometry))
@@ -141,9 +141,9 @@ def search(request):
 				properties = Property.objects.filter(reduce(operator.and_, queries))
 			except:
 				pass # search engines keep sending malformed queries with no search criteria so we want to just return everything in that case
-			if returnType == "html":				
+			if returnType == "html":
 				return render(request, 'property_search_table_template.html', {'table': properties})
-			if returnType == "csv": 	
+			if returnType == "csv":
 				response = HttpResponse(content_type='text/csv')
 				response['Content-Disposition'] = 'attachment; filename="renew-properties.csv"'
 				writer = csv.writer(response)
@@ -175,7 +175,7 @@ def search(request):
 						bepDemolition = "No"
 
 					writer.writerow([row.parcel, row.streetAddress, row.zipcode, row.structureType, row.cdc, row.zone, nspValue, ugValue, qtValue, slValue, hstdValue, bepDemolition, row.area, row.status, row.price, GEOSGeometry(row.geometry).centroid])
-				return response	
+				return response
 
 	try:
 		properties = Property.objects.filter(reduce(operator.and_, queries))
@@ -191,7 +191,7 @@ def search(request):
 def searchProperties(request):
 #	config = RequestConfig(request)
 
-	f = PropertySearchFilter(request.GET, queryset=Property.objects.filter(propertyType__exact='lb'), prefix="property") 
+	f = PropertySearchFilter(request.GET, queryset=Property.objects.filter(propertyType__exact='lb'), prefix="property")
 #	table = PropertySearchTable(f, prefix="property")
 #	config.configure(table)
 
@@ -240,6 +240,3 @@ def showMap(request):
 		'form': form,
 		'title': 'Property Search'
 	}, context_instance=RequestContext(request))
-	
-
-
