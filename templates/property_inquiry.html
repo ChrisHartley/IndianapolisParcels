@@ -19,8 +19,8 @@ We recommend completing a scope of work document during your visit to the proper
 <!-- the actual submission form -->
 
 		{% load crispy_forms_tags %}
-		{% crispy form %} 
-		
+		{% crispy form %}
+
 <!-- end of column div-->
 	</div>
 
@@ -45,7 +45,7 @@ We recommend completing a scope of work document during your visit to the proper
 		<select size=6 id="options" style="width: 300px">
 		</select><br/><br/>
 		<label for="result" class="control-label"">Parcel Street Address: </label>
-		<div id="result" class="form-control-static"></div>	
+		<div id="result" class="form-control-static"></div>
 		<div id="structureType"></div>
 		<div id="status"></div>
 	</div>
@@ -64,12 +64,12 @@ $('#id_parcel').change(function(){
 	$('#propertyInquiryForm :submit').removeAttr('disabled') // enable form submission
 	if ( /[0-9]{7}/.test( $("#id_parcel").val() ) )
 		{
-			var $form = $("#propertyInquiryForm"), 
+			var $form = $("#propertyInquiryForm"),
 				term = $form.find( "input[name='parcel']" ).val(),
-				url = "lookup_street_address/"
+				url = "/map/lookup_street_address/"
 
 			var posting = $.get( url, { parcel: term } );
- 
+
 			// Put the results in a div
 			posting.done(function( data ) {
 				try {
@@ -83,20 +83,20 @@ $('#id_parcel').change(function(){
 				$( "#status" ).text(data.status);
 				if (data.status == "Sold" || data.status.indexOf('Sale approved by MDC') > -1) {
 					$("#status_alert").show("fast");
-					$('#propertyInquiryForm :submit').attr("disabled", "disabled"); // disable form submission					
+					$('#propertyInquiryForm :submit').attr("disabled", "disabled"); // disable form submission
 				}
 				if (data.structureType == "Vacant Lot") {
 					$("#vacant_lot_alert").show("fast");
 					$('#propertyInquiryForm :submit').attr("disabled", "disabled"); // disable form submission
 				}
 			});
-		
+
 		}
 });
 
 
 // bind to street name form button and submit
-$("#street_name").keyup(function() { 
+$("#street_name").keyup(function() {
  	var $options = $("#options");
 	$("#options").empty();
 	$.getJSON("/lookup_possible_street_addresses/", { street_name: $("#street_name_lookup").find("input[name='street_name']").val()})
