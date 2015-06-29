@@ -43,14 +43,14 @@ def submitPropertyInquiry(request):
 	}, context_instance=RequestContext(request))
 
 # Displays submitted property inquiries
-# Need to add login required decorator once that is up and running
+@login_required
 def inquiry_list(request):
 	config = RequestConfig(request)
-	f = PropertyInquiryFilters(request.GET, queryset=propertyInquiry.objects.all().order_by('-timestamp')) 
+	f = PropertyInquiryFilters(request.GET, queryset=propertyInquiry.objects.all().order_by('-timestamp'))
 	table = PropertyInquiryTable(f)
 	config.configure(table)
 	return render_to_response('property_inquiry_admin.html', {
-		'filter': f, 
+		'filter': f,
 		'title': 'Property Inquiry Admin',
 		'table': table
 	}, context_instance=RequestContext(request))
