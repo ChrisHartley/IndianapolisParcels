@@ -16,7 +16,8 @@ urlpatterns = patterns('',
 	url(r'lookup_possible_street_addresses/$', 'property_inventory.views.getMatchingAddresses'),
 
     url(r'admin-inquiry-list/$', 'property_inquiry.views.inquiry_list'),
-	url(r'property-inquiry/$', 'property_inquiry.views.submitPropertyInquiry'),
+
+    url(r'property_inquiry/$', 'property_inquiry.views.submitPropertyInquiry'),
 
 	url(r'search-neighborhood-association/$', get_relevant_neighborhood_assocations.as_view() ),
 	url(r'search-neighborhood-association/(?P<parcel>[0-9]{7})/$', get_relevant_neighborhood_assocations.as_view() ),
