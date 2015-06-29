@@ -99,7 +99,7 @@ $('#id_parcel').change(function(){
 $("#street_name").keyup(function() {
  	var $options = $("#options");
 	$("#options").empty();
-	$.getJSON("/lookup_possible_street_addresses/", { street_name: $("#street_name_lookup").find("input[name='street_name']").val()})
+	$.getJSON("/map/lookup_possible_street_addresses/", { street_name: $("#street_name_lookup").find("input[name='street_name']").val()})
 	.done(function(data) {
 		$.each(data, function(i, item) {
 			$options.append("<option value='"+item.fields.parcel+"'>"+item.fields.streetAddress+" - "+item.fields.parcel+"</option>");
