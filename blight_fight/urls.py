@@ -11,7 +11,7 @@ urlpatterns = patterns('',
     # url(r'^blog/', include('blog.urls')),
 
     url(r'^admin/', include(admin.site.urls)),
-	url(r'^annual_report/$', 'annual_report_form.views.showAnnualReportForm'),
+	url(r'annual_report/$', 'annual_report_form.views.showAnnualReportForm'),
 	url(r'lookup_street_address/$', 'property_inventory.views.getAddressFromParcel'),
 	url(r'lookup_possible_street_addresses/$', 'property_inventory.views.getMatchingAddresses'),
 	url(r'admin-inquiry-list/$', 'property_inquiry.views.inquiry_list'),
@@ -29,7 +29,7 @@ urlpatterns = patterns('',
 	url(r'search/$', 'property_inventory.views.search'),
 	url(r'show-map/$', 'property_inventory.views.showMap'),
 	url(r'^accounts/profile/', 'users.views.user_profile'),
-	#url(r'^accounts/signup/', 'applicants.views.showUserSignup'),	
+	#url(r'^accounts/signup/', 'applicants.views.showUserSignup'),
 	url(r'^accounts/', include('allauth.urls')), #django all-auth
 )
 
