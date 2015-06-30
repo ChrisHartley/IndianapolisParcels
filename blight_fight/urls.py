@@ -31,7 +31,9 @@ urlpatterns = patterns('',
 	url(r'search_propertyAJAX/$', 'property_inventory.views.searchPropertiesAJAX'),
 	url(r'propertyPopup/$', 'property_inventory.views.propertyPopup'),
 
+    url(r'admin_condition_report/$', 'property_condition.views.condition_report_list'),
 	url(r'condition_report/$', 'property_condition.views.submitConditionReport'),
+
 
     url(r'annual_report/$', 'annual_report_form.views.showAnnualReportForm'),
 	url(r'view_annual_report/(?P<id>[0-9]+)/$', 'annual_report_form.views.showAnnualReportData', name='view_annual_report'),

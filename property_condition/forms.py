@@ -6,12 +6,13 @@ from property_condition.models import ConditionReport
 from property_inventory.models import Property
 
 class ConditionReportForm(forms.ModelForm):
-	Property = forms.ModelChoiceField(queryset=Property.objects.exclude(structureType__exact='Vacant Lot').order_by('streetAddress'))	
+	Property = forms.ModelChoiceField(queryset=Property.objects.exclude(structureType__exact='Vacant Lot').order_by('streetAddress'))
+
 
 	class Meta:
 		model = ConditionReport
 		exclude = []
-			
+
 	def __init__(self, *args, **kwargs):
 		super(ConditionReportForm, self).__init__(*args, **kwargs)
 		self.helper = FormHelper()
@@ -25,6 +26,10 @@ class ConditionReportForm(forms.ModelForm):
 			Fieldset(
 				'Property Condition Report',
 				'Property'
+			),
+			Fieldset(
+				'Property Picture',
+				Div('picture'),
 			),
 			Fieldset(
 				'Roof',
@@ -86,5 +91,3 @@ class ConditionReportForm(forms.ModelForm):
 		)
 		self.helper.form_method = 'post'
 		self.helper.form_action = ''
-
-

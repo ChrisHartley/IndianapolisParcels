@@ -1,5 +1,9 @@
 from django.db import models
+from PIL import Image
 #from property_inventory.models import Property
+
+def content_file_name(instance, filename):
+	return '/'.join(['condition_report', instance.Property.streetAddress, filename])
 
 class ConditionReport(models.Model):
 	GOOD_STATUS = 3
@@ -10,6 +14,8 @@ class ConditionReport(models.Model):
 	STATUS_CHOICES = ( (GOOD_STATUS, 'Good / Satisfactory'), (FAIR_STATUS, 'Fair / Repair'), (POOR_STATUS, 'Poor / Replace'), (NA_STATUS, 'N/A') )
 
 	Property = models.ForeignKey('property_inventory.Property')
+	picture = models.ImageField(upload_to=content_file_name, blank=True)
+	timestamp = models.DateTimeField(auto_now_add=True)
 
 	roof_shingles = models.IntegerField(choices=STATUS_CHOICES, null=True, blank=True, verbose_name='Shingles')
 	roof_shingles_notes = models.CharField(max_length=512, blank=True, verbose_name='Notes')
@@ -72,3 +78,18 @@ class ConditionReport(models.Model):
 	hvac_air_conditioner = models.IntegerField(choices=STATUS_CHOICES, null=True, blank=True, verbose_name='AC')
 	hvac_air_conditioner_notes = models.CharField(max_length=512, blank=True, verbose_name='Notes')
 
+	def save(self, size=(400, 300)):
+	    """
+	    Save Photo after ensuring it is not blank.  Resize as needed.
+	    """
+
+	    if not self.id and not self.picture:
+	        return
+
+	    super(ConditionReport, self).save()
+
+	    filename = self.picture.name
+	    image = Image.open(filename)
+
+	    image.thumbnail(size, Image.ANTIALIAS)
+	    image.save(filename)
