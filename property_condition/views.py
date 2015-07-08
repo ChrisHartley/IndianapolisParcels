@@ -8,10 +8,10 @@ from django_tables2_reports.config import RequestConfigReport as RequestConfig
 from PIL import Image
 
 from property_inventory.models import Property
-from .models import ConditionReport
-from .forms import ConditionReportForm
-from .filters import ConditionReportFilters
-from .tables import ConditionReportTable
+from property_condition.models import ConditionReport
+from property_condition.forms import ConditionReportForm
+from property_condition.filters import ConditionReportFilters
+from property_condition.tables import ConditionReportTable
 
 
 # Displays form template for property inquiry submissions, and saves those submissions
