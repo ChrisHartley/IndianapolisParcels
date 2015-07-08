@@ -25,7 +25,7 @@ urlpatterns = patterns('',
 	url(r'application_status/$', 'property_inventory.views.showApplications'),
 
 	url(r'search/$', 'property_inventory.views.search'),
-	url(r'show-map/$', 'property_inventory.views.showMap'),
+	url(r'search-map/$', 'property_inventory.views.showMap'),
 	url(r'search_property/$', 'property_inventory.views.searchProperties'),
 	url(r'propertiesJSON/$', 'property_inventory.views.propertiesAsJSON',  name='properties_ajax_url'),
 	url(r'search_propertyAJAX/$', 'property_inventory.views.searchPropertiesAJAX'),

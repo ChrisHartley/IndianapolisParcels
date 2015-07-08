@@ -14,15 +14,15 @@ class propertyInquiry(models.Model):
 
 
 	def clean(self):
-		try: 
+		try:
 			structureType = Property.objects.get(parcel=self.parcel).structureType
 			status = Property.objects.get(parcel=self.parcel).status
 		except Property.DoesNotExist:
 			raise ValidationError('That parcel is not in our inventory')
 		if structureType == 'Vacant Lot':
 			raise ValidationError('Our records show this is a vacant lot and so you can not submit a property inquiry. If our data are incorrect, please email us at chris.hartley@renewindianapolis.org so we can correct our data and set up a showing.')
-		if (status == 'Sold' or 'Sale approved by MDC' in status):
-			raise ValidationError('This parcel has been sold or is approved for sale and is no longer available from Renew Indianapolis.')	
-	
+		if ('Sold' in status or 'Sale approved by MDC' in status):
+			raise ValidationError('This parcel has been sold or is approved for sale and is no longer available from Renew Indianapolis.')
+
 	class Meta:
 		verbose_name_plural = "property inquiries"

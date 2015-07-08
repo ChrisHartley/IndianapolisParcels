@@ -15,7 +15,7 @@ class Overlay(models.Model):
 
 	def natural_key(self):
 		return self.name
-	
+
 	class Meta:
 		abstract = True
 
@@ -30,14 +30,14 @@ class Zoning(Overlay):
 
 class Property(models.Model):
 
-	PROPERTY_TYPES = ( ('lb', 'Landbank'), ('sp', 'County Owned Surplus') ) 
+	PROPERTY_TYPES = ( ('lb', 'Landbank'), ('sp', 'County Owned Surplus') )
 
 	geometry = models.MultiPolygonField(srid=4326)
 	objects = models.GeoManager()
 
 	propertyType = models.CharField(choices=PROPERTY_TYPES, max_length=2, verbose_name='property type')
 
-	parcel = models.CharField(max_length=7, unique=True, help_text="The 7 digit local parcel number for a property, ex 1052714", verbose_name='parcel number')	
+	parcel = models.CharField(max_length=7, unique=True, help_text="The 7 digit local parcel number for a property, ex 1052714", verbose_name='parcel number')
 	streetAddress = models.CharField(max_length=255, help_text="Supports partial matching, so you can enter either the full street address (eg 1425 E 11TH ST) to find one property or just the street name (eg 11th st) to find all the properties on that street.", verbose_name='Street Address')
 	nsp = models.BooleanField(default=False, help_text="If a property comes with requirements related to the Neighborhood Stabilization Program.", verbose_name='NSP')
 	quiet_title_complete = models.BooleanField(default=False, help_text="If quiet title process has been completed.", verbose_name='Quiet Title Complete')
@@ -54,13 +54,13 @@ class Property(models.Model):
 	applicant = models.CharField(max_length=255, null=True, help_text="Name of current applicant for status page")	# change to foreign key when ready
 	homestead_only = models.BooleanField(default=False, help_text="Only available for homestead applications")
 	bep_demolition = models.BooleanField(default=False, help_text="Slated for demolition under the Blight Elimination Program", verbose_name="Slated for BEP demolition")
-	project_agreement_released = models.BooleanField(default=False, help_text="Has the project agreement on a sold property been released?")	
+	project_agreement_released = models.BooleanField(default=False, help_text="Has the project agreement on a sold property been released?")
 	is_active = models.BooleanField(default=True, help_text="Is this property listing active?")
+	price_obo = models.BooleanField(default=False, help_text="Price is Or Best Offer")
 
 
 	class Meta:
 		verbose_name_plural = "properties"
-	
+
 	def __unicode__(self):
 		return '%s - %s' % (self.streetAddress, self.parcel)
-
