@@ -3,6 +3,7 @@ from django.shortcuts import render_to_response
 from django.shortcuts import get_object_or_404
 from django.template import RequestContext
 from django_tables2_reports.config import RequestConfigReport as RequestConfig
+from django.contrib.auth.decorators import login_required
 
 from annual_report_form.models import annual_report
 from annual_report_form.forms import annualReportForm
@@ -33,6 +34,7 @@ def showAnnualReportForm(request):
 		'title': "annual report"
 	}, context_instance=RequestContext(request))
 
+@login_required
 def showAnnualReportData(request, id):
 	selected_report = get_object_or_404(annual_report, id=id)
 	title = selected_report.Property.streetAddress + " - annual report"
@@ -55,15 +57,14 @@ def showAnnualReportData(request, id):
 		'pre': pre,
 	}, context_instance=RequestContext(request))
 
+@login_required
 def showAnnualReportIndex(request):
 	config = RequestConfig(request)
-	f = AnnualReportFilters(request.GET, queryset=annual_report.objects.all().order_by('id')) 
+	f = AnnualReportFilters(request.GET, queryset=annual_report.objects.all().order_by('id'))
 	table = AnnualReportTable(f)
 	config.configure(table)
 	return render_to_response('admin-with-filter-table.html', {
-		'filter': f, 
+		'filter': f,
 		'title': 'Annual Report Admin',
 		'table': table
 	}, context_instance=RequestContext(request))
-
-
