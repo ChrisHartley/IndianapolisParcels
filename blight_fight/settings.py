@@ -33,6 +33,7 @@ INSTALLED_APPS = (
 	'allauth',	# added 20150526
 	'allauth.account', # added 20150526
 	'endless_pagination', # added 20150610 for old style map search.
+    'django.contrib.humanize', # added 20150708 to format prices in template
 	'property_inventory',
 	'annual_report_form',
 	'property_inquiry',
@@ -60,7 +61,7 @@ WSGI_APPLICATION = 'blight_fight.wsgi.application'
 # Database
 DATABASES = {
     'default': {
-        'ENGINE': 'django.contrib.gis.db.backends.postgis', 
+        'ENGINE': 'django.contrib.gis.db.backends.postgis',
         'NAME': 'geodjango',
         'USER': 'chris',
         'PASSWORD': 'huck',
@@ -91,7 +92,7 @@ STATICFILES_DIRS = (
     '/home/chris/Projects/geodjango/blight_fight/static/',
 )
 
-# custom things added by Chris 
+# custom things added by Chris
 CRISPY_TEMPLATE_PACK = 'bootstrap3'
 
 
@@ -179,6 +180,5 @@ EXCEL_SUPPORT = 'xlwt'
 # Production settings are kept in a separate file, settings_production.py which overrides db, email, secret key, etc with production values
 try:
 	from settings_production import *
-except ImportError:	# 
-	pass	
-
+except ImportError:	#
+	pass
