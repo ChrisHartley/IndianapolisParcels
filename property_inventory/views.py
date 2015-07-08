@@ -147,7 +147,7 @@ def search(request):
 				response = HttpResponse(content_type='text/csv')
 				response['Content-Disposition'] = 'attachment; filename="renew-properties.csv"'
 				writer = csv.writer(response)
-				writer.writerow(["Parcel Number", "Street Address", "Zipcode", "Structure Type", "CDC", "Zoned", "NSP", "Licensed Urban Garden", "Quiet Title", "Sidelot Eligible", "Homestead Only", "BEP Demolition Slated", "Parcel Area ft^2", "Status", "Price", "Lat/Lon"])
+				writer.writerow(["Parcel Number", "Street Address", "Zipcode", "Structure Type", "CDC", "Zoned", "NSP", "Licensed Urban Garden", "Quiet Title", "Sidelot Eligible", "Homestead Only", "BEP Demolition Slated", "Parcel Area ft^2", "Status", "Price", "Price is Or Best Offer", "Lat/Lon"])
 				for row in properties:
 					if row.nsp:
 						nspValue = "Yes"
@@ -173,8 +173,12 @@ def search(request):
 						bepDemolition = "Yes"
 					else:
 						bepDemolition = "No"
+					if row.price_obo:
+						priceOBO = "Yes"
+					else:
+						priceOBO = "No"
 
-					writer.writerow([row.parcel, row.streetAddress, row.zipcode, row.structureType, row.cdc, row.zone, nspValue, ugValue, qtValue, slValue, hstdValue, bepDemolition, row.area, row.status, row.price, GEOSGeometry(row.geometry).centroid])
+					writer.writerow([row.parcel, row.streetAddress, row.zipcode, row.structureType, row.cdc, row.zone, nspValue, ugValue, qtValue, slValue, hstdValue, bepDemolition, row.area, row.status, row.price, priceOBO, GEOSGeometry(row.geometry).centroid])
 				return response
 
 	try:
@@ -187,7 +191,7 @@ def search(request):
 	return HttpResponse(s)
 
 
-# search property inventory
+# search property inventory - new version
 def searchProperties(request):
 #	config = RequestConfig(request)
 
