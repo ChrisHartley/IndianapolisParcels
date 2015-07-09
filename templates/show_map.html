@@ -7,22 +7,24 @@
   	<link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
 
 	<!-- Bootstrap -->
-	<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
+<!--	<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
 	<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css">
 	<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap-theme.min.css">
-
+-->
 	<!-- jQuery DataTables -->
-	<script src="//cdn.datatables.net/1.10.6/js/jquery.dataTables.min.js"></script>
+<!--	<script src="//cdn.datatables.net/1.10.6/js/jquery.dataTables.min.js"></script>
 	<link rel="stylesheet" href="//cdn.datatables.net/1.10.6/css/jquery.dataTables.css">
+-->
 
 	<!-- dataTables plugins -->
-	<link rel="stylesheet" href="//cdn.datatables.net/responsive/1.0.5/css/dataTables.responsive.css">
+<!--	<link rel="stylesheet" href="//cdn.datatables.net/responsive/1.0.5/css/dataTables.responsive.css">
 	<script src="//cdn.datatables.net/responsive/1.0.5/js/dataTables.responsive.min.js"></script>
-	
+
 	<link rel="stylesheet" href="//cdn.datatables.net/tabletools/2.2.4/css/dataTables.tableTools.css">
 	<script src="//cdn.datatables.net/tabletools/2.2.4/js/dataTables.tableTools.min.js"></script>
+-->
 
-	<!-- jQuery form and validation -- double check if jquery.form is still used -->	
+	<!-- jQuery form and validation -- double check if jquery.form is still used -->
 	<script src="//cdnjs.cloudflare.com/ajax/libs/jquery.form/3.51/jquery.form.min.js"></script>
 	<script src="//ajax.aspnetcdn.com/ajax/jquery.validate/1.13.1/jquery.validate.min.js"></script>
 
@@ -35,23 +37,23 @@
 	<!-- locally hosted map stylesheet - map.js is at the very bottom of file so loaded last -->
 	{% load staticfiles %}
 	<link rel="stylesheet" href="{% static "map.css" %}" type="text/css" />
-	<script src="{% static "endless-pagination.js" %}"></script> 
+	<script src="{% static "endless-pagination.js" %}"></script>
 
 {% endblock wpwrap-header %}
 
 {% block wpwrap-content %}
 
 <script type="text/javascript">
-if(screen.width < 500){ 
+if(screen.width < 500){
 	if(confirm('Would you like to use our mobile optomized property map?')){
-		window.location = "http://www.renewindianapolis.org/mobile-map" 
+		window.location = "http://www.renewindianapolis.org/mobile-map"
 	}
 }
 
 </script>
 <p>Properties coded in <span style="color:#33A02C;">green</span> are listed in our inventory. You can also <a href="http://www.renewindianapolis.org/map/show/search/?returnType=csv&searchType=lb">download a complete list of properties</a>.
 </p>
-			
+
 			<div id="map"  style='width: 900px; height: 700px; position:relative;'><noscript>Since you are not using javascript you will not be able to view the map. You download the complete list of Renew Indianapolis properties using the link below.</noscript><div id="intro" title="Helpful Hints">
 				<ul>
 					<li>Properties coded in <span style="color:#33A02C;">green</span> are available through Renew Indianapolis through either our side lot program or our standard program.</li>
@@ -68,7 +70,7 @@ if(screen.width < 500){
 {% include "search-form-template.html" %}
 
 			<br/>
-		
+
 			</div>
 		<a href="/map/show/search/?returnType=csv&searchType=lb">Download a full list of available properties</a>
 		<div id="resultsTable"><p></p>
