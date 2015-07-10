@@ -7,29 +7,27 @@
    <script src="http://code.jquery.com/jquery-1.10.2.min.js"></script>
     	<link rel="stylesheet" href="http://www.renewindianapolis.org/static/screen.css" type="text/css">
 
-  <!-- Latest compiled and minified CSS -->
-<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css">
-
-<!-- Optional theme -->
-<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap-theme.min.css">
  
-<script type="text/javascript" src="//www.openlayers.org/api/OpenLayers.js"></script>
-	<script type="text/javascript" src="//code.jquery.com/jquery-1.10.2.min.js"></script>
-  	<script type="text/javascript" src="//code.jquery.com/ui/1.10.3/jquery-ui.min.js"></script>
+<script type="text/javascript" src="http://www.openlayers.org/api/OpenLayers.js"></script>
+	<script type="text/javascript" src="http://code.jquery.com/jquery-1.10.2.min.js"></script>
+  	<script type="text/javascript" src="http://code.jquery.com/ui/1.10.3/jquery-ui.min.js"></script>
     	<script type="text/javascript" src="http://maps.stamen.com/js/tile.stamen.js?v1.2.3"></script>
-	<script type="text/javascript" src="//maps.google.com/maps/api/js?v=3.2&sensor=false"></script>
+	<script type="text/javascript" src="http://maps.google.com/maps/api/js?v=3.2&sensor=false"></script>
 
 
 	<script src="/static/map.js"></script>
 	<script src="/static/jquery.form.js"></script> 
-
+	<script src="/static/endless-pagination.js"></script> 
 	<link rel="stylesheet" href="/static/map.css" type="text/css" />
-
+	<script src="/static/browser-warning-auto.js"></script>
 	<script src="/static/jquery.validate.min.js"></script>
 
     	<link rel="stylesheet" href="http://openlayers.org/dev/examples/style.css" type="text/css">
-	<link rel="stylesheet" href="//code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css" />
-	<link rel='stylesheet' id='style-custom-css'  href='//www.renewindianapolis.org/wp-content/themes/bluediamond-v1-08/style-custom.css?ver=3.6.1' type='text/css' media='all' />
+	<link rel="stylesheet" href="http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css" />
+	<link rel="stylesheet" href="http://www.renewindianapolis.org/wp-content/themes/bluediamond-v1-08/style.css" type="text/css" />
+	<link rel="stylesheet" href="http://www.renewindianapolis.org/wp-content/themes/bluediamond-v1-08/stylesheet/foundation-responsive.css">
+	<link rel='stylesheet' id='style-custom-css'  href='http://www.renewindianapolis.org/wp-content/themes/bluediamond-v1-08/style-custom.css?ver=3.6.1' type='text/css' media='all' />
+
 
 
 	<!-- Basic Page Needs
@@ -38,30 +36,48 @@
 	<title>Renew Indianapolis  &raquo; {{ title }}</title>
 
 	<!--[if lt IE 9]>
-		<script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+		<script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
 	<![endif]-->
 
 	<!-- CSS
   ================================================== -->
-	<link rel="stylesheet" href="//www.renewindianapolis.org/wp-content/themes/bluediamond-v1-08/style.css" type="text/css" />
+	<link rel="stylesheet" href="http://www.renewindianapolis.org/wp-content/themes/bluediamond-v1-08/style.css" type="text/css" />
 	
 				<meta name="viewport" content="width=device-width, user-scalable=no">
-		<link rel="stylesheet" href="//www.renewindianapolis.org/wp-content/themes/bluediamond-v1-08/stylesheet/foundation-responsive.css">
+		<link rel="stylesheet" href="http://www.renewindianapolis.org/wp-content/themes/bluediamond-v1-08/stylesheet/foundation-responsive.css">
 		
 	<!--[if IE 7]>
-		<link rel="stylesheet" href="//www.renewindianapolis.org/wp-content/themes/bluediamond-v1-08/stylesheet/ie7-style.css" /> 
+		<link rel="stylesheet" href="http://www.renewindianapolis.org/wp-content/themes/bluediamond-v1-08/stylesheet/ie7-style.css" /> 
 	<![endif]-->	
 	
-	<link rel="shortcut icon" href="//www.renewindianapolis.org/wp-content/uploads/favicon.png" type="image/x-icon" /><link rel="alternate" type="application/rss+xml" title="Renew Indianapolis &raquo; Feed" href="http://www.renewindianapolis.org/feed/" />
+	<link rel="shortcut icon" href="http://www.renewindianapolis.org/wp-content/uploads/favicon.png" type="image/x-icon" /><link rel="alternate" type="application/rss+xml" title="Renew Indianapolis &raquo; Feed" href="http://www.renewindianapolis.org/feed/" />
 <link rel="alternate" type="application/rss+xml" title="Renew Indianapolis &raquo; Comments Feed" href="http://www.renewindianapolis.org/comments/feed/" />
-<link rel='stylesheet' id='style-custom-css'  href='http://www.renewindianapolis.org/wp-content/themes/bluediamond-v1-08/style-custom.css?ver=4.0.1' type='text/css' media='all' />
-<link rel='stylesheet' id='Google-Font-ABeeZee-css'  href='http://fonts.googleapis.com/css?family=ABeeZee%3An%2Ci%2Cb%2Cbi&#038;subset=latin&#038;ver=4.0.1' type='text/css' media='all' />
-<link rel='stylesheet' id='Google-Font-PT+Sans-css'  href='http://fonts.googleapis.com/css?family=PT+Sans%3An%2Ci%2Cb%2Cbi&#038;subset=latin&#038;ver=4.0.1' type='text/css' media='all' />
+		<script type="text/javascript">
+			window._wpemojiSettings = {"baseUrl":"http:\/\/s.w.org\/images\/core\/emoji\/72x72\/","ext":".png","source":{"concatemoji":"http:\/\/www.renewindianapolis.org\/wp-includes\/js\/wp-emoji-release.min.js?ver=4.2.2"}};
+			!function(a,b,c){function d(a){var c=b.createElement("canvas"),d=c.getContext&&c.getContext("2d");return d&&d.fillText?(d.textBaseline="top",d.font="600 32px Arial","flag"===a?(d.fillText(String.fromCharCode(55356,56812,55356,56807),0,0),c.toDataURL().length>3e3):(d.fillText(String.fromCharCode(55357,56835),0,0),0!==d.getImageData(16,16,1,1).data[0])):!1}function e(a){var c=b.createElement("script");c.src=a,c.type="text/javascript",b.getElementsByTagName("head")[0].appendChild(c)}var f,g;c.supports={simple:d("simple"),flag:d("flag")},c.DOMReady=!1,c.readyCallback=function(){c.DOMReady=!0},c.supports.simple&&c.supports.flag||(g=function(){c.readyCallback()},b.addEventListener?(b.addEventListener("DOMContentLoaded",g,!1),a.addEventListener("load",g,!1)):(a.attachEvent("onload",g),b.attachEvent("onreadystatechange",function(){"complete"===b.readyState&&c.readyCallback()})),f=c.source||{},f.concatemoji?e(f.concatemoji):f.wpemoji&&f.twemoji&&(e(f.twemoji),e(f.wpemoji)))}(window,document,window._wpemojiSettings);
+		</script>
+		<style type="text/css">
+img.wp-smiley,
+img.emoji {
+	display: inline !important;
+	border: none !important;
+	box-shadow: none !important;
+	height: 1em !important;
+	width: 1em !important;
+	margin: 0 .07em !important;
+	vertical-align: -0.1em !important;
+	background: none !important;
+	padding: 0 !important;
+}
+</style>
+<link rel='stylesheet' id='style-custom-css'  href='http://www.renewindianapolis.org/wp-content/themes/bluediamond-v1-08/style-custom.css?ver=4.2.2' type='text/css' media='all' />
+<link rel='stylesheet' id='Google-Font-ABeeZee-css'  href='http://fonts.googleapis.com/css?family=ABeeZee%3An%2Ci%2Cb%2Cbi&#038;subset=latin&#038;ver=4.2.2' type='text/css' media='all' />
+<link rel='stylesheet' id='Google-Font-PT+Sans-css'  href='http://fonts.googleapis.com/css?family=PT+Sans%3An%2Ci%2Cb%2Cbi&#038;subset=latin&#038;ver=4.2.2' type='text/css' media='all' />
 <link rel='stylesheet' id='layerslider_css-css'  href='http://www.renewindianapolis.org/wp-content/themes/bluediamond-v1-08/include/plugin/layerslider/css/layerslider.css?ver=4.6.0' type='text/css' media='all' />
-<link rel='stylesheet' id='superfish-css'  href='http://www.renewindianapolis.org/wp-content/themes/bluediamond-v1-08/stylesheet/superfish.css?ver=4.0.1' type='text/css' media='all' />
-<link rel='stylesheet' id='fancybox-css'  href='http://www.renewindianapolis.org/wp-content/themes/bluediamond-v1-08/stylesheet/fancybox.css?ver=4.0.1' type='text/css' media='all' />
-<link rel='stylesheet' id='fancybox-thumbs-css'  href='http://www.renewindianapolis.org/wp-content/themes/bluediamond-v1-08/stylesheet/jquery.fancybox-thumbs.css?ver=4.0.1' type='text/css' media='all' />
-<script type='text/javascript' src='http://www.renewindianapolis.org/wp-includes/js/jquery/jquery.js?ver=1.11.1'></script>
+<link rel='stylesheet' id='superfish-css'  href='http://www.renewindianapolis.org/wp-content/themes/bluediamond-v1-08/stylesheet/superfish.css?ver=4.2.2' type='text/css' media='all' />
+<link rel='stylesheet' id='fancybox-css'  href='http://www.renewindianapolis.org/wp-content/themes/bluediamond-v1-08/stylesheet/fancybox.css?ver=4.2.2' type='text/css' media='all' />
+<link rel='stylesheet' id='fancybox-thumbs-css'  href='http://www.renewindianapolis.org/wp-content/themes/bluediamond-v1-08/stylesheet/jquery.fancybox-thumbs.css?ver=4.2.2' type='text/css' media='all' />
+<script type='text/javascript' src='http://www.renewindianapolis.org/wp-includes/js/jquery/jquery.js?ver=1.11.2'></script>
 <script type='text/javascript' src='http://www.renewindianapolis.org/wp-includes/js/jquery/jquery-migrate.min.js?ver=1.2.1'></script>
 <script type='text/javascript' src='http://www.renewindianapolis.org/wp-content/themes/bluediamond-v1-08/include/plugin/layerslider/js/layerslider.kreaturamedia.jquery.js?ver=4.6.0'></script>
 <script type='text/javascript' src='http://www.renewindianapolis.org/wp-content/themes/bluediamond-v1-08/include/plugin/layerslider/js/jquery-easing-1.3.js?ver=1.3.0'></script>
@@ -70,7 +86,7 @@
 <script type='text/javascript' src='http://www.renewindianapolis.org/wp-content/themes/bluediamond-v1-08/javascript/jquery.fitvids.js?ver=1.0'></script>
 <link rel="EditURI" type="application/rsd+xml" title="RSD" href="http://www.renewindianapolis.org/xmlrpc.php?rsd" />
 <link rel="wlwmanifest" type="application/wlwmanifest+xml" href="http://www.renewindianapolis.org/wp-includes/wlwmanifest.xml" /> 
-<meta name="generator" content="WordPress 4.0.1" />
+<meta name="generator" content="WordPress 4.2.2" />
 <link rel='canonical' href='http://www.renewindianapolis.org/blank-template/' />
 <link rel='shortlink' href='http://www.renewindianapolis.org/?p=541' />
 	
@@ -103,7 +119,7 @@ width: 500px !important;
 }
 </style>
 </head>
-<body class="page page-id-541 page-template-default">
+<body class="page page-id-541 page-template-default" onload="init();">
 <div class="body-outer-wrapper">
 	<div class="body-wrapper boxed-style">
 		
@@ -117,11 +133,12 @@ width: 500px !important;
 			<!-- Navigation -->
 			<div class="clear"></div>
 			<div class="gdl-navigation-wrapper">
-				<div class="responsive-menu-wrapper"><select id="menu-menu-1" class="menu dropdown-menu"><option value="" class="blank">&#8211; Main Menu &#8211;</option><option class="menu-item menu-item-type-post_type menu-item-object-page menu-item-21 menu-item-depth-0" value="http://www.renewindianapolis.org/learn-who-we-are/">learn who we are</option>
+				<div class="responsive-menu-wrapper"><select id="menu-menu-1" class="menu dropdown-menu"><option value="" class="blank">&#8212; Main Menu &#8212;</option><option class="menu-item menu-item-type-post_type menu-item-object-page menu-item-21 menu-item-depth-0" value="http://www.renewindianapolis.org/learn-who-we-are/">learn who we are</option>
 <option class="menu-item menu-item-type-post_type menu-item-object-page menu-item-has-children menu-item-24 menu-item-depth-0" value="http://www.renewindianapolis.org/understand-what-we-do/">understand what we do</option>	<option class="menu-item menu-item-type-post_type menu-item-object-page menu-item-250 menu-item-depth-1" value="http://www.renewindianapolis.org/application-and-buying-timelines/">- our application and buying timelines</option>
 	<option class="menu-item menu-item-type-post_type menu-item-object-page menu-item-251 menu-item-depth-1" value="http://www.renewindianapolis.org/view-our-policies/">- our policies and procedures</option>
 	<option class="menu-item menu-item-type-custom menu-item-object-custom menu-item-546 menu-item-depth-1" value="http://www.renewindianapolis.org/map/application_status/">- applications &#038; sale activity</option>
-	<option class="menu-item menu-item-type-post_type menu-item-object-page menu-item-443 menu-item-depth-1" value="http://www.renewindianapolis.org/nsp-requirements/">- NSP requirements</option>
+	<option class="menu-item menu-item-type-post_type menu-item-object-page menu-item-443 menu-item-depth-1" value="http://www.renewindianapolis.org/nsp-requirements/">- nsp requirements</option>
+	<option class="menu-item menu-item-type-post_type menu-item-object-page menu-item-580 menu-item-depth-1" value="http://www.renewindianapolis.org/data-sharing/">- data sharing</option>
 
 <option class="menu-item menu-item-type-post_type menu-item-object-page menu-item-257 menu-item-depth-0" value="http://www.renewindianapolis.org/read-about-whats-possible/">read what&#8217;s possible</option>
 <option class="menu-item menu-item-type-post_type menu-item-object-page menu-item-112 menu-item-depth-0" value="http://www.renewindianapolis.org/search-map/">our property map</option>
@@ -138,7 +155,8 @@ width: 500px !important;
 	<li id="menu-item-250" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-250"><a href="http://www.renewindianapolis.org/application-and-buying-timelines/">our application and buying timelines</a></li>
 	<li id="menu-item-251" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-251"><a href="http://www.renewindianapolis.org/view-our-policies/">our policies and procedures</a></li>
 	<li id="menu-item-546" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-546"><a href="http://www.renewindianapolis.org/map/application_status/">applications &#038; sale activity</a></li>
-	<li id="menu-item-443" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-443"><a href="http://www.renewindianapolis.org/nsp-requirements/">NSP requirements</a></li>
+	<li id="menu-item-443" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-443"><a href="http://www.renewindianapolis.org/nsp-requirements/">nsp requirements</a></li>
+	<li id="menu-item-580" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-580"><a href="http://www.renewindianapolis.org/data-sharing/">data sharing</a></li>
 </ul>
 </li>
 <li id="menu-item-257" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-257"><a href="http://www.renewindianapolis.org/read-about-whats-possible/">read what&#8217;s possible</a></li>
@@ -162,7 +180,7 @@ width: 500px !important;
 			
 	<div id="post-541" class="post-541 page type-page status-publish hentry">
 	<div class="page-wrapper single-page ">
-		<div class="page-header-wrapper gdl-border-x bottom"><div class="page-header-top-gimmick"></div><h1 class="page-header-title">{{ title }}</h1><span class="page-header-caption"></span></div><div class="row gdl-page-row-wrapper"><div class="gdl-page-left mb0 twelve columns"><div class="row"><div class="gdl-page-item mb0 twelve columns"><div class="row"><div class="twelve columns mb45"><div class="gdl-page-content"><p>{% block center %}<br />
+		<div class="page-header-wrapper gdl-border-x bottom"><div class="page-header-top-gimmick"></div><h1 class="page-header-title">{{ title }}</h1><span class="page-header-caption"></span></div><div class="row gdl-page-row-wrapper"><div class="gdl-page-left mb0 twelve columns"><div class="row"><div class="gdl-page-item mb0 twelve columns"><div class="row"><div class="twelve columns mb45"><div class="gdl-page-content"><p>{% block wpwrap %}<br />
 {% endblock %}</p>
 </div></div><div class="clear"></div></div></div><div class="clear"></div></div></div><div class="clear"></div></div>		<div class="clear"></div>
 	</div> <!-- page wrapper -->
@@ -221,6 +239,6 @@ var ATTR = {"enable":"enable","width":"80","height":"45"};
   ga('send', 'pageview');
 
 </script>
-	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
+
 </body>
 </html>
