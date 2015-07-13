@@ -134,6 +134,9 @@ AUTHENTICATION_BACKENDS = (
 
 )
 
+LOGIN_URL = '/map/accounts/login'
+LOGIN_REDIRECT_URL = '/map/accounts/profile'
+LOGOUT_URL = '/map/accounts/logout'
 #AUTH_USER_MODEL = 'applicants.ApplicantUser'
 
 #django all-auth related

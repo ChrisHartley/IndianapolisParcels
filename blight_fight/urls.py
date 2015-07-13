@@ -34,7 +34,6 @@ urlpatterns = patterns('',
     url(r'admin_condition_report/$', 'property_condition.views.condition_report_list'),
 	url(r'condition_report/$', 'property_condition.views.submitConditionReport'),
 
-
     url(r'annual-report/$', 'annual_report_form.views.showAnnualReportForm'),
 	url(r'view_annual_report/(?P<id>[0-9]+)/$', 'annual_report_form.views.showAnnualReportData', name='view_annual_report'),
 	url(r'admin_annual_report/$', 'annual_report_form.views.showAnnualReportIndex'),
