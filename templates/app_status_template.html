@@ -1,5 +1,5 @@
 {% extends 'wp-template.html' %}
-{% block center %}
+{% block wpwrap %}
 {% load render_table from django_tables2 %}
 {% load crispy_forms_tags %}
 The following applications have been completed and are being reviewed by Renew Indianapolis and the Metropolitan Development Commission:<br/>
@@ -8,4 +8,4 @@ The following applications have been completed and are being reviewed by Renew I
 The following sales have been completed:<br/>
 {% render_table soldTable %}
 <br/><br/>
-{% endblock center %}
+{% endblock wpwrap %}
