@@ -40,7 +40,7 @@ urlpatterns = patterns('',
 
 	url(r'accounts/profile/', 'users.views.user_profile'),
 	#url(r'accounts/signup/', 'applicants.views.showUserSignup'),
-	url(r'/map/accounts/', include('allauth.urls')), #django all-auth
+	url(r'map/accounts/', include('allauth.urls')), #django all-auth
 )
 
 if settings.DEBUG:
