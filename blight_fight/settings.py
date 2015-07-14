@@ -141,7 +141,7 @@ LOGOUT_URL = '/map/accounts/logout'
 #AUTH_USER_MODEL = 'applicants.ApplicantUser'
 
 #django all-auth related
-#SITE_ID = 1
+SITE_ID = 2
 
 # set all-auth to use email as username
 ACCOUNT_USER_MODEL_USERNAME_FIELD = None
