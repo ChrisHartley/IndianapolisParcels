@@ -25,6 +25,7 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.sites', #required by allauth
     'django.contrib.gis', # added 20150225
 	'crispy_forms', # added 20150225
 	'django_tables2', # added 20150225
@@ -140,7 +141,7 @@ LOGOUT_URL = '/map/accounts/logout'
 #AUTH_USER_MODEL = 'applicants.ApplicantUser'
 
 #django all-auth related
-SITE_ID = 1
+#SITE_ID = 1
 
 # set all-auth to use email as username
 ACCOUNT_USER_MODEL_USERNAME_FIELD = None
