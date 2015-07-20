@@ -31,7 +31,7 @@ urlpatterns = patterns('',
 	url(r'search_propertyAJAX/$', 'property_inventory.views.searchPropertiesAJAX'),
 	url(r'propertyPopup/$', 'property_inventory.views.propertyPopup'),
 
-    url(r'admin_condition_report/$', 'property_condition.views.condition_report_list'),
+    url(r'admin-condition-report/$', 'property_condition.views.condition_report_list'),
 	url(r'condition_report/$', 'property_condition.views.submitConditionReport'),
 
     url(r'annual-report/$', 'annual_report_form.views.showAnnualReportForm'),
@@ -42,6 +42,9 @@ urlpatterns = patterns('',
 	#url(r'accounts/signup/', 'applicants.views.showUserSignup'),
 	#url(r'map/accounts/', include('allauth.urls')), #django all-auth
     url(r'accounts/', include('allauth.urls')), #django all-auth
+
+#    url(r'apply/', 'applications.views.submitApplication'),
+
 )
 
 if settings.DEBUG:
