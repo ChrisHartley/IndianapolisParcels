@@ -15,9 +15,6 @@ from property_condition.forms import ConditionReportForm
 from property_condition.filters import ConditionReportFilters
 from property_condition.tables import ConditionReportTable
 
-def is_city_staff(user):
-	return user.groups.filter(name='City Staff').exists()
-
 # Displays form template for property condition submissions, and saves those submissions
 @user_passes_test(lambda u: u.groups.filter(name='City Staff').exists() or u.is_staff)
 def submitConditionReport(request):
@@ -36,7 +33,7 @@ def submitConditionReport(request):
 	}, context_instance=RequestContext(request))
 
 # Displays submitted property condition reports
-@staff_member_required
+@user_passes_test(lambda u: u.groups.filter(name='City Staff').exists() or u.is_staff)
 def condition_report_list(request):
 	config = RequestConfig(request)
 	f = ConditionReportFilters(request.GET, queryset=ConditionReport.objects.all())
