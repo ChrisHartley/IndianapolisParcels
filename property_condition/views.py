@@ -7,8 +7,6 @@ from django.contrib.admin.views.decorators import staff_member_required
 
 from django_tables2_reports.config import RequestConfigReport as RequestConfig
 
-from PIL import Image
-
 from property_inventory.models import Property
 from property_condition.models import ConditionReport
 from property_condition.forms import ConditionReportForm
@@ -18,7 +16,6 @@ from property_condition.tables import ConditionReportTable
 # Displays form template for property condition submissions, and saves those submissions
 @user_passes_test(lambda u: u.groups.filter(name='City Staff').exists() or u.is_staff)
 def submitConditionReport(request):
-	parcelNumber = False
 	success = False
 	if request.method == 'POST':
 		form = ConditionReportForm(request.POST, request.FILES)
@@ -40,7 +37,7 @@ def condition_report_list(request):
 	table = ConditionReportTable(f)
 	config.configure(table)
 	return render_to_response('admin-with-filter-table.html', {
-		'filter': f,
+	#	'filter': f,
 		'title': 'Condition Reports Admin',
-		'table': table
+	#	'table': table
 	}, context_instance=RequestContext(request))
