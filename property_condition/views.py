@@ -7,6 +7,7 @@ from django.contrib.admin.views.decorators import staff_member_required
 
 from django_tables2_reports.config import RequestConfigReport as RequestConfig
 
+from property_inquiry.models import propertyInquiry
 from property_inventory.models import Property
 from property_condition.models import ConditionReport
 from property_condition.forms import ConditionReportForm
@@ -33,7 +34,7 @@ def submitConditionReport(request):
 #@user_passes_test(lambda u: u.groups.filter(name='City Staff').exists() or u.is_staff)
 def condition_report_list(request):
 	config = RequestConfig(request)
-	f = ConditionReportFilters(request.GET, queryset=ConditionReport.objects.all().order_by('-timestamp'))
+	f = ConditionReportFilters(request.GET, queryset=propertyInquiry.objects.all().order_by('-timestamp'))
 	table = ConditionReportTable(f)
 	config.configure(table)
 	return render_to_response('admin-with-filter-table.html', {
