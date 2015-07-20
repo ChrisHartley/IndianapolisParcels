@@ -38,6 +38,6 @@ def condition_report_list(request):
 	config.configure(table)
 	return render_to_response('admin-with-filter-table.html', {
 	#	'filter': f,
-		'title': 'Condition Reports Admin',
+		'title': 'Condition Reports Admin'
 	#	'table': table
 	}, context_instance=RequestContext(request))
