@@ -2,6 +2,8 @@ from django.shortcuts import render
 from django.shortcuts import render_to_response
 from django.template import RequestContext
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import user_passes_test
+from django.contrib.admin.views.decorators import staff_member_required
 
 from django_tables2_reports.config import RequestConfigReport as RequestConfig
 
@@ -13,9 +15,12 @@ from property_condition.forms import ConditionReportForm
 from property_condition.filters import ConditionReportFilters
 from property_condition.tables import ConditionReportTable
 
+def is_city_staff(user):
+	return user.groups.filter(name='City Staff').exists()
 
-# Displays form template for property inquiry submissions, and saves those submissions
+# Displays form template for property condition submissions, and saves those submissions
 @login_required
+@user_passes_test(lambda u: u.groups.filter(name='City Staff').exists() or u.is_staff)
 def submitConditionReport(request):
 	parcelNumber = False
 	success = False
@@ -31,8 +36,9 @@ def submitConditionReport(request):
 		'success': success
 	}, context_instance=RequestContext(request))
 
-# Displays submitted property inquiries
+# Displays submitted property condition reports
 @login_required
+@staff_member_required
 def condition_report_list(request):
 	config = RequestConfig(request)
 	f = ConditionReportFilters(request.GET, queryset=ConditionReport.objects.all())
