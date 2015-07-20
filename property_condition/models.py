@@ -95,8 +95,8 @@ class ConditionReport(models.Model):
 
 	    super(ConditionReport, self).save()
 
-	    filename = self.picture.name
-	    image = Image.open(self.picture.path)
+	    filename = self.picture.path
+	    image = Image.open(filename)
 
 	    image.thumbnail(size, Image.ANTIALIAS)
 	    image.save(filename)
