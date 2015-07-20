@@ -19,7 +19,6 @@ def is_city_staff(user):
 	return user.groups.filter(name='City Staff').exists()
 
 # Displays form template for property condition submissions, and saves those submissions
-@login_required
 @user_passes_test(lambda u: u.groups.filter(name='City Staff').exists() or u.is_staff)
 def submitConditionReport(request):
 	parcelNumber = False
@@ -37,7 +36,6 @@ def submitConditionReport(request):
 	}, context_instance=RequestContext(request))
 
 # Displays submitted property condition reports
-@login_required
 @staff_member_required
 def condition_report_list(request):
 	config = RequestConfig(request)
