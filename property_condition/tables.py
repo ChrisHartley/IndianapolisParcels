@@ -5,7 +5,7 @@ from .models import ConditionReport
 from property_inventory.models import Property
 
 class ConditionReportTable(TableReport):
-    condition_avg = tables2.Column()
+    #condition_avg = tables2.Column()
 
     class Meta:
 		model = ConditionReport
