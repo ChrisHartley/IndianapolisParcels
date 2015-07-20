@@ -36,7 +36,7 @@ def condition_report_list(request):
 	f = ConditionReportFilters(request.GET, queryset=ConditionReport.objects.all().order_by('-timestamp'))
 	table = ConditionReportTable(f)
 	config.configure(table)
-	return render_to_response('property_inquiry_admin.html', {
+	return render_to_response('admin-with-filter-table.html', {
 		'filter': f,
 		'title': 'Condition Reports Admin',
 		'table': table
