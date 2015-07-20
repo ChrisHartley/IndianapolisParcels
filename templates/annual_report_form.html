@@ -1,6 +1,12 @@
-{% extends 'wp-template.html' %}
+{% extends 'wp-template-header.html' %}
 {% load crispy_forms_tags %}
-{% block wpwrap %}
+{% block wpwrap-header %}
+<!-- Bootstrap -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap-theme.min.css">
+{% endblock wpwrap-header %}
+{% block wpwrap-content %}
 As part of the Project Agreement attached to each purchase from Renew Indianapolis,
 buyers agree to submit an annual, written report by April 1st detailing their progress
 on the purchased property. From Section 3(d) of Attachment A, Project Agreement:
@@ -50,4 +56,4 @@ $(function(){
 });
 </script>
 
-{% endblock wpwrap %}
+{% endblock wpwrap-content %}
