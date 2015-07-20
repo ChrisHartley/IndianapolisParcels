@@ -51,7 +51,7 @@ def inquiry_list(request):
 	f = PropertyInquiryFilters(request.GET, queryset=propertyInquiry.objects.all().order_by('-timestamp'))
 	table = PropertyInquiryTable(f)
 	config.configure(table)
-	return render_to_response('property_inquiry_admin.html', {
+	return render_to_response('admin-with-filter-table.html', {
 		'filter': f,
 		'title': 'Property Inquiry Admin',
 		'table': table
