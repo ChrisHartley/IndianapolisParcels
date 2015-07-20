@@ -33,11 +33,11 @@ def submitConditionReport(request):
 #@user_passes_test(lambda u: u.groups.filter(name='City Staff').exists() or u.is_staff)
 def condition_report_list(request):
 	config = RequestConfig(request)
-	#f = ConditionReportFilters(request.GET, queryset=ConditionReport.objects.all())
-	#table = ConditionReportTable(f)
-	#config.configure(table)
-	return render_to_response('admin-with-filter-table.html', {
-	#	'filter': f,
-		'title': 'Condition Reports Admin'
-	#	'table': table
+	f = ConditionReportFilters(request.GET, queryset=ConditionReport.objects.all().order_by('-timestamp'))
+	table = ConditionReportTable(f)
+	config.configure(table)
+	return render_to_response('property_inquiry_admin.html', {
+		'filter': f,
+		'title': 'Condition Reports Admin',
+		'table': table
 	}, context_instance=RequestContext(request))
