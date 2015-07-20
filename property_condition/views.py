@@ -30,14 +30,14 @@ def submitConditionReport(request):
 	}, context_instance=RequestContext(request))
 
 # Displays submitted property condition reports
-@user_passes_test(lambda u: u.groups.filter(name='City Staff').exists() or u.is_staff)
+#@user_passes_test(lambda u: u.groups.filter(name='City Staff').exists() or u.is_staff)
 def condition_report_list(request):
 	config = RequestConfig(request)
 	f = ConditionReportFilters(request.GET, queryset=ConditionReport.objects.all())
 	table = ConditionReportTable(f)
 	config.configure(table)
 	return render_to_response('admin-with-filter-table.html', {
-	#	'filter': f,
-		'title': 'Condition Reports Admin'
-	#	'table': table
+		'filter': f,
+		'title': 'Condition Reports Admin',
+		'table': table
 	}, context_instance=RequestContext(request))
