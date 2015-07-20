@@ -3,6 +3,11 @@
 {% load render_table from django_tables2 %}
 {% load crispy_forms_tags %}
 
+{% block header %}
+{% load staticfiles %}
+<link rel="stylesheet" href="{% static "screen.css" %}" type="text/css" />
+
+{% endblock header %}
 
 {% block left %}
 		<div class="panel panel-success">
