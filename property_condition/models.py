@@ -1,6 +1,7 @@
 from django.db import models
 from PIL import Image
 import numpy as np
+from django.conf import settings
 #from property_inventory.models import Property
 
 def content_file_name(instance, filename):
@@ -86,17 +87,18 @@ class ConditionReport(models.Model):
 			return np.round(np.mean(clean), 1)
 
 	def save(self, size=(400, 300)):
-	    """
-	    Save Photo after ensuring it is not blank.  Resize as needed.
-	    """
+		"""
+		Save Photo after ensuring it is not blank.  Resize as needed.
+		"""
 
-	    if not self.id and not self.picture:
-	        return
+		if not self.id and not self.picture:
+		    return
 
-	    super(ConditionReport, self).save()
+		super(ConditionReport, self).save()
 
-	    filename = self.picture.path
-	    image = Image.open(filename)
+		filename = self.picture.path
+		print filename
+		image = Image.open(filename)
 
-	    image.thumbnail(size, Image.ANTIALIAS)
-	    image.save(filename)
+		image.thumbnail(size, Image.ANTIALIAS)
+		image.save(filename)
