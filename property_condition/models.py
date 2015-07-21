@@ -93,7 +93,7 @@ class ConditionReport(models.Model):
 
 		super(ConditionReport, self).save()
 
-		if self.pictures:
+		if self.picture:
 			filename = self.picture.path
 			image = Image.open(filename)
 
