@@ -1,5 +1,5 @@
 Django==1.8.1
-Pillow==2.7.0
+Pillow==2.9.0
 argparse==1.2.1
 django-allauth==0.20.0
 django-crispy-forms==1.4.0
