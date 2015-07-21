@@ -91,14 +91,11 @@ class ConditionReport(models.Model):
 		Save Photo after ensuring it is not blank.  Resize as needed.
 		"""
 
-		if not self.id and not self.picture:
-		    return
-
 		super(ConditionReport, self).save()
 
-		filename = self.picture.path
-		print filename
-		image = Image.open(filename)
+		if self.pictures:
+			filename = self.picture.path
+			image = Image.open(filename)
 
-		image.thumbnail(size, Image.ANTIALIAS)
-		image.save(filename)
+			image.thumbnail(size, Image.ANTIALIAS)
+			image.save(filename)
