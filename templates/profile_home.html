@@ -1,0 +1,48 @@
+{% extends 'allauth-wp-base.html' %}
+{% load render_table from django_tables2 %}
+{% block extra_head %}
+{% endblock extra_head %}
+
+{% block content %}
+<row class="col-md-12">&nbsp</row>
+<row class="col-md-12">
+<span class="col-md-7">
+    {% if not profile %}
+    <div class="alert alert-warning">Please complete your profile with your full name and contact information.</div>
+    {% endif %}
+    {% if not profile %}
+    <div class="alert alert-warning">Please verify your email address.</div>
+    {% endif %}
+
+    <p class="lead">
+Welcome {{ profile.first_name }},
+Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque a ultricies mi.
+    </p>
+    <p>
+Mauris sit amet massa tempor, ullamcorper quam eget, ornare metus. Aliquam in dapibus arcu. Quisque scelerisque, erat eu scelerisque lobortis, elit magna porttitor dolor, vitae blandit ipsum mi eu arcu. Nam pellentesque neque lorem, at placerat purus molestie eget. Maecenas ut felis rutrum, euismod metus in, pulvinar elit. Morbi porta, felis eget pulvinar varius, dui erat porta orci, eget dapibus velit leo vitae lorem. Vestibulum et pharetra ligula. Proin vel ipsum quis ante hendrerit laoreet sed eget felis.
+    </p>
+</span>
+<span class="col-md-5">
+<p class="">
+<h3>Property Inquiries</h3>
+{% render_table property_inquiries %}
+<p class="text-center">
+<a href="{% url 'submit_property_inquiry' %}" class="btn btn-primary" role="button">Submit a Property Inquiry</a>
+</p>
+</p>
+<p class="">
+<h3>Applications</h3>
+{% render_table applications %}
+<p class="text-center">
+<a href="{% url 'process_application' 'new' %}" class="btn btn-primary" role="button">Submit an Application</a>
+</p>
+</p>
+<!--
+<span class="">
+<h3>Organizations</h3>
+{% render_table organizations %}
+</span>
+</span>
+-->
+</row>
+{% endblock content %}

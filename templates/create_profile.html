@@ -1,0 +1,14 @@
+{% extends 'wp-template-header.html' %}
+{% block wpwrap-header %}
+<!-- Bootstrap -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap-theme.min.css">
+{% endblock wpwrap-header %}
+
+{% block wpwrap-content %}
+{% load crispy_forms_tags %}
+{% crispy form %}
+{% crispy formset %}
+
+{% endblock wpwrap-content %}

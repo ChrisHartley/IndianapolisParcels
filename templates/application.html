@@ -1,0 +1,84 @@
+{% extends 'wp-template-header.html' %}
+{% block wpwrap-header %}
+<!-- Bootstrap -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap-theme.min.css">
+{% endblock wpwrap-header %}
+
+{% block wpwrap-content %}
+{% if success %}
+<div id="success" class="alert alert-success" role="alert">Your application was successfully submitted.</div>
+{% else %}
+
+{% load crispy_forms_tags %}
+{% crispy form %}
+
+{%endif%}
+
+<script>
+$('#id_Property').change(function(){
+		$("#result").text();
+			var $form = $("#propertyInquiryForm"),
+				term = $("#id_Property option:selected").text().match(/[0-9]{7}$/),
+				url = "/lookup_street_address/"
+
+			var posting = $.get( url, { parcel: term[0] } );
+
+			// Put the results in a div
+			posting.done(function( data ) {
+				try {
+					var obj = $.parseJSON(data);
+				}
+				catch (e){
+					$( "#structureType" ).text("Error finding property");
+					$( "#status" ).text("Error finding property");
+					$( "#sidelot_eligible" ).text("Error finding property");
+				}
+				$( "#structureType" ).text(data.structureType);
+				$( "#status" ).text(data.status);
+				$( "#sidelot_eligible" ).text(data.sidelot_eligible);
+			});
+});
+
+// Show the correct sections per the application type selected.
+function showAppropriateSections(value){
+	if (value === '3') { // 3 = sidelot app
+		console.log('sidelot selected');
+		$('.standard-app').hide(400);
+		$('.homestead-app').hide(400);
+		$('.sidelot-app').show(400);
+	}
+	if (value === '2') { // 2 = standard app
+		console.log('standard selected');
+		$('.homestead-app').hide(400);
+		$('.sidelot-app').hide(400);
+		$('.standard-app').show(400);
+	}
+	if (value === '1') { // 1 = homestead app
+		console.log('homestead selected');
+		$('.standard-app').hide(400);
+		$('.sidelot-app').hide(400);
+		$('.homestead-app').show(400);
+	}
+	if (value === '') { // initial default
+		console.log('default selected');
+		$('.standard-app').hide();
+		$('.homestead-app').hide();
+		$('.sidelot-app').hide();
+
+	}
+
+}
+
+$(function(){
+	showAppropriateSections($('#id_application_type').val());
+});
+
+$('#id_application_type').change(function() {
+	showAppropriateSections($(this).val());
+});
+
+</script>
+
+{% endblock wpwrap-content %}

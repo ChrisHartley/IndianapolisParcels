@@ -1,0 +1,53 @@
+{% extends 'wp-template-header.html' %}
+
+{% block wpwrap-header %}
+<!-- Bootstrap -->
+<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
+<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css">
+<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap-theme.min.css">
+
+{% block extra_head %}
+
+
+{% endblock extra_head %}
+
+{% endblock wpwrap-header%}
+
+{% block wpwrap-content %}
+<div class="container">
+
+{% if messages %}
+<div class="panel panel-default">
+  <div class="panel-heading">Messages:</div>
+  <ul class="list-group">
+{% for message in messages %}
+<li class="list-group-item">{{message}}</li>
+{% endfor %}
+  </ul>
+</div>
+{% endif %}
+
+<div>
+    <ul class="nav nav-tabs" role="navigation">
+{% if user.is_authenticated %}
+<li><a href="{% url 'applicants_home' %}">Home</a></li>
+<li><a href="{% url 'applicants_profile' %}">Profile</a></li>
+<li><a href="{% url 'applicants_organization' %}">Organizations</a></li>
+<li><a href="{% url 'account_email' %}">Change E-mail</a></li>
+<li><a href="{% url 'account_logout' %}">Sign Out</a></li>
+{% else %}
+<li><a href="{% url 'account_login' %}">Sign In</a></li>
+<li><a href="{% url 'account_signup' %}">Create Account</a></li>
+{% endif %}
+  </ul>
+</div>
+<div class="col-lg-11">
+{% block content %}
+{% endblock %}
+</div>
+{% block extra_body %}
+{% endblock %}
+
+</div>
+
+{% endblock wpwrap-content%}

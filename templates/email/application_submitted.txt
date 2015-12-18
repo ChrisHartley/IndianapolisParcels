@@ -1,0 +1,23 @@
+Hello {{ user }},
+
+Thank you for submitting your application for {{ Property.streetAddress }}, parcel # {{ Property.parcel }}. Your application will be reviewed by our staff
+within the next several days. If we need any additional information from you we will be in touch, otherwise your application will be reviewed by our
+Review Committee.
+
+If you have questions or would like to modify your application, please contact chris.hartley@renewindianapolis.org.
+
+Our applications go through a multi-step approval process:
+1) Staff review for completeness, schedule for Review Committee (deadline is two Fridays before the last Thursday of the month)
+2) Review Committee (last Thursday of the month) where they can recommend for approval, not recommend for approval, or table for further information
+3) Board of Directors (first Thursday of the month) where they can approve, not approve, or table for further information
+4) The Indianapolis Department of Metropolitan Development can accept or deny the recommendations of the Board of Directors
+5) The Metropolitan Development Commission (second Wednesday of the month), appointed by the Mayor of Indianapolis and the City-County Council votes
+to give final approval.
+6) We send a purchase agreement to the title company of your choosing and they begin preparing the title work and removing any trash or weed liens on the title.
+This can take anywhere from one to several weeks, depending on the property and title company. Once the title company notifies us that they are ready to close we
+will contact you to schedule a day and time that works for everyone.
+
+
+Thank you for your application,
+
+Renew Indianapolis
