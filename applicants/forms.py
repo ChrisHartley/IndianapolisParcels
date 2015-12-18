@@ -1,37 +1,134 @@
 from django import forms
-from applicants.models import ApplicantUser
+from applicants.models import Organization, ApplicantProfile
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Submit, Layout, Fieldset, ButtonHolder, Div, Button, MultiField, Field
 from crispy_forms.bootstrap import FormActions
 from passwords.fields import PasswordField
+from localflavor.us.forms import USPhoneNumberField, USZipCodeField, USPSSelect, USStateField, USStateSelect
 
-class NewApplicantSignupForm(forms.ModelForm):
-	password = PasswordField(label="Password")
+from .widgets import AddAnotherWidgetWrapper
 
+
+class OrganizationForm(forms.ModelForm):
+	phone_number = USPhoneNumberField()
+	mailing_address_state = USStateField(widget=USStateSelect, required=True, label='State')
+	mailing_address_zip =  USZipCodeField(required=True, label='Zipcode')
+	
 	class Meta:
-		model = ApplicantUser
-		fields = ('name','email', 'organization', 'password')
-		exclude = []
-			
-		def __init__(self, *args, **kwargs):
-			super(NewApplicantSignupForm, self).__init__(*args, **kwargs)
+		model = Organization
+		exclude = ['user', 'date_created']
+
+	def __init__(self, *args, **kwargs):
+			super(OrganizationForm, self).__init__(*args, **kwargs)
 			self.helper = FormHelper()
-			self.helper.form_id = 'NewApplicantSignupForm'
+			self.helper.form_id = 'OrganizationForm'
 			self.helper.form_class = 'form-horizontal'
-			self.helper.field_class = 'col-lg-4'
-			self.helper.label_class = 'col-lg-2'
+			#self.helper.field_class = 'col-lg-4'
+			#self.helper.label_class = 'col-lg-2'
+			self.helper.form_tag = True
+
 			self.helper.layout = Layout(
 				Fieldset(
-					'New User Signup',
-					'name',
-					'email',
+					'Add Organization',
+					Field('name'),
+					Field('phone_number'),
+					css_class='well'
+				),
+				Fieldset(
+					'Mailing Address',
+					Field('mailing_address_line1'),
+					Field('mailing_address_line2'),
+					Field('mailing_address_line3'),
+					Field('mailing_address_city'),
+					Field('mailing_address_state'),
+					Field('mailing_address_zip'),
+					css_class='well'
+				),
+				Fieldset(
+					'Supporting Documents',
+					Field('sos_business_entity_report'),
+					Field('irs_determination_letter'),
+					Field('most_recent_financial_statement'),
+					css_class='well'
 				),
 	 			FormActions(
 					Button('cancel', 'Cancel'),
-					Submit('save', 'Create account')
+					Submit('save', 'Create organization')
 				)
 			)
 			self.helper.form_method = 'post'
 			self.helper.form_action = ''
 
 
+class SignupForm(forms.Form):
+    first_name = forms.CharField(max_length=30, label='First name')
+    last_name = forms.CharField(max_length=30, label='Last name')
+    phone_number = USPhoneNumberField()
+    mailing_address_line1 = forms.CharField(max_length='100', required=True, label='Line 1')
+    mailing_address_line2 = forms.CharField(max_length='100', required=False, label='Line 2')
+    mailing_address_line3 = forms.CharField(max_length='100', required=False, label='Line 3')
+    mailing_address_city = forms.CharField(max_length='100', required=True, label='City')
+    mailing_address_state = USStateField(widget=USStateSelect, required=True, label='State')
+    mailing_address_zip =  USZipCodeField(required=True, label='Zipcode')
+
+    def signup(self, request, user):
+        user.first_name = self.cleaned_data['first_name']
+        user.last_name = self.cleaned_data['last_name']
+        user.save()
+        profile = ApplicantProfile()
+        profile.phone_number = self.cleaned_data['phone_number']
+        profile.mailing_address_line1 = self.cleaned_data['mailing_address_line1']
+        profile.mailing_address_line2 = self.cleaned_data['mailing_address_line2']
+        profile.mailing_address_line3 = self.cleaned_data['mailing_address_line3']
+        profile.mailing_address_city = self.cleaned_data['mailing_address_city']
+        profile.mailing_address_state = self.cleaned_data['mailing_address_state']
+        profile.mailing_address_zip = self.cleaned_data['mailing_address_zip']
+        profile.user = user
+        profile.save()
+
+
+
+class ApplicantProfileForm(forms.ModelForm):
+	# organization = forms.ModelChoiceField(
+    #     queryset=Organization.objects.all().order_by('name'),
+    #     widget=AddAnotherWidgetWrapper(
+    #         forms.Select(),
+    #         Organization,
+    #     ),
+	# 	required=False
+    # )
+	class Meta:
+		model = ApplicantProfile
+		exclude = ['user']
+
+	def __init__(self, *args, **kwargs):
+			super(ApplicantProfileForm, self).__init__(*args, **kwargs)
+			self.helper = FormHelper()
+			self.helper.form_id = 'ApplicantProfileForm'
+			self.helper.form_class = 'form-horizontal'
+			self.helper.field_class = 'col-lg-4'
+			self.helper.label_class = 'col-lg-2'
+			self.helper.render_unmentioned_fields = True
+			self.helper.layout = Layout(
+				Fieldset(
+					'Add Details',
+					Field('phone_number'),
+					css_class='well'
+				),
+				Fieldset(
+					'Mailing Address',
+					Field('mailing_address_line1'),
+					Field('mailing_address_line2'),
+					Field('mailing_address_line3'),
+					Field('mailing_address_city'),
+					Field('mailing_address_state'),
+					Field('mailing_address_zip'),
+					css_class='well'
+				),
+				FormActions(
+					Button('cancel', 'Cancel'),
+					Submit('save', 'Save')
+				)
+			)
+			self.helper.form_method = 'post'
+			self.helper.form_action = ''

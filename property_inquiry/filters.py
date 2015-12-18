@@ -15,11 +15,11 @@ class AllValuesNoneFilter(django_filters.ChoiceFilter):
 
 class PropertyInquiryFilters(django_filters.FilterSet):
 	timestamp = django_filters.DateRangeFilter()
-	applicant_name = django_filters.CharFilter(lookup_type='icontains')
-	applicant_email_address = django_filters.CharFilter(lookup_type='icontains')
+	#applicant_name = django_filters.CharFilter(lookup_type='icontains')
+	#applicant_email_address = django_filters.CharFilter(lookup_type='icontains')
 	all_applicants = AllValuesNoneFilter(name='applicant_name', label="Applicant")
 	Property__streetAddress = django_filters.CharFilter(lookup_type='icontains', label='Street Address')
 
 	class Meta:
 		model = propertyInquiry
-		fields = ['parcel', 'applicant_name', 'applicant_email_address','timestamp', 'all_applicants']
+		fields = ['Property','timestamp', 'all_applicants']

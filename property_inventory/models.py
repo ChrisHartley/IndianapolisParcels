@@ -62,5 +62,8 @@ class Property(models.Model):
 	class Meta:
 		verbose_name_plural = "properties"
 
+ 	def natural_key(self):
+		return '%s - %s' % (self.streetAddress, self.parcel)
+
 	def __unicode__(self):
 		return '%s - %s' % (self.streetAddress, self.parcel)

@@ -21,6 +21,7 @@
             <th>Property</th>
             <th>Applications Type</th>
             <th>Status</th>
+            <th>URL</th>
         </tr>
     </thead>
     <tbody></tbody>
@@ -41,7 +42,7 @@
                     // `data` option, which defaults to the column being worked with, in
                     // this case `data: 0`.
                     "render": function ( data, type, row ) {
-                        url = "<a href='applications/"+data+"'>"+data+"</a>"
+                        url = "<a href='applications/edit/"+data+"'>"+data+"</a>"
                         return url;
                     },
                     "targets": 0
@@ -54,6 +55,7 @@
                     { "data": "fields.Property" },
                     { "data": "fields.application_type" },
                     { "data": "fields.status" },
+                    { "data": "url" },
             ]
          } );
      } );

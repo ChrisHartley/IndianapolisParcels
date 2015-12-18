@@ -1,19 +1,16 @@
-{% extends 'wp-template-header.html' %}
+{% extends 'allauth-wp-base.html' %}
 
-{% load crispy_forms_tags %}
-{% block wpwrap-header %}
-<!-- Bootstrap -->
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css">
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap-theme.min.css">
-{% endblock wpwrap-header %}
+{% block extra_head %}
+<link href="//cdnjs.cloudflare.com/ajax/libs/select2/4.0.0/css/select2.min.css" rel="stylesheet" />
+<script src="//cdnjs.cloudflare.com/ajax/libs/select2/4.0.0/js/select2.min.js"></script>
 
-{% block wpwrap-content %}
+{% endblock extra_head %}
+
+{% block content %}
+<div class="row">&nbsp</div>
+
 <div class="row">
-Before you submit a scheduling request we recommend you do a drive by of the property to evaluate the exterior condition and location.</br> Once you have found one or more properties you would like to go inside please fill out and submit the form below. We will forward your request to a representative from the city who will contact you to set up a time to visit the property. You should expect to hear from them within 5 business days. <br/>If you know the parcel number of the property you are interested in you can enter it directly in the space provided, otherwise you can search by street name on the right, then click on the property you are interested in to copy the parcel number to the correct space.
-</div>
-<div class="row">
-We recommend completing a scope of work document during your visit to the property. You can download our scope of work template here: <a href="http://www.renewindianapolis.org/wp-content/uploads/Example-Scope-of-Work-updated.xls">Example-Scope-of-Work-updated.xls</a>
+We recommend completing a scope of work document during your visit to the property. You can download our scope of work template here: <a href="//www.renewindianapolis.org/wp-content/uploads/Example-Scope-of-Work-updated.xls">Example-Scope-of-Work-updated.xls</a>
 </div>
 <div class="row">&nbsp</div>
 {% if parcel %}
@@ -31,30 +28,16 @@ We recommend completing a scope of work document during your visit to the proper
 	</div>
 
 	<!-- spacer -->
-	<div class="col-md-1"></div>
 
-	<div class="col-md-4">
-		<form  id="street_name_lookup">
-			<input type="text" id="street_name" name="street_name" placeholder="Enter street name">
-  			<input type="button" value="Search by street name" id="streetLookup">
-		</form>
-		<br/>
-		<div class="alert alert-danger" role="alert" id="vacant_lot_alert" style='display: none'>
-		Our records show this is a vacant lot and so you can not submit a property inquiry. If our data are incorrect, please <a href="mailto:chris.hartley@renewindianapolis.org">email us</a> so we can correct our data and set up a showing.
-		</div>
-		<div class="alert alert-danger" role="alert" id="status_alert" style='display: none'>
-		This parcel has been sold or is approved for sale and is no longer available from Renew Indianapolis.
-		</div>
 
-		<!-- street address search results shown here -->
-		Search by street name above and then select the property below. If you haven't found a property you are interested in yet, please use our <a href="http://www.renewindianapolis.org/search-map/">Property Map</a>.</br>
-		<select size=6 id="options" style="width: 300px">
-		</select><br/><br/>
-		<label for="result" class="control-label">Parcel Street Address: </label>
-		<div id="result" class="form-control-static"></div>
-		<div id="structureType"></div>
-		<div id="status"></div>
+	<div class="col-md-5">
+
+		<label for="structureType">Structure Type: </label><div id="structureType"></div>
+		<label for="price">Price: </label><div id="price"></div>
+		<label for="nsp"><a href="http://www.renewindianapolis.org/nsp-requirements/" target="_blank">NSP</a>:</label><div id="nsp"></div>
+		<label for="status">Status:</label> <div id="status">--</div></div
 	</div>
+
 
 
 <!-- end of row div -->
@@ -63,67 +46,32 @@ We recommend completing a scope of work document during your visit to the proper
 
 <script>
 
-// watch the parcel number property inquiry form for changes and submit
-$('#id_parcel').change(function(){
-	$("#vacant_lot_alert").hide();
-	$("#status_alert").hide();
-	$('#propertyInquiryForm :submit').removeAttr('disabled') // enable form submission
-	if ( /[0-9]{7}/.test( $("#id_parcel").val() ) )
-		{
-			var $form = $("#propertyInquiryForm"),
-				term = $form.find( "input[name='parcel']" ).val(),
-				url = "/map/lookup_street_address/"
+function get_property_attributions(){
+	var	term = $("#id_Property option:selected").text().match(/[0-9]{7}$/),
+		url = "/lookup_street_address/"
 
-			var posting = $.get( url, { parcel: term } );
+	if (term !== null) {
+		var posting = $.get( url, { parcel: term[0] } );
 
-			// Put the results in a div
-			posting.done(function( data ) {
-				try {
-					var obj = $.parseJSON(data);
-				}
-				catch (e){
-					$( "#result" ).text("No such parcel in our inventory");
-				}
-				$( "#result" ).text(data.streetAddress);
-				$( "#structureType" ).text(data.structureType);
-				$( "#status" ).text(data.status);
-				if (data.status.indexOf('Sold') > -1 || data.status.indexOf('Sale approved by MDC') > -1) {
-					$("#status_alert").show("fast");
-					$('#propertyInquiryForm :submit').attr("disabled", "disabled"); // disable form submission
-				}
-				if (data.structureType == "Vacant Lot") {
-					$("#vacant_lot_alert").show("fast");
-					$('#propertyInquiryForm :submit').attr("disabled", "disabled"); // disable form submission
-				}
-			});
+		// Put the results in a div
+		posting.done(function( data ) {
+			$( "#structureType" ).text(data[0].fields.structureType);
+			$( "#status" ).text(data[0].fields.status);
+			if (data[0].fields.nsp == true){
+				$( "#nsp" ).text('Yes');
+			}
+			if (data[0].fields.nsp == false){
+				$( "#nsp" ).text('No');
+			}
+			$( "#price" ).text('$'+data[0].fields.price);
 
-		}
-});
-
-
-// bind to street name form button and submit
-$("#street_name").keyup(function() {
- 	var $options = $("#options");
-	$("#options").empty();
-	$.getJSON("/map/lookup_possible_street_addresses/", { street_name: $("#street_name_lookup").find("input[name='street_name']").val()})
-	.done(function(data) {
-		$.each(data, function(i, item) {
-			$options.append("<option value='"+item.fields.parcel+"'>"+item.fields.streetAddress+" - "+item.fields.parcel+"</option>");
 		});
-	});
+	}
+}
+$('#id_Property').change(function(){
+	get_property_attributions();
 });
-
-// copy the selected parcel to the parcel input box and trigger the lookups
-$("#options").change(function(){
-	var option_selected = $(this).find('option:selected').val();
-	$("#propertyInquiryForm").find("input[name='parcel']").val(option_selected);
-	$("#propertyInquiryForm").find("input[name='parcel']").change();
-});
-
-// bind to "Search by street name" button in case someone pastes in and then clicks
-$("#streetLookup").bind("click", function(){
-	$('#street_name').keyup();
-});
+$('#id_Property').select2();
 </script>
 
-{% endblock wpwrap-content %}
+{% endblock content %}

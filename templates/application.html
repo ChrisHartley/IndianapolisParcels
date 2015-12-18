@@ -1,68 +1,82 @@
-{% extends 'wp-template-header.html' %}
-{% block wpwrap-header %}
+{% extends 'allauth-wp-base.html' %}
+{% block extra_head %}
 <!-- Bootstrap -->
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css">
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap-theme.min.css">
-{% endblock wpwrap-header %}
+<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
+<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css">
+<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap-theme.min.css">
+<link href="//cdnjs.cloudflare.com/ajax/libs/select2/4.0.0/css/select2.min.css" rel="stylesheet" />
+<script src="//cdnjs.cloudflare.com/ajax/libs/select2/4.0.0/js/select2.min.js"></script>
 
-{% block wpwrap-content %}
-{% if success %}
-<div id="success" class="alert alert-success" role="alert">Your application was successfully submitted.</div>
-{% else %}
+<script src="{{ STATIC_URL }}ajaxuploader/js/fileuploader.js" ></script>
+<link href="{{ STATIC_URL }}ajaxuploader/css/fileuploader.css" media="screen" rel="stylesheet" type="text/css" />
+
+<script src="{{ STATIC_URL }}admin/js/admin/RelatedObjectLookups.js"></script>
+<script src="{{ STATIC_URL }}admin/js/jquery.min.js"></script>
+<script src="{{ STATIC_URL }}admin/js/jquery.init.js"></script>
+{% endblock extra_head %}
+
+{% block content %}
+{{ form.non_field_errors }}
 
 {% load crispy_forms_tags %}
-{% crispy form %}
 
-{%endif%}
+{% crispy form %}
+{{ formset }}
 
 <script>
-$('#id_Property').change(function(){
-		$("#result").text();
-			var $form = $("#propertyInquiryForm"),
-				term = $("#id_Property option:selected").text().match(/[0-9]{7}$/),
-				url = "/lookup_street_address/"
 
-			var posting = $.get( url, { parcel: term[0] } );
 
-			// Put the results in a div
-			posting.done(function( data ) {
-				try {
-					var obj = $.parseJSON(data);
+function get_property_attributions(){
+	var	term = $("#id_Property option:selected").text().match(/[0-9]{7}$/),
+		url = "/lookup_street_address/"
+
+	if (term !== null) {
+		var posting = $.get( url, { parcel: term[0] } );
+
+		// Put the results in a div
+		posting.done(function( data ) {
+			$( "#structureType" ).text(data[0].fields.structureType);
+			$( "#status" ).text(data[0].fields.status);
+			if (data[0].fields.sidelot_eligible == true){
+				$( "#sidelot_eligible" ).text('Yes');
+			}
+			if (data[0].fields.sidelot_eligible == false){
+				$( "#sidelot_eligible" ).text('No');
+			}
+			$( "#price" ).text('$'+data[0].fields.price);
+			if (data[0].fields.nsp == true) {
+				$( "#nsp" ).show();
+				if ($('#id_is_rental').val() == 'True'){
+					$('#div_id_nsp_income_qualifier').show(400);
 				}
-				catch (e){
-					$( "#structureType" ).text("Error finding property");
-					$( "#status" ).text("Error finding property");
-					$( "#sidelot_eligible" ).text("Error finding property");
-				}
-				$( "#structureType" ).text(data.structureType);
-				$( "#status" ).text(data.status);
-				$( "#sidelot_eligible" ).text(data.sidelot_eligible);
-			});
-});
+			}
+			else {
+				$( "#nsp" ).hide();
+				$('#div_id_nsp_income_qualifier').hide();
+
+			}
+		});
+	}
+}
 
 // Show the correct sections per the application type selected.
 function showAppropriateSections(value){
 	if (value === '3') { // 3 = sidelot app
-		console.log('sidelot selected');
 		$('.standard-app').hide(400);
 		$('.homestead-app').hide(400);
 		$('.sidelot-app').show(400);
 	}
 	if (value === '2') { // 2 = standard app
-		console.log('standard selected');
 		$('.homestead-app').hide(400);
 		$('.sidelot-app').hide(400);
 		$('.standard-app').show(400);
 	}
 	if (value === '1') { // 1 = homestead app
-		console.log('homestead selected');
 		$('.standard-app').hide(400);
 		$('.sidelot-app').hide(400);
 		$('.homestead-app').show(400);
 	}
 	if (value === '') { // initial default
-		console.log('default selected');
 		$('.standard-app').hide();
 		$('.homestead-app').hide();
 		$('.sidelot-app').hide();
@@ -71,14 +85,143 @@ function showAppropriateSections(value){
 
 }
 
+$(function() {
+
+	$('.uploaded_file_delete').click(function(event){
+		$.post(
+			'{% url 'uploadedfile_delete' %}',
+			{ file_id: event.target.id.match(/\d+$/)[0],
+				'csrfmiddlewaretoken': '{{ csrf_token }}',
+			},
+			function(data){
+				$(event.target).parent().remove();
+				alert('File deleted:', data.name);
+			} )
+	});
+});
+
+
 $(function(){
 	showAppropriateSections($('#id_application_type').val());
+	$('#div_id_nsp_income_qualifier').hide();
+	get_property_attributions();
 });
 
 $('#id_application_type').change(function() {
 	showAppropriateSections($(this).val());
 });
+$('#id_Property').change(function(){
+	get_property_attributions();
+});
+$('#id_is_rental').change(function(){
+	if ($('#id_is_rental').val() == 'True'){
+		if ( $( "#nsp" ).is(":visible") ){
+			$('#div_id_nsp_income_qualifier').show(400);
+		}
+	}
+	else{
+		$('#div_id_nsp_income_qualifier').hide(400);
+	}
+
+
+});
+$('#id_Property').select2();
+
+<!-- Ajax Uploader code -->
+
+$(function(){
+	var pofuploader = new qq.FileUploader({
+		action: "{% url 'my_ajax_upload' %}",
+		element: $('#pof-file-uploader')[0],
+		multiple: false,
+		onComplete: function(id, fileName, responseJSON) {
+			if(responseJSON.success) {
+				//alert("success!");
+				//console.log(responseJSON);
+				//console.log(fileName);
+			} else {
+				alert("Upload Failed!");
+				console.log(fileName);
+				console.log(responseJSON);
+			}
+		},
+		onAllComplete: function(uploads) {
+			// uploads is an array of maps
+			// the maps look like this: {file: FileObject, response: JSONServerResponse}
+			alert("Proof of funds uploads complete!");
+				},
+		params: {
+			'csrf_token': '{{ csrf_token }}',
+			'csrf_name': 'csrfmiddlewaretoken',
+			'csrf_xname': 'X-CSRFToken',
+			'file_purpose': '2',
+			'application': '{{ app_id }}',
+		},
+	});
+});
+
+$(function(){
+	var sowuploader = new qq.FileUploader({
+		action: "{% url 'my_ajax_upload' %}",
+		element: $('#sow-file-uploader')[0],
+		multiple: true,
+		onComplete: function(id, fileName, responseJSON) {
+			if(responseJSON.success) {
+				//alert("success!");
+			} else {
+				alert("Upload Failed!");
+				console.log(fileName);
+				console.log(responseJSON);
+			}
+		},
+		onAllComplete: function(uploads) {
+			// uploads is an array of maps
+			// the maps look like this: {file: FileObject, response: JSONServerResponse}
+			alert("Scope of work uploads complete!");
+		},
+		params: {
+			'csrf_token': '{{ csrf_token }}',
+			'csrf_name': 'csrfmiddlewaretoken',
+			'csrf_xname': 'X-CSRFToken',
+			'file_purpose': '1',
+			'application': '{{ app_id }}',
+
+		},
+	});
+});
+
+$(function(){
+	var elevationfileuploader = new qq.FileUploader({
+		action: "{% url 'my_ajax_upload' %}",
+		element: $('#elevation-file-uploader')[0],
+		multiple: true,
+		onComplete: function(id, fileName, responseJSON) {
+			if(responseJSON.success) {
+				//alert("success!");
+			} else {
+				alert("Upload Failed!");
+				console.log(fileName);
+				console.log(responseJSON);
+			}
+		},
+		onAllComplete: function(uploads) {
+			// uploads is an array of maps
+			// the maps look like this: {file: FileObject, response: JSONServerResponse}
+			alert("Scope of work uploads complete!");
+		},
+		params: {
+			'csrf_token': '{{ csrf_token }}',
+			'csrf_name': 'csrfmiddlewaretoken',
+			'csrf_xname': 'X-CSRFToken',
+			'file_purpose': '4',
+			'application': '{{ app_id }}',
+
+		},
+	});
+});
+
 
 </script>
 
-{% endblock wpwrap-content %}
+
+{% endblock content %}

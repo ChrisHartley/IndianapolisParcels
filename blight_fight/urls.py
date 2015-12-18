@@ -1,15 +1,13 @@
 from django.conf.urls import patterns, include, url
 from django.contrib import admin
 from django.conf import settings
+from django.views.generic.base import TemplateView
 
 from neighborhood_associations.views import get_relevant_neighborhood_assocations
+#from applications.views import
 
 
 urlpatterns = patterns('',
-    # Examples:
-    # url(r'^$', 'blight_fight.views.home', name='home'),
-    # url(r'^blog/', include('blog.urls')),
-
     url(r'admin/', include(admin.site.urls)),
 
     url(r'lookup_street_address/$', 'property_inventory.views.getAddressFromParcel'),
@@ -17,7 +15,7 @@ urlpatterns = patterns('',
 
     url(r'admin-inquiry-list/$', 'property_inquiry.views.inquiry_list'),
 
-    url(r'property_inquiry/$', 'property_inquiry.views.submitPropertyInquiry'),
+    url(r'property_inquiry/$', 'property_inquiry.views.submitPropertyInquiry', name='submit_property_inquiry'),
 
 	url(r'search-neighborhood-association/$', get_relevant_neighborhood_assocations.as_view() ),
 	url(r'search-neighborhood-association/(?P<parcel>[0-9]{7})/$', get_relevant_neighborhood_assocations.as_view() ),
@@ -31,19 +29,29 @@ urlpatterns = patterns('',
 	url(r'search_propertyAJAX/$', 'property_inventory.views.searchPropertiesAJAX'),
 	url(r'propertyPopup/$', 'property_inventory.views.propertyPopup'),
 
-    url(r'admin-condition-report/$', 'property_condition.views.condition_report_list'),
+	url(r'admin-condition-report/$', 'property_condition.views.condition_report_list'),
 	url(r'condition_report/$', 'property_condition.views.submitConditionReport'),
 
-    url(r'annual-report/$', 'annual_report_form.views.showAnnualReportForm'),
+	url(r'annual-report/$', 'annual_report_form.views.showAnnualReportForm'),
 	url(r'view_annual_report/(?P<id>[0-9]+)/$', 'annual_report_form.views.showAnnualReportData', name='view_annual_report'),
 	url(r'admin_annual_report/$', 'annual_report_form.views.showAnnualReportIndex'),
 
-	url(r'accounts/profile/', 'users.views.user_profile'),
-	#url(r'accounts/signup/', 'applicants.views.showUserSignup'),
-	#url(r'map/accounts/', include('allauth.urls')), #django all-auth
-    url(r'accounts/', include('allauth.urls')), #django all-auth
+	url(r'json_applications$', 'applications.views.applications_asJson', name='applications_ajax'),
+	url(r'admin_applications$', TemplateView.as_view(template_name="admin_datatables.html")),
 
-#    url(r'apply/', 'applications.views.submitApplication'),
+
+	url(r'accounts/profile$', 'applicants.views.profile_home', name='applicants_home'),
+	url(r'accounts/profile/edit$', 'applicants.views.showApplicantProfileForm', name='applicants_profile'),
+	url(r'accounts/organization$', 'applicants.views.show_organizations', name='applicants_organization'),
+	url(r'accounts/create_organization$', 'applicants.views.add_organization_popup', name='applicants_organization_add'),
+	#url(r'map/accounts/', include('allauth.urls')), #django all-auth
+	url(r'accounts/', include('allauth.urls')), #django all-auth
+
+	url(r'application/delete_file/$', 'applications.views.delete_uploaded_file', name='uploadedfile_delete'),
+	url(r'application/upload_file/$', 'applications.views.import_uploader', name='my_ajax_upload'),
+
+	url(r'application/(?P<action>\w+)/$', 'applications.views.process_application', name='process_application'),
+	url(r'application/(?P<action>\w+)/(?P<id>[0-9]+)/$', 'applications.views.process_application', name='process_application'),
 
 )
 

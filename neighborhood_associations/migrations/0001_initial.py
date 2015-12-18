@@ -22,11 +22,10 @@ class Migration(migrations.Migration):
                 ('contact_phone', models.CharField(max_length=255)),
                 ('contact_email_address', models.CharField(max_length=255)),
                 ('last_updated', models.DateField()),
-                ('area2', models.IntegerField()),
+                ('area2', models.FloatField()),
             ],
             options={
                 'abstract': False,
             },
-            bases=(models.Model,),
         ),
     ]

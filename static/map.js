@@ -9,19 +9,21 @@ var searchArea = new Array();
 var geojson_format = new OpenLayers.Format.GeoJSON({
                     'internalProjection': new OpenLayers.Projection("EPSG:900913"),
                     'externalProjection': new OpenLayers.Projection("EPSG:4326")
-});   
+});
 
 var table = $('#example').DataTable({
 					dom: 'T<"clear">lrtip',
 					tableTools: {
 						"sSwfPath": "https://cdn.datatables.net/tabletools/2.2.4/swf/copy_csv_xls.swf",
-						"aButtons": [ "copy",
-										{
-											"sExtends":    "collection",
-											"sButtonText": "Save",
-											"aButtons":    [ "csv", "xls", "pdf" ]             
-										}, "print"
-									]
+						"aButtons": [
+                            "copy",
+                            {
+                                "sExtends":    "collection",
+                                "sButtonText": "Save",
+                                "aButtons":    [ "csv", "xls", "pdf" ]
+                            },
+                            "print"
+						]
 					},
 
 					"columns": [
@@ -55,7 +57,7 @@ function toggleDraw(element) {
 function clearDrawn() {
 	polygonLayer.destroyFeatures();
 }
-    
+
 
 function onPopupClose(evt) {
     selectControl.unselect(selectedFeature);
@@ -65,25 +67,25 @@ function onFeatureSelect(feature) {
     selectedFeature = feature;
 	selectedLayer = feature.layer;
 	selectedLayer.drawFeature(feature, {fillColor: "#ffff00", strokeColor: "black"});
-	popup = new OpenLayers.Popup.FramedCloud("chicken", 
+	popup = new OpenLayers.Popup.FramedCloud("chicken",
                          feature.geometry.getBounds().getCenterLonLat(),
                          null,
 						 $.ajax({ type: "GET", url: '/propertyPopup/', data: {parcel: feature.attributes.parcel}, async: false}).responseText,
-                         null, true, onPopupClose);		
+                         null, true, onPopupClose);
     feature.popup = popup;
     map.addPopup(popup);
-	
+
 }
 
 function onFeatureUnselect(feature) {
     map.removePopup(feature.popup);
     feature.popup.destroy();
     feature.popup = null;
-}    
+}
 
 function getSearchArea(){
 	try{
-		$('input[name=searchArea]').val(polygonLayer.features[0].geometry.toString());		
+		$('input[name=property-searchArea]').val(polygonLayer.features[0].geometry.toString());
 	}
 	catch(err){ return; }
 }
@@ -92,7 +94,7 @@ function zoomChanged(){ // not working yet - how do we change opacity? it is a c
 /*	if (map.getZoom() > 16){
 		console.log(map.getZoom())
 		searchResultsLayer.setOpacity(0.1);
-		lbLayer.setOpacity(0.1);	
+		lbLayer.setOpacity(0.1);
 		searchResultsLayer.redraw();
 		lbLayer.redraw();
 	} */
@@ -102,9 +104,9 @@ function zoomChanged(){ // not working yet - how do we change opacity? it is a c
 
 $(function() {
 
-	map = new OpenLayers.Map( 'map', {controls: [	
-		new OpenLayers.Control.PanZoomBar(), 
-		new OpenLayers.Control.KeyboardDefaults(), 
+	map = new OpenLayers.Map( 'map', {controls: [
+		new OpenLayers.Control.PanZoomBar(),
+		new OpenLayers.Control.KeyboardDefaults(),
 		new OpenLayers.Control.Navigation(),
 		new OpenLayers.Control.Attribution()
 	]});
@@ -115,7 +117,7 @@ $(function() {
 	var intProj = new OpenLayers.Projection("EPSG:900913");
 	extent.transform(proj, intProj);
 	map.setOptions({restrictedExtent: extent});
-	
+
 	var ls = new OpenLayers.Control.LayerSwitcher({});
 	map.addControl(ls);
 	ls.maximizeControl();
@@ -130,17 +132,17 @@ $(function() {
 	ghyb = new OpenLayers.Layer.Google("Google Hybrid",	{type: google.maps.MapTypeId.HYBRID, numZoomLevels: 20});
 
 		// define style maps
-	
+
 	lbStyle = new OpenLayers.Style({
-		fillColor: '#33A02C', 
-		strokeWidth: '.05', 
-		strokeColor: 'black', 
-		pointRadius: '8', 
+		fillColor: '#33A02C',
+		strokeWidth: '.05',
+		strokeColor: 'black',
+		pointRadius: '8',
 		fontColor: "#ffffff",
         fontOpacity: 0.8,
 		fillOpacity: 1,
         fontSize: "12px"
-	}); 
+	});
 
 	var surplusStyleMap = new OpenLayers.StyleMap({fillColor: '#A6CEE3', strokeWidth: '.05', strokeColor: 'black'});
 	lbStyleMap = new OpenLayers.StyleMap(lbStyle);
@@ -165,7 +167,7 @@ $(function() {
 	map.addLayer(lbLayer);
 	map.setLayerIndex(lbLayer, 1);
 
-	map.addLayer(stamenLayer);	
+	map.addLayer(stamenLayer);
 	map.addLayer(OSMlayer);
 	map.addLayer(gmap);
 	map.addLayer(ghyb);
@@ -177,15 +179,15 @@ $(function() {
 
 	map.setCenter(new OpenLayers.LonLat(lon, lat), zoom);
 
-	// draw polygon to define search area   
+	// draw polygon to define search area
 	polyfeature = new OpenLayers.Control.DrawFeature(polygonLayer, OpenLayers.Handler.Polygon);
 	map.addControl(polyfeature);
-	
+
 
 	selectControl = new OpenLayers.Control.SelectFeature([lbLayer, searchResultsLayer],
 		{onSelect: onFeatureSelect, onUnselect: onFeatureUnselect});
 	map.addControl(selectControl);
-	selectControl.activate(); 
+	selectControl.activate();
 
 	map.events.register("zoomend", map, zoomChanged); // on close zoom increase layer transparency
 
@@ -193,7 +195,7 @@ $(function() {
 
 
 function getCSV(){
-	var tmp = $("#myForm").serialize(); 
+	var tmp = $("#myForm").serialize();
 	document.location.href = "?property-report-propertysearchtable=csv" + tmp;
 }
 
@@ -210,15 +212,9 @@ function getSearchResults(data)  {
 	}
 }
 
-function clearSearchResults(){
-	searchResultsLayer.destroyFeatures();
-	$('#myTable').empty();
-	$('input[name=searchArea]').val("");
-	//clearDrawn();
-}
 
-;
 function toggleSearchOptions(){
+    console.log("Toggle search)");
 	if ( $('#searchToggle').is(':contains("Show more search options >>>")') ){
 		$('#moreSearchOptions').show();
 		$('#searchToggle').html('Show fewer search options <<<');
@@ -227,33 +223,23 @@ function toggleSearchOptions(){
 		$('#moreSearchOptions').hide();
 		$('#searchToggle').html('Show more search options >>>');
 	}
-	
+
 }
 
 
 //jquery ajax form
 $(function(){
-	var options = {		
+    $("#intro").dialog({
+        autoOpen: true
+    });
+	var options = {
 		beforeSerialize: function(){
 			getSearchArea();
 			console.log("Pre search extent: " + searchResultsLayer.getDataExtent());
-		},		
+		},
 		data: { returnType: 'geojson' },
 		dataType: 'html', // because it makes it a json javascript object if you chose json
 		success: getSearchResults
-	};
-
-	var optionsTable = {
-		beforeSerialize: function(){
-			getSearchArea();
-		},
-		data: { returnType: 'html'},				
-		dataType: 'html', // because it makes it a json javascript object if you chose json
-		success: function(data) { 
-		    $('#myTable')
-				.empty()
-				.append(data)
-		} 
 	};
 
 
@@ -276,17 +262,13 @@ $(function(){
 });
 
 $(function() {
-	$( "#intro" ).dialog();
-
 	$('#help-hints').click(function () {
 		$("#intro").dialog('open');
         return false;
     });
 	$('#searchToggle').click(function() { toggleSearchOptions(); });
 	$('#downloadButton').click(function() { getCSV(); } );
-	
+
 
 
  });
-
-

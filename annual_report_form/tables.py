@@ -5,6 +5,8 @@ from .models import annual_report
 
 class AnnualReportTable(TableReport):
 	id_number = tables2.TemplateColumn('<a href="{% url \'annual_report_form.views.showAnnualReportData\' id=record.id %}">{{record.id}}</a>')
+	#accella_records = tables2.Column()
+	#Property.accella_records_set
 	class Meta:
 		model = annual_report
 		attrs = {"class": "paleblue"}

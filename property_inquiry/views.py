@@ -3,7 +3,7 @@ from django.contrib.auth.decorators import login_required
 
 from django_tables2_reports.config import RequestConfigReport as RequestConfig
 
-from django.shortcuts import render_to_response
+from django.shortcuts import render_to_response, HttpResponseRedirect
 from django.template import RequestContext
 
 from django.core.mail import send_mail
@@ -23,24 +23,18 @@ def submitPropertyInquiry(request):
 	parcelNumber = False
 	if request.method == 'POST':
 		form = PropertyInquiryForm(request.POST)
-		try:
-			selected_property = Property.objects.get(parcel__exact=request.POST['parcel'])
-		except Property.DoesNotExist:
-			selected_property = None
 		if form.is_valid():
-			form_saved = form.save(commit=False)			# this is necessary so we can set the Property based on the parcel number inputed
-			form_saved.Property = selected_property
+			form_saved = form.save(commit=False)
 			form_saved.applicant_ip_address = get_real_ip(request)
+			form_saved.user = request.user
 			form_saved.save()
-			parcelNumber = form.cleaned_data['parcel']
-			ChosenProperty = Property.objects.get(parcel__exact=parcelNumber)
-			message_body = 'Applicant: ' + form.cleaned_data['applicant_name'] + '\n' + 'Parcel: ' + form.cleaned_data['parcel'] + '\nAddress: ' + ChosenProperty.streetAddress + '\nStatus: ' + ChosenProperty.status
+			message_body = 'Applicant: ' + form_saved.user.first_name + ' ' + form_saved.user.last_name + '\n' + 'Parcel: ' + form_saved.Property.parcel + '\nAddress: ' + form_saved.Property.streetAddress + '\nStatus: ' + form_saved.Property.status
 			send_mail('New Property Inquiry', message_body, 'chris.hartley@renewindianapolis.org',
     			['chris.hartley@renewindianapolis.org'], fail_silently=False)
+			return HttpResponseRedirect('/inquiry-thank-you')
 	form = PropertyInquiryForm()
 	return render_to_response('property_inquiry.html', {
 		'form': form,
-		'parcel': parcelNumber,
 		'title': 'property inquiry'
 	}, context_instance=RequestContext(request))
 

@@ -8,6 +8,7 @@ class PropertyInquiryTable(TableReport):
 
 	#Property__parcel = tables2.Column()
 	#street_address = tables2.Column(empty_values=())
+	parcel = tables2.Column(accessor='Property.parcel')
 	street_address = tables2.Column(accessor='Property.streetAddress')
 	inquiry_count = tables2.Column(empty_values=(), orderable=False)
 	inquirier_count = tables2.Column(empty_values=(), orderable=False)

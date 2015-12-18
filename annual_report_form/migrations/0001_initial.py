@@ -2,6 +2,7 @@
 from __future__ import unicode_literals
 
 from django.db import models, migrations
+import annual_report_form.models
 
 
 class Migration(migrations.Migration):
@@ -21,19 +22,19 @@ class Migration(migrations.Migration):
                 ('email', models.EmailField(max_length=254)),
                 ('phone', models.CharField(max_length=12)),
                 ('percent_completed', models.PositiveIntegerField(help_text=b'Roughly speaking, what percentage complete is this project?')),
-                ('past_expenses', models.PositiveIntegerField()),
-                ('work_completed', models.TextField(help_text=b'What work has been completed?', max_length=5120, verbose_name=b'Work completed')),
+                ('past_expenses', models.PositiveIntegerField(help_text=b'It is ok to use rough estimates.', verbose_name=b'Funds spent to date')),
+                ('work_completed', models.TextField(help_text=b'What work has been completed?', max_length=5120, verbose_name=b'Written narative of the improvements made to date')),
                 ('work_remaining', models.TextField(help_text=b'What work remains to be completed?', max_length=5120, verbose_name=b'Work remaining')),
-                ('future_expenses', models.PositiveIntegerField()),
-                ('feedback', models.TextField(help_text=b'Do you have any feedback for Renew Indianapolis about your experience with our program?', max_length=5120, verbose_name=b'Feedback')),
-                ('front_exterior_picture', models.ImageField(upload_to=b'annual_report_images/%Y/%m/%d')),
-                ('back_exterior_picture', models.ImageField(upload_to=b'annual_report_images/%Y/%m/%d')),
-                ('kitchen_picture', models.ImageField(upload_to=b'annual_report_images/%Y/%m/%d')),
-                ('bathroom_picture', models.ImageField(upload_to=b'annual_report_images/%Y/%m/%d')),
+                ('future_expenses', models.PositiveIntegerField(help_text=b'It is ok to use rough estimates.', verbose_name=b'Anticipated remaining expenses')),
+                ('feedback', models.TextField(help_text=b'Do you have any other comments on your project or feedback for Renew Indianapolis about your experience with our program?', max_length=5120, verbose_name=b'Feedback')),
+                ('certificate_of_completion_ready', models.BooleanField(default=False, verbose_name=b'Are you ready for a certificate of completion inspection?')),
+                ('property_occupied', models.BooleanField(default=False, verbose_name=b'Is the property occupied?')),
+                ('front_exterior_picture', models.ImageField(upload_to=annual_report_form.models.content_file_name, blank=True)),
+                ('back_exterior_picture', models.ImageField(upload_to=annual_report_form.models.content_file_name, blank=True)),
+                ('kitchen_picture', models.ImageField(upload_to=annual_report_form.models.content_file_name, blank=True)),
+                ('bathroom_picture', models.ImageField(upload_to=annual_report_form.models.content_file_name, blank=True)),
+                ('other_picture', models.ImageField(help_text=b'Project photo of your choice (optional)', upload_to=annual_report_form.models.content_file_name, blank=True)),
                 ('Property', models.ForeignKey(blank=True, to='property_inventory.Property', null=True)),
             ],
-            options={
-            },
-            bases=(models.Model,),
         ),
     ]

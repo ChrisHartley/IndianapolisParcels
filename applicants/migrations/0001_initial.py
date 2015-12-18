@@ -2,31 +2,42 @@
 from __future__ import unicode_literals
 
 from django.db import models, migrations
+import localflavor.us.models
 
 
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('auth', '0006_require_contenttypes_0002'),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='ApplicantUser',
+            name='ApplicantProfile',
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
-                ('password', models.CharField(max_length=128, verbose_name='password')),
-                ('last_login', models.DateTimeField(null=True, verbose_name='last login', blank=True)),
-                ('is_superuser', models.BooleanField(default=False, help_text='Designates that this user has all permissions without explicitly assigning them.', verbose_name='superuser status')),
-                ('email', models.EmailField(unique=True, max_length=255, verbose_name=b'email address')),
-                ('name', models.CharField(max_length=b'255', null=True, blank=True)),
-                ('organization', models.CharField(max_length=b'255', null=True, blank=True)),
+                ('phone_number', localflavor.us.models.PhoneNumberField(max_length=20)),
+                ('mailing_address_line1', models.CharField(max_length=b'100')),
+                ('mailing_address_line2', models.CharField(max_length=b'100', blank=True)),
+                ('mailing_address_line3', models.CharField(max_length=b'100', blank=True)),
+                ('mailing_address_city', models.CharField(max_length=b'100')),
+                ('mailing_address_state', models.CharField(max_length=b'100')),
+                ('mailing_address_zip', models.CharField(max_length=b'100')),
                 ('date_created', models.DateTimeField(auto_now_add=True)),
-                ('groups', models.ManyToManyField(related_query_name='user', related_name='user_set', to='auth.Group', blank=True, help_text='The groups this user belongs to. A user will get all permissions granted to each of their groups.', verbose_name='groups')),
-                ('user_permissions', models.ManyToManyField(related_query_name='user', related_name='user_set', to='auth.Permission', blank=True, help_text='Specific permissions for this user.', verbose_name='user permissions')),
             ],
-            options={
-                'abstract': False,
-            },
+        ),
+        migrations.CreateModel(
+            name='Organization',
+            fields=[
+                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
+                ('name', models.CharField(max_length=255)),
+                ('phone_number', localflavor.us.models.PhoneNumberField(max_length=20)),
+                ('mailing_address_line1', models.CharField(max_length=b'100')),
+                ('mailing_address_line2', models.CharField(max_length=b'100', blank=True)),
+                ('mailing_address_line3', models.CharField(max_length=b'100', blank=True)),
+                ('mailing_address_city', models.CharField(max_length=b'100')),
+                ('mailing_address_state', models.CharField(max_length=b'100')),
+                ('mailing_address_zip', models.CharField(max_length=b'100')),
+                ('date_created', models.DateTimeField(auto_now_add=True)),
+            ],
         ),
     ]

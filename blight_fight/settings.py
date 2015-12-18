@@ -12,6 +12,7 @@ SECRET_KEY = 'n!ri)qh6@-3&qgzj(&#6a#1-lsbb!j!vh^41ds5&d-f09nv=4*'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
+CRISPY_FAIL_SILENTLY = not DEBUG
 
 ALLOWED_HOSTS = []
 
@@ -35,12 +36,16 @@ INSTALLED_APPS = (
 	'allauth.account', # added 20150526
 	'endless_pagination', # added 20150610 for old style map search.
     'django.contrib.humanize', # added 20150708 to format prices in template
+    'formtools',    # added 20151028 to use form wizard for application form
+    'ajaxuploader',
 	'property_inventory',
 	'annual_report_form',
 	'property_inquiry',
 	'neighborhood_associations',
 	'property_condition',
-	'applicants'
+    'applications',
+	'applicants',
+    'accella_records'
 )
 
 MIDDLEWARE_CLASSES = (
@@ -58,14 +63,13 @@ ROOT_URLCONF = 'blight_fight.urls'
 
 WSGI_APPLICATION = 'blight_fight.wsgi.application'
 
-
 # Database
 DATABASES = {
     'default': {
         'ENGINE': 'django.contrib.gis.db.backends.postgis',
-        'NAME': 'geodjango',
+        'NAME': 'blight_fight', # change this to a new db to prevent problems on dev server
         'USER': 'chris',
-        'PASSWORD': 'huck',
+        'PASSWORD': 'chris',
         'HOST': '',
         'PORT': '',
     }
@@ -135,10 +139,12 @@ AUTHENTICATION_BACKENDS = (
 
 )
 
+
 LOGIN_URL = '/map/accounts/login'
 LOGIN_REDIRECT_URL = '/map/accounts/profile'
 LOGOUT_URL = '/map/accounts/logout'
 #AUTH_USER_MODEL = 'applicants.ApplicantUser'
+AUTH_PROFILE_MODULE = 'applicants.ApplicantProfile'
 
 #django all-auth related
 SITE_ID = 2
@@ -148,7 +154,9 @@ ACCOUNT_USER_MODEL_USERNAME_FIELD = None
 ACCOUNT_EMAIL_REQUIRED = True
 ACCOUNT_USERNAME_REQUIRED = False
 ACCOUNT_AUTHENTICATION_METHOD = 'email'
-
+ACCOUNT_USER_DISPLAY = lambda user: user.email
+ACCOUNT_EMAIL_VERIFICATION = 'mandatory'
+ACCOUNT_SIGNUP_FORM_CLASS = 'applicants.forms.SignupForm'
 
 # Email settings - for development. Typically over-written by production settings for production use
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
@@ -166,20 +174,11 @@ PASSWORD_COMPLEXITY = { # You can omit any or all of these for no limit for that
 
 
 # media settings
-MEDIA_ROOT = '/home/chris/Projects/geodjango/blight_fight/'
+MEDIA_ROOT = '/home/chris/Projects/geodjango/blight_fight/media/'
 MEDIA_URL = '/media/'
 
 # for django-tables2-reports
 EXCEL_SUPPORT = 'xlwt'
-
-# import gmail settings and password for sending mail
-#try:
-#	from settings_gmail import *
-#	EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-#except ImportError:
-#	# if custom email settings aren't defined in the separate file (which has passwords) then just the dummy console backend.
-#	EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
-
 
 # Production settings are kept in a separate file, settings_production.py which overrides db, email, secret key, etc with production values
 try:

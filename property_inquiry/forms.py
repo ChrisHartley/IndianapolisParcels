@@ -1,14 +1,18 @@
-from django.forms import ModelForm
+from django.forms import ModelForm, ModelChoiceField
+
 
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Submit
 
 from property_inquiry.models import propertyInquiry
+from property_inventory.models import Property
 
 class PropertyInquiryForm(ModelForm):
+	Property = ModelChoiceField(queryset=Property.objects.filter(status__contains='Available').exclude(structureType__contains='Vacant Lot').exclude(is_active__exact=False).order_by('streetAddress'), help_text='Select the property you would like to submit an inquiry for. One property per inquiry. Only "Available" properties with a structure are listed here.')
+
 	def __init__(self, *args, **kwargs):
 		super(PropertyInquiryForm, self).__init__(*args, **kwargs)
-		self.fields.keyOrder = ['applicant_name','applicant_email_address','applicant_phone','parcel']
+		self.fields.keyOrder = ['applicant_name','applicant_email_address','applicant_phone', 'Property']
 		self.helper = FormHelper()
 		self.helper.form_id = 'propertyInquiryForm'
 		self.helper.form_class = 'form-horizontal'
@@ -20,4 +24,4 @@ class PropertyInquiryForm(ModelForm):
 
 	class Meta:
 		model = propertyInquiry
-		exclude = ['Property', 'showing_scheduled', 'applicant_ip_address']
+		exclude = ['user','showing_scheduled', 'applicant_ip_address']

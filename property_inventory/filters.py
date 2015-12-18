@@ -1,7 +1,9 @@
 import django_filters
+from django_filters import MethodFilter
 from django.db.models import Count
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Submit
+from django.contrib.gis.geos import GEOSGeometry # used for centroid calculation
 from property_inventory.models import Property
 from property_inventory.forms import PropertySearchForm
 
@@ -35,10 +37,19 @@ class PropertySearchFilter(django_filters.FilterSet):
 #	structureType = django_filters.ModelMultipleChoiceFilter(queryset=Property.objects.order_by('structureType').distinct('structureType'), to_field_name="structureType")
 	structureType = django_filters.ModelMultipleChoiceFilter(queryset=Property.objects.values_list('structureType', flat=True).distinct('structureType').order_by('structureType'), to_field_name="structureType", label="Structure Type")
 
+	searchArea = MethodFilter()
+
 	class Meta:
 		model = Property
 		fields = ['parcel', 'streetAddress', 'nsp', 'structureType', 'cdc', 'zone', 'zipcode', 'sidelot_eligible', 'homestead_only', 'bep_demolition']
 		form = PropertySearchForm
 
+	def filter_searchArea(self, queryset, value):
+		try:
+			searchGeometry = GEOSGeometry(searchArea, srid=900913)
+		except Exception:
+			return queryset
 
-
+		return queryset.filter(
+			geometry__within=searchGeometry
+		)
