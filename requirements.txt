@@ -6,6 +6,7 @@ django-allauth==0.20.0
 django-crispy-forms==1.4.0
 django-endless-pagination==2.0
 django-filter==0.10.0
+django-formtools==1.0
 django-ipware==1.0.0
 django-localflavor==1.1
 django-passwords==0.2.0
