@@ -207,7 +207,7 @@ class ApplicationForm(forms.ModelForm):
                 self.add_error('estimated_cost', msg)
             if not team_members or team_members == "":
                 self.add_error('team_members', msg)
-            if not source_of_financing or source_of_finacing == "":
+            if not source_of_financing or source_of_financing == "":
                 self.add_error('source_of_financing', msg)
             if UploadedFile.objects.filter(file_purpose__exact=UploadedFile.PURPOSE_SOW).filter(application__exact=app_id).count() == 0:
                 self.add_error(None, 'You must upload a separate scope of work document with your application')
