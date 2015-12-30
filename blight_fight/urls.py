@@ -9,6 +9,8 @@ from neighborhood_associations.views import get_relevant_neighborhood_assocation
 
 urlpatterns = patterns('',
     url(r'admin/', include(admin.site.urls)),
+    url(r'^$', 'applicants.views.profile_home', name='applicants_home'),
+
 
     url(r'lookup_street_address/$', 'property_inventory.views.getAddressFromParcel'),
 	url(r'lookup_possible_street_addresses/$', 'property_inventory.views.getMatchingAddresses'),
@@ -39,7 +41,6 @@ urlpatterns = patterns('',
 	url(r'json_applications$', 'applications.views.applications_asJson', name='applications_ajax'),
 	url(r'admin_applications$', TemplateView.as_view(template_name="admin_datatables.html")),
 
-	url(r'/$', 'applicants.views.profile_home', name='applicants_home'),
 
 	url(r'accounts/profile$', 'applicants.views.profile_home', name='applicants_home'),
 	url(r'accounts/profile/edit$', 'applicants.views.showApplicantProfileForm', name='applicants_profile'),
