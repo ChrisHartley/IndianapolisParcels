@@ -130,7 +130,7 @@ class ApplicationForm(forms.ModelForm):
                 ),
                 Fieldset(
                     'Uploaded Files',
-                    HTML(''''Previously uploaded files:<ul>
+                    HTML('''Previously uploaded files:<ul>
                         {% for file in uploaded_files_all %}
                             <li>{{ file }} <img src="{{STATIC_URL}}admin/img/icon_deletelink.gif" id='uploadedfile_{{ file.id }}' class='uploaded_file_delete' alt='[X]'></img></li>
                             {% empty %}
