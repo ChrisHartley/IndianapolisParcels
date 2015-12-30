@@ -39,6 +39,7 @@ urlpatterns = patterns('',
 	url(r'json_applications$', 'applications.views.applications_asJson', name='applications_ajax'),
 	url(r'admin_applications$', TemplateView.as_view(template_name="admin_datatables.html")),
 
+	url(r'/$', 'applicants.views.profile_home', name='applicants_home'),
 
 	url(r'accounts/profile$', 'applicants.views.profile_home', name='applicants_home'),
 	url(r'accounts/profile/edit$', 'applicants.views.showApplicantProfileForm', name='applicants_profile'),
