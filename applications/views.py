@@ -13,7 +13,7 @@ import os
 from django.forms import inlineformset_factory
 
 from .forms import ApplicationForm, UploadedFileForm #, ApplicationForm0,ApplicationForm1,ApplicationForm2,ApplicationForm3,ApplicationForm4,ApplicationForm5
-from .models import UploadedFile, Application, IncompleteApplication
+from .models import UploadedFile, Application
 from django.contrib.auth.models import User
 
 # ajaxuploader requirements
@@ -63,23 +63,24 @@ def process_application(request, action, id=None):
 				application.status = Application.ACTIVE_STATUS
 			save_for_later = request.POST.get('save_for_later', None)
 			if save_for_later is None: # they want to submit the application
-				form.validate_for_submission()
-				application.frozen = True
-				application.save()
-				applicant_email = request.user.email
-				property_address = app.Property
-				msg_plain = render_to_string('email/application_submitted.txt', {
-					'user': request.user.first_name,
-					'Property': property_address,
-					}
-				)
-				send_mail(
-					'Application received: {0}'.format(property_address),
-					msg_plain,
-					'info@renewindianapolis.org',
-					[applicant_email],
-				)
-				return HttpResponseRedirect('/thanks/')
+				if form.validate_for_submission(id=application.id):
+					application.frozen = True
+					application.save()
+					applicant_email = request.user.email
+					property_address = app.Property
+					msg_plain = render_to_string('email/application_submitted.txt', {
+						'user': request.user.first_name,
+						'Property': property_address,
+						}
+					)
+					send_mail(
+						'Application received: {0}'.format(property_address),
+						msg_plain,
+						'info@renewindianapolis.org',
+						[applicant_email],
+					)
+					return HttpResponseRedirect('/thanks/')
+
 			else:
 				application.frozen = False
 				application.save()

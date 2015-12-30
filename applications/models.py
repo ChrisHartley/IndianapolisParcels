@@ -361,8 +361,3 @@ class Meeting(models.Model):
     meeting_outcome = models.IntegerField(choices=STATUS_CHOICES, null=True)
     meeting_date = models.DateField()
     application = models.ForeignKey(Application)
-
-# used to store a pickle of incomplete applications' formwizards
-class IncompleteApplication(models.Model):
-	user = models.ForeignKey(User)
-	postdata = models.BinaryField()

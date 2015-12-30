@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Application, UploadedFile, IncompleteApplication
+from .models import Application, UploadedFile
 
 
 class ApplicationAdmin(admin.ModelAdmin):
@@ -8,4 +8,3 @@ class ApplicationAdmin(admin.ModelAdmin):
 
 admin.site.register(Application, ApplicationAdmin)
 admin.site.register(UploadedFile)
-admin.site.register(IncompleteApplication)

@@ -152,7 +152,8 @@ class ApplicationForm(forms.ModelForm):
         self.helper.form_method = 'post'
         self.helper.form_action = reverse('process_application', kwargs={'action': 'save', 'id': app_id})
 
-    def validate_for_submission(self):
+    def validate_for_submission(self, *args, **kwargs):
+        app_id = kwargs.pop('id')
         cleaned_data = super(ApplicationForm, self).clean()
         application_type = cleaned_data.get('application_type')
         conflict_board_rc = cleaned_data.get('conflict_board_rc')
@@ -177,7 +178,7 @@ class ApplicationForm(forms.ModelForm):
 
         sidelot_eligible = cleaned_data.get('sidelot_eligible')
 
-        if conflict_board_rc is None and not conflict_board_rc_name:
+        if conflict_board_rc is True and conflict_board_rc_name == '':
             self.add_error("conflict_board_rc_name","You anwsered Yes above, please provide a name.")
 
         if Application.DELINQUENT_STATUS == tax_status_of_properties_owned:
@@ -198,16 +199,21 @@ class ApplicationForm(forms.ModelForm):
 
         if Application.HOMESTEAD == application_type or Application.STANDARD == application_type:
             msg = "This is a required field."
-            if not planned_improvements:
+            if not planned_improvements or planned_improvements == "":
                 self.add_error('planned_improvements', msg)
-            if not timeline:
+            if not timeline or timeline == "":
                 self.add_error('timeline', msg)
-            if not estimated_cost:
+            if not estimated_cost or estimated_cost == 0:
                 self.add_error('estimated_cost', msg)
-            if not team_members:
+            if not team_members or team_members == "":
                 self.add_error('team_members', msg)
-            if not source_of_financing:
+            if not source_of_financing or source_of_finacing == "":
                 self.add_error('source_of_financing', msg)
+            if UploadedFile.objects.filter(file_purpose__exact=UploadedFile.PURPOSE_SOW).filter(application__exact=app_id).count() == 0:
+                self.add_error(None, 'You must upload a separate scope of work document with your application')
+            if UploadedFile.objects.filter(file_purpose__exact=UploadedFile.PURPOSE_POF).filter(application__exact=app_id).count() == 0:
+                self.add_error(None, 'You must upload a separate proof of funds document with your application')
+
             #if not proof_of_funds:
                 # custom_msg = "You must attach proof of funds to your application."
                 # self.add_error('proof_of_funds', custom_msg)
@@ -218,11 +224,11 @@ class ApplicationForm(forms.ModelForm):
             #    pass
 
             if Application.STANDARD == application_type:
-                if not long_term_ownership:
+                if not long_term_ownership or long_term_ownership == "":
                     self.add_error('long_term_ownership', msg)
                 if is_rental is None: # boolean value
                     self.add_error('is_rental', msg)
-                if not nsp_income_qualifier and property_selected.nsp:
+                if not nsp_income_qualifier and property_selected.nsp and nsp_income_qualifier == "":
                     self.add_error('nsp_income_qualifier', "Since this is a rental NSP property you must list who will be conducting tenant income qualification.")
 
 # class ApplicationFormTemplate(forms.ModelForm):
