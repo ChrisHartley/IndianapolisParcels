@@ -21,8 +21,14 @@
 {% load crispy_forms_tags %}
 
 {% crispy form %}
-{{ formset }}
 
+
+
+
+{% endblock content%}
+
+
+{% block extra_body %}
 <script>
 
 
@@ -224,4 +230,4 @@ $(function(){
 </script>
 
 
-{% endblock content %}
+{% endblock extra_body %}

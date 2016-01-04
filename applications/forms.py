@@ -35,7 +35,7 @@ class UploadedFileForm(forms.ModelForm):
         )
 
 class ApplicationForm(forms.ModelForm):
-    Property = forms.ModelChoiceField(queryset=Property.objects.exclude(status__contains='Sold').exclude(is_active__exact=False).order_by('streetAddress'), help_text='Select the property you are applying for. One property per application.')
+    Property = forms.ModelChoiceField(queryset=Property.objects.exclude(status__contains='Sale approved by MDC').exclude(is_active__exact=False).exclude(status__contains='Sold').exclude(status__contains='Sale approved by Board of Directors', renew_owned=True).order_by('streetAddress'), help_text='Select the property you are applying for. One property per application.')
     organization = forms.ModelChoiceField(
         queryset=Organization.objects.all().order_by('name'),
         widget=AddAnotherWidgetWrapper(
@@ -48,7 +48,6 @@ class ApplicationForm(forms.ModelForm):
     status = forms.IntegerField(
         required=False
     )
-    check_data = forms.BooleanField(required=False)
     save_for_later = forms.CharField(required=False)
 
     class Meta:
@@ -153,6 +152,7 @@ class ApplicationForm(forms.ModelForm):
         self.helper.form_action = reverse('process_application', kwargs={'action': 'save', 'id': app_id})
 
     def validate_for_submission(self, *args, **kwargs):
+        print "in validate_for_submission()"
         app_id = kwargs.pop('id')
         cleaned_data = super(ApplicationForm, self).clean()
         application_type = cleaned_data.get('application_type')
@@ -214,15 +214,6 @@ class ApplicationForm(forms.ModelForm):
             if UploadedFile.objects.filter(file_purpose__exact=UploadedFile.PURPOSE_POF).filter(application__exact=app_id).count() == 0:
                 self.add_error(None, 'You must upload a separate proof of funds document with your application')
 
-            #if not proof_of_funds:
-                # custom_msg = "You must attach proof of funds to your application."
-                # self.add_error('proof_of_funds', custom_msg)
-            #    pass
-            #if not scope_of_work:
-                # custom_msg = "You must attach a separate scope of work document to your application."
-                # self.add_error('scope_of_work', custom_msg)
-            #    pass
-
             if Application.STANDARD == application_type:
                 if not long_term_ownership or long_term_ownership == "":
                     self.add_error('long_term_ownership', msg)
@@ -230,6 +221,8 @@ class ApplicationForm(forms.ModelForm):
                     self.add_error('is_rental', msg)
                 if not nsp_income_qualifier and property_selected.nsp and nsp_income_qualifier == "":
                     self.add_error('nsp_income_qualifier', "Since this is a rental NSP property you must list who will be conducting tenant income qualification.")
+
+        return self.cleaned_data
 
 # class ApplicationFormTemplate(forms.ModelForm):
 #     def __init__(self, *args, **kwargs):

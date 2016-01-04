@@ -131,6 +131,7 @@ $(function() {
 	gmap = new OpenLayers.Layer.Google("Google Streets", {numZoomLevels: 20});
 	ghyb = new OpenLayers.Layer.Google("Google Hybrid",	{type: google.maps.MapTypeId.HYBRID, numZoomLevels: 20});
 
+
 		// define style maps
 
 	lbStyle = new OpenLayers.Style({
@@ -178,7 +179,7 @@ $(function() {
 	map.setLayerIndex(searchResultsLayer, 2);
 
 	map.setCenter(new OpenLayers.LonLat(lon, lat), zoom);
-
+    ghyb.mapObject.setTilt(0);
 	// draw polygon to define search area
 	polyfeature = new OpenLayers.Control.DrawFeature(polygonLayer, OpenLayers.Handler.Polygon);
 	map.addControl(polyfeature);

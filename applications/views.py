@@ -1,6 +1,7 @@
-from django.shortcuts import render_to_response, get_object_or_404
+from django.shortcuts import render_to_response, get_object_or_404, render
 from django.http import HttpResponse, HttpResponseRedirect, Http404, HttpResponseNotAllowed, JsonResponse
 from django.conf import settings
+from django.core.urlresolvers import reverse
 from django.core import serializers
 from django.core.serializers.json import Serializer
 #from django.core.serializers.json import DjangoJSONEncoder
@@ -14,6 +15,7 @@ from django.forms import inlineformset_factory
 
 from .forms import ApplicationForm, UploadedFileForm #, ApplicationForm0,ApplicationForm1,ApplicationForm2,ApplicationForm3,ApplicationForm4,ApplicationForm5
 from .models import UploadedFile, Application
+from property_inventory.models import Property
 from django.contrib.auth.models import User
 
 # ajaxuploader requirements
@@ -61,9 +63,12 @@ def process_application(request, action, id=None):
 			application = form.save(commit=False)
 			if application.status == Application.INITIAL_STATUS:
 				application.status = Application.ACTIVE_STATUS
-			save_for_later = request.POST.get('save_for_later', None)
-			if save_for_later is None: # they want to submit the application
+			save_for_later = request.POST.get('save_for_later')
+			print "save_for_later..%s.." % save_for_later
+			if not save_for_later: # they want to submit the application
+				print "save for later was none"
 				if form.validate_for_submission(id=application.id):
+					print "form was validated for submission successfully"
 					application.frozen = True
 					application.save()
 					applicant_email = request.user.email
@@ -79,12 +84,13 @@ def process_application(request, action, id=None):
 						'info@renewindianapolis.org',
 						[applicant_email],
 					)
-					return HttpResponseRedirect('/thanks/')
-
+					return HttpResponseRedirect(reverse('application_confirmation', args=(id,) ) )
+				else:
+					print "not valid form"
 			else:
 				application.frozen = False
 				application.save()
-				print "saved for later, form was valid"
+				print "saved for later"
 
 	uploaded_files_sow = UploadedFile.objects.filter(user=request.user, application=app.id, file_purpose=UploadedFile.PURPOSE_SOW)
 	uploaded_files_pof = UploadedFile.objects.filter(user=request.user, application=app.id, file_purpose=UploadedFile.PURPOSE_POF)
@@ -136,6 +142,14 @@ def applications_datatable(request):
 	return render_to_response('admin_datatables.html', {
 		'title': 'applications'
 	}, context_instance=RequestContext(request))
+
+@login_required
+def application_confirmation(request, id):
+	app = Application.objects.get(id=id)
+	return render(request, 'confirmation.html', {
+		'title': 'thank you',
+		'Property': app.Property,
+	})
 
 # APPLICATION_FORMS = [
 #     ('QualifyingQuestions', ApplicationForm0),

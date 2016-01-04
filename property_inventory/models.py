@@ -57,6 +57,7 @@ class Property(models.Model):
 	project_agreement_released = models.BooleanField(default=False, help_text="Has the project agreement on a sold property been released?")
 	is_active = models.BooleanField(default=True, help_text="Is this property listing active?")
 	price_obo = models.BooleanField(default=False, help_text="Price is Or Best Offer")
+	renew_owned = models.BooleanField(default=False, help_text="Property is owned directly by Renew Indianapolis or a wholly owned subsidiary.")
 
 
 	class Meta:

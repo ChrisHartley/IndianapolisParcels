@@ -51,9 +51,12 @@ urlpatterns = patterns('',
 
 	url(r'application/delete_file/$', 'applications.views.delete_uploaded_file', name='uploadedfile_delete'),
 	url(r'application/upload_file/$', 'applications.views.import_uploader', name='my_ajax_upload'),
+	url(r'application/thanks/(?P<id>[0-9]+)$', 'applications.views.application_confirmation', name='application_confirmation'),
 
 	url(r'application/(?P<action>\w+)/$', 'applications.views.process_application', name='process_application'),
 	url(r'application/(?P<action>\w+)/(?P<id>[0-9]+)/$', 'applications.views.process_application', name='process_application'),
+
+
 
 )
 
