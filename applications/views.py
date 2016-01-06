@@ -49,9 +49,19 @@ import_uploader = AjaxFileUploader()
 def process_application(request, action, id=None):
 	if action == 'edit':
 		app = get_object_or_404(Application, id=id, user=request.user)
+		if app.frozen == True:
+			return HttpResponse("This application has been submitted and can not be editted. To unfreeze this application email chris.hartley@renewindianapolis.org.", status=403)
 		form = ApplicationForm(instance=app, user=request.user, id=app.pk)
 	if action == 'new':
-		app = Application(user=request.user, status=Application.ACTIVE_STATUS)
+		## see if they already have an application with initial status, if so use that one again, if not create one.
+		## Problem - multiple browser windows, or multiple browsers (eg start app on phone, continue on computer, then save phone app before computer app,
+		## they share an ID and will overwrite each other. So not doing this for now. We'll see if it is a problem having a blank app saved for each app start
+		# try:
+		# 	app = Application.objects.get(user.request=user, status=Application.INITIAL_STATUS).first()
+		# except model.DoesNotExist:
+		# 	app = Application(user=request.user, status=Application.INITIAL_STATUS)
+		# 	app.save()
+		app = Application(user=request.user, status=Application.INITIAL_STATUS)
 		app.save()
 		form = ApplicationForm(instance=app, user=request.user, id=app.pk)
 	if action == 'save':
@@ -70,6 +80,7 @@ def process_application(request, action, id=None):
 				if form.validate_for_submission(id=application.id):
 					print "form was validated for submission successfully"
 					application.frozen = True
+					application.status = Application.COMPLETE_STATUS
 					application.save()
 					applicant_email = request.user.email
 					property_address = app.Property
@@ -145,7 +156,7 @@ def applications_datatable(request):
 
 @login_required
 def application_confirmation(request, id):
-	app = Application.objects.get(id=id)
+	app = get_object_or_404(Application, id=id, user=request.user)
 	return render(request, 'confirmation.html', {
 		'title': 'thank you',
 		'Property': app.Property,

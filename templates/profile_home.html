@@ -16,25 +16,27 @@
 
     <p class="lead">
 Welcome {{ profile.first_name }},
-Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque a ultricies mi.
+Thank you for your interest in Renew Indianapolis and our properties.
     </p>
     <p>
+        Renew Indianapolis sells properties through an application process. Anyone is welcome to apply and there are is no application fee.
+        Brief explanation of application process, scope of work, proof of funds, deadlines,
 Mauris sit amet massa tempor, ullamcorper quam eget, ornare metus. Aliquam in dapibus arcu. Quisque scelerisque, erat eu scelerisque lobortis, elit magna porttitor dolor, vitae blandit ipsum mi eu arcu. Nam pellentesque neque lorem, at placerat purus molestie eget. Maecenas ut felis rutrum, euismod metus in, pulvinar elit. Morbi porta, felis eget pulvinar varius, dui erat porta orci, eget dapibus velit leo vitae lorem. Vestibulum et pharetra ligula. Proin vel ipsum quis ante hendrerit laoreet sed eget felis.
     </p>
 </span>
 <span class="col-md-5">
 <p class="">
-<h3>Property Inquiries</h3>
+<h3>Property Visits</h3>
 {% render_table property_inquiries %}
 <p class="text-center">
-<a href="{% url 'submit_property_inquiry' %}" class="btn btn-primary" role="button">Submit a Property Inquiry</a>
+<a href="{% url 'submit_property_inquiry' %}" class="btn btn-primary" role="button">Request a Property Visit</a>
 </p>
 </p>
 <p class="">
 <h3>Applications</h3>
 {% render_table applications %}
 <p class="text-center">
-<a href="{% url 'process_application' 'new' %}" class="btn btn-primary" role="button">Submit an Application</a>
+<a href="{% url 'process_application' 'new' %}" class="btn btn-primary" role="button">Start a New Application</a>
 </p>
 </p>
 <!--

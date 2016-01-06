@@ -1,7 +1,7 @@
 from django import forms
 from applicants.models import Organization, ApplicantProfile
 from crispy_forms.helper import FormHelper
-from crispy_forms.layout import Submit, Layout, Fieldset, ButtonHolder, Div, Button, MultiField, Field
+from crispy_forms.layout import Submit, Layout, Fieldset, ButtonHolder, Div, Button, MultiField, Field, HTML
 from crispy_forms.bootstrap import FormActions
 from passwords.fields import PasswordField
 from localflavor.us.forms import USPhoneNumberField, USZipCodeField, USPSSelect, USStateField, USStateSelect
@@ -13,7 +13,7 @@ class OrganizationForm(forms.ModelForm):
 	phone_number = USPhoneNumberField()
 	mailing_address_state = USStateField(widget=USStateSelect, required=True, label='State')
 	mailing_address_zip =  USZipCodeField(required=True, label='Zipcode')
-	
+
 	class Meta:
 		model = Organization
 		exclude = ['user', 'date_created']
@@ -29,7 +29,10 @@ class OrganizationForm(forms.ModelForm):
 
 			self.helper.layout = Layout(
 				Fieldset(
-					'Add Organization',
+					'Add Organization or Third Party',
+					HTML("""
+						<p>If you are applying on behalf of an organization, family member, client or other third party who will take title, provide their name and contact information.</p>
+					"""),
 					Field('name'),
 					Field('phone_number'),
 					css_class='well'
@@ -46,6 +49,9 @@ class OrganizationForm(forms.ModelForm):
 				),
 				Fieldset(
 					'Supporting Documents',
+					HTML("""
+						<p>Organizations should provide additional identifying and financial documents.</p>
+					"""),
 					Field('sos_business_entity_report'),
 					Field('irs_determination_letter'),
 					Field('most_recent_financial_statement'),
@@ -64,11 +70,11 @@ class SignupForm(forms.Form):
     first_name = forms.CharField(max_length=30, label='First name')
     last_name = forms.CharField(max_length=30, label='Last name')
     phone_number = USPhoneNumberField()
-    mailing_address_line1 = forms.CharField(max_length='100', required=True, label='Line 1')
-    mailing_address_line2 = forms.CharField(max_length='100', required=False, label='Line 2')
-    mailing_address_line3 = forms.CharField(max_length='100', required=False, label='Line 3')
-    mailing_address_city = forms.CharField(max_length='100', required=True, label='City')
-    mailing_address_state = USStateField(widget=USStateSelect, required=True, label='State')
+    mailing_address_line1 = forms.CharField(max_length='100', required=True, label='Mailing Address Line 1')
+    mailing_address_line2 = forms.CharField(max_length='100', required=False, label='Mailing Address Line 2')
+    mailing_address_line3 = forms.CharField(max_length='100', required=False, label='Mailing Address Line 3')
+    mailing_address_city = forms.CharField(max_length='100', required=True, label='Mailing Address City')
+    mailing_address_state = USStateField(widget=USStateSelect, required=True, label='Mailing Address State')
     mailing_address_zip =  USZipCodeField(required=True, label='Zipcode')
 
     def signup(self, request, user):

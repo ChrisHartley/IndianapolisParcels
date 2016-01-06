@@ -8,7 +8,11 @@ from property_inquiry.models import propertyInquiry
 from property_inventory.models import Property
 
 class PropertyInquiryForm(ModelForm):
-	Property = ModelChoiceField(queryset=Property.objects.filter(status__contains='Available').exclude(structureType__contains='Vacant Lot').exclude(is_active__exact=False).order_by('streetAddress'), help_text='Select the property you would like to submit an inquiry for. One property per inquiry. Only "Available" properties with a structure are listed here.')
+	Property = ModelChoiceField(
+		queryset=Property.objects.filter(status__contains='Available').exclude(structureType__contains='Vacant Lot').exclude(is_active__exact=False).order_by('streetAddress'),
+		help_text='Select the property you would like to visit. Your request will be sent to the City, who will contact you within 5 business days to schedule the visit. Only "Available" properties with a structure are listed here.',
+		label='Property to visit',
+	)
 
 	def __init__(self, *args, **kwargs):
 		super(PropertyInquiryForm, self).__init__(*args, **kwargs)

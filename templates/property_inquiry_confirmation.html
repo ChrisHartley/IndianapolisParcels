@@ -1,0 +1,30 @@
+{% extends 'allauth-base.html' %}
+
+{% block extra_head %}
+<!-- Bootstrap -->
+<script src="//code.jquery.com/jquery-2.1.4.min.js"></script>
+<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
+<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css">
+<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap-theme.min.css">
+{% endblock extra_head %}
+
+{% block content %}
+<h1>Thank you!</h1>
+<p class="lead">
+    Your requst to visit {{ Property.streetAddress }}, parcel #{{ Property.parcel }} has been recorded.
+</p>
+<p>
+    {% if Property.renew_owned %}
+    Someone from Renew Indianapolis will contact you within 5 business days to schedule a visit to the property.
+    {% else %}
+    Your request will be forwarded to the Department of Metropolitan Development at the City Of Indianapolis, who will contact you
+    within 5 business days to schedule a visit to the property.
+    {% endif %}
+</p>
+
+<p>
+    Please make sure to check your email, including your spam folder, so you don't miss this follow-up.
+</p>
+
+
+{% endblock content%}

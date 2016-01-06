@@ -10,11 +10,24 @@
 <div class="row">&nbsp</div>
 
 <div class="row">
-We recommend completing a scope of work document during your visit to the property. You can download our scope of work template here: <a href="//www.renewindianapolis.org/wp-content/uploads/Example-Scope-of-Work-updated.xls">Example-Scope-of-Work-updated.xls</a>
+	<p class="lead">
+		We recommend completing a scope of work during your visit to the property.
+	</p>
+	<p>
+		A scope of work is required with an application. A scope of work documents the current condition of the property, what repairs you will make to the property and how much you think each repair will cost.
+		Feel free to bring your contractor, knowledgeable friends or family or whomever you need along with you to the property visit.
+	</p>
+	<p>
+		You can download our scope of work template as a <a href="//www.renewindianapolis.org/wp-content/uploads/Example-Scope-of-Work-updated.xls" target="_blank">spreadsheet</a>
+		or as a <a href="http://www.renewindianapolis.org/wp-content/uploads/Example-Scope-of-Work-updated-printable.pdf" target="_blank">printable PDF</a>.
+	</p>
 </div>
 <div class="row">&nbsp</div>
 {% if parcel %}
-<div id="success" class="alert alert-success" role="alert">Your property inquiry for parcel # {{ parcel }} was successfully submitted. If you like you may submit another but we ask that you limit yourself to 2-3 at any one time.</div>
+	<div id="success" class="alert alert-success" role="alert">
+		Your property inquiry for parcel # {{ parcel }} was successfully submitted. If you like you may submit another
+		but we ask that you limit yourself to 2-3 at any one time.
+	</div>
 {%endif%}
 <div class="row">
 
@@ -31,11 +44,13 @@ We recommend completing a scope of work document during your visit to the proper
 
 
 	<div class="col-md-5">
-
-		<label for="structureType">Structure Type: </label><div id="structureType"></div>
-		<label for="price">Price: </label><div id="price"></div>
-		<label for="nsp"><a href="http://www.renewindianapolis.org/nsp-requirements/" target="_blank">NSP</a>:</label><div id="nsp"></div>
-		<label for="status">Status:</label> <div id="status">--</div></div
+		<dl class="dl-horizontal">
+			<dt>Structure Type</dt> <dd id="structureType"></dd>
+			<dt>Price:</dt><dd id="price"></dd>
+			<dt><a href="http://www.renewindianapolis.org/nsp-requirements/" target="_blank">NSP</a>:</dt><dd id="nsp"></dd>
+			<dt>Status:</dt><dd id="status"></dd>
+			<dt>Homestead Only:</dt><dd id="homestead_only"></dd>
+		</dl>
 	</div>
 
 
@@ -45,6 +60,17 @@ We recommend completing a scope of work document during your visit to the proper
 
 
 <script>
+
+function boolean_to_yesno(boolean){
+	if (boolean == true)
+		return "Yes"
+	return "No"
+}
+
+// thanks http://stackoverflow.com/questions/2901102/how-to-print-a-number-with-commas-as-thousands-separators-in-javascript
+function numberWithCommas(x) {
+    return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+}
 
 function get_property_attributions(){
 	var	term = $("#id_Property option:selected").text().match(/[0-9]{7}$/),
@@ -57,13 +83,9 @@ function get_property_attributions(){
 		posting.done(function( data ) {
 			$( "#structureType" ).text(data[0].fields.structureType);
 			$( "#status" ).text(data[0].fields.status);
-			if (data[0].fields.nsp == true){
-				$( "#nsp" ).text('Yes');
-			}
-			if (data[0].fields.nsp == false){
-				$( "#nsp" ).text('No');
-			}
-			$( "#price" ).text('$'+data[0].fields.price);
+			$( "#homestead_only" ).text(boolean_to_yesno(data[0].fields.homestead_only));
+			$( "#nsp" ).text(boolean_to_yesno(data[0].fields.nsp));
+			$( "#price" ).text('$'+numberWithCommas(data[0].fields.price));
 
 		});
 	}
@@ -71,7 +93,9 @@ function get_property_attributions(){
 $('#id_Property').change(function(){
 	get_property_attributions();
 });
+
 $('#id_Property').select2();
+
 </script>
 
 {% endblock content %}

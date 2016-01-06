@@ -13,6 +13,8 @@
 {% endblock header %}
 
 {% block body %}
+<div class="container">
+    <div class="row">
 {% if success %}
 <div class="alert alert-success" role="alert">Organization created</div>
 <script>
@@ -22,4 +24,9 @@ setTimeout(function(){
 </script>
 {% endif %}
 {% crispy form %}
+
+</div>
+<div class="row">&nbsp</div>
+
+</div>
 {% endblock body %}

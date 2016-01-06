@@ -1,0 +1,38 @@
+{% extends 'allauth-base.html' %}
+
+{% block extra_head %}
+<!-- Bootstrap -->
+<script src="//code.jquery.com/jquery-2.1.4.min.js"></script>
+<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
+<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css">
+<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap-theme.min.css">
+{% endblock extra_head %}
+
+{% block content %}
+<h1>Thank you!</h1>
+<p class="lead">
+    Your application for {{ Property.streetAddress }}, parcel #{{ Property.parcel }} has been submitted. Your application will be reviewed by our staff
+    within the next several days. If we need any additional information from you we will be in touch, otherwise your application will be reviewed by our
+    Review Committee.
+</p>
+<p>
+    If you have questions or would like to modify your application, please contact chris.hartley@renewindianapolis.org.
+</p><p>
+    Our applications go through a multi-step approval process:
+<ol>
+    <li>Staff review for completeness, schedule for Review Committee (deadline is two Fridays before the last Thursday of the month)</li>
+    <li>Review Committee (last Thursday of the month) where they can recommend for approval, not recommend for approval, or table for further information</li>
+    <li>Board of Directors (first Thursday of the month) where they can approve, not approve, or table for further information</li>
+    <li>The Indianapolis Department of Metropolitan Development can accept or deny the recommendations of the Board of Directors</li>
+    <li>The Metropolitan Development Commission (second Wednesday of the month), appointed by the Mayor of Indianapolis and the City-County Council votes
+    to give final approval.</li>
+    <li>We send a purchase agreement to the title company of your choosing and they begin preparing the title work and removing any trash or weed liens on the title.
+    This can take anywhere from one to several weeks, depending on the property and title company. Once the title company notifies us that they are ready to close we
+    will contact you to schedule a day and time that works for everyone.</li>
+</ol>
+
+    Thank you for your application,</br>
+
+    Renew Indianapolis
+</p>
+{% endblock content%}

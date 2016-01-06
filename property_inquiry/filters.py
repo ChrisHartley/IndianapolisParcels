@@ -17,7 +17,7 @@ class PropertyInquiryFilters(django_filters.FilterSet):
 	timestamp = django_filters.DateRangeFilter()
 	#applicant_name = django_filters.CharFilter(lookup_type='icontains')
 	#applicant_email_address = django_filters.CharFilter(lookup_type='icontains')
-	all_applicants = AllValuesNoneFilter(name='applicant_name', label="Applicant")
+	all_applicants = AllValuesNoneFilter(name='user', label="Applicant")
 	Property__streetAddress = django_filters.CharFilter(lookup_type='icontains', label='Street Address')
 
 	class Meta:
