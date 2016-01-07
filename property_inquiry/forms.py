@@ -10,7 +10,7 @@ from property_inventory.models import Property
 class PropertyInquiryForm(ModelForm):
 	Property = ModelChoiceField(
 		queryset=Property.objects.filter(status__contains='Available').exclude(structureType__contains='Vacant Lot').exclude(is_active__exact=False).order_by('streetAddress'),
-		help_text='Select the property you would like to visit. Your request will be sent to the City, who will contact you within 5 business days to schedule the visit. Only "Available" properties with a structure are listed here.',
+		help_text='Select the property you would like to visit. Your request saved and you will be contacted within 5 business days to schedule the visit. Only "Available" properties with a structure are listed here.',
 		label='Property to visit',
 	)
 

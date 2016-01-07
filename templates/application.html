@@ -30,11 +30,20 @@
 
 {% block extra_body %}
 <script>
+function boolean_to_yesno(boolean){
+	if (boolean == true)
+		return "Yes"
+	return "No"
+}
 
+// thanks http://stackoverflow.com/questions/2901102/how-to-print-a-number-with-commas-as-thousands-separators-in-javascript
+function numberWithCommas(x) {
+    return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+}
 
 function get_property_attributions(){
-	var	term = $("#id_Property option:selected").text().match(/[0-9]{7}$/),
-		url = "/lookup_street_address/"
+	var term = $("#id_Property option:selected").text().match(/[0-9]{7}$/),
+		url = "{% url 'get_address_from_parcel' %}"
 
 	if (term !== null) {
 		var posting = $.get( url, { parcel: term[0] } );
@@ -43,13 +52,10 @@ function get_property_attributions(){
 		posting.done(function( data ) {
 			$( "#structureType" ).text(data[0].fields.structureType);
 			$( "#status" ).text(data[0].fields.status);
-			if (data[0].fields.sidelot_eligible == true){
-				$( "#sidelot_eligible" ).text('Yes');
-			}
-			if (data[0].fields.sidelot_eligible == false){
-				$( "#sidelot_eligible" ).text('No');
-			}
-			$( "#price" ).text('$'+data[0].fields.price);
+			$( "#sidelot_eligible" ).text(boolean_to_yesno(data[0].fields.sidelot_eligible));
+			$( "#homestead_only" ).text(boolean_to_yesno(data[0].fields.homestead_only));
+			$( "#price" ).text('$'+numberWithCommas(data[0].fields.price));
+			$( "#nsp_boolean" ).text(boolean_to_yesno(data[0].fields.nsp));
 			if (data[0].fields.nsp == true) {
 				$( "#nsp" ).show();
 				if ($('#id_is_rental').val() == 'True'){
@@ -131,7 +137,10 @@ $('#id_is_rental').change(function(){
 
 
 });
-$('#id_Property').select2();
+$('#id_Property').select2({
+	placeholder: "Enter address, street name, parcel number or select from dropdown"
+	}
+);
 
 <!-- Ajax Uploader code -->
 
@@ -213,7 +222,7 @@ $(function(){
 		onAllComplete: function(uploads) {
 			// uploads is an array of maps
 			// the maps look like this: {file: FileObject, response: JSONServerResponse}
-			alert("Scope of work uploads complete!");
+			alert("Elevation view uploads complete!");
 		},
 		params: {
 			'csrf_token': '{{ csrf_token }}',

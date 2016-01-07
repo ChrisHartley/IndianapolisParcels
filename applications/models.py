@@ -27,7 +27,7 @@ class UploadToApplicationDir(object):
 class Application(models.Model):
 
 	user = models.ForeignKey(User)
-	Property = models.ForeignKey(Property, null=True)
+	Property = models.ForeignKey(Property, null=True, blank=True)
 	organization = models.ForeignKey(Organization, null=True, blank=True)
 
 	created = models.DateTimeField(auto_now_add=True)
@@ -52,8 +52,8 @@ class Application(models.Model):
 	STATUS_TYPES = (
 		(WITHDRAWN_STATUS, 'Withdrawn'),
 		(HOLD_STATUS, 'On Hold'),
-		(ACTIVE_STATUS, 'Active'),
-		(COMPLETE_STATUS, 'Complete'),
+		(ACTIVE_STATUS, 'Active / In Progress'),
+		(COMPLETE_STATUS, 'Complete / Submitted'),
 		(INITIAL_STATUS, 'Initial state'),
 	)
 
@@ -82,6 +82,7 @@ class Application(models.Model):
 		choices=APPLICATION_TYPES,
 		verbose_name='Application Type',
 		null=True,
+		blank=True,
 		help_text="If you will live in this property as your primary residence chose Homestead, if you will rent or sell chose Standard. If this is a side lot adjacent to your primary residence chose Sidelot."
 	)
 
@@ -101,7 +102,7 @@ class Application(models.Model):
 
 	planned_improvements = models.TextField(
 		max_length=5120,
-		help_text="Tell us about your plans for this property",
+		help_text="Tell us about your plans for this property and who will do what work.",
 		blank=True
 	)
 
@@ -135,11 +136,11 @@ class Application(models.Model):
 		blank=True
 	)
 
-	team_members = models.TextField(
-		max_length=5120,
-		help_text="Have you identified which contractors, property managers, construction managers, or others will be part of this work? What experience do they have?",
-		blank=True
-	)
+	#team_members = models.TextField(
+	#	max_length=5120,
+	#	help_text="Have you identified which contractors, property managers, construction managers, or others will be part of this work? What experience do they have?",
+	#	blank=True
+	#)
 
 	estimated_cost = models.PositiveIntegerField(
 		null=True,
@@ -149,17 +150,11 @@ class Application(models.Model):
 
 	source_of_financing = models.TextField(
 		max_length=5120,
-		help_text="""What sources of financing will you use? For example, cash on hand, regular income, bank loan, investor, etc.
-					<ol>
-					<li>100% affidavits for proposed rehabilitation projects can only be used by
-						homestead applications.</li>
-					<li>Other rehabilitation projects, including homes for rental or for sale projects, must
-						show acceptable proof of funds for 75-100% of the total project costs less any
-						materials on hand.  An affidavit of funds may be used for up to 25% of the total
-						project costs.</li>
-					<li>All proposed new construction projects require proof of funds for 75% of the
-						total project costs.  An affidavit of funds may be used for up to 25% of the total
-						project costs.</li></ol>""",
+		help_text="""
+			Tell us how you plan to pay for the proposed improvements, including any donated materials or
+			labor from friends and family.  Also include any grants you plan to apply for, including the
+			name of the grant and whether it is awarded, pending, or not yet submitted.
+		""",
 		blank=True
 	)
 
@@ -177,15 +172,15 @@ class Application(models.Model):
 	# 				update the approval status at a later date, including a possible simultaneous closing."""
 	# )
 
-	grant_funds = models.TextField(
-		max_length=5120,
-		help_text="List grants you plan to utilize, if any. If you aren't using grants, leave this blank. Note whether any grants are committed, applied for, or planned. Renew Indianapolis does not offer any grants at this time.",
-		blank=True
-	)
+	# grant_funds = models.TextField(
+	# 	max_length=5120,
+	# 	help_text="List grants you plan to utilize, if any. If you aren't using grants, leave this blank. Note whether any grants are committed, applied for, or planned. Renew Indianapolis does not offer any grants at this time.",
+	# 	blank=True
+	# )
 
 	timeline = models.TextField(
 		max_length=5120,
-		help_text="Tell us your anticipated timeline for this project. You can take up to 18 months from closing to complete the work in your scope of work.",
+		help_text="Tell us your anticipated timeline for this project. You can take up to 24 months from closing to complete the work in your scope of work.",
 		blank=True
 	)
 
@@ -217,11 +212,12 @@ class Application(models.Model):
 
 	conflict_board_rc = models.NullBooleanField(
 		choices=YESNO_TYPES,
-		verbose_name="Do you, any partner/member of your entity, or any of your entity's board members serve on the Renew Indianapolis Board of Directors or Committees and thus pose a potential conflict of interest?"
+		verbose_name="Do you, any partner/member of your entity, or any of your entity's board members serve on the Renew Indianapolis Board of Directors or Committees and thus pose a potential conflict of interest?",
+		blank=True
 	)
 
 	conflict_board_rc_name = models.CharField(
-		verbose_name="If yes, what is their name?",
+		verbose_name="If yes, what is his or her name?",
 		blank=True,
 		max_length=255
 	)
@@ -229,13 +225,15 @@ class Application(models.Model):
 	active_citations = models.NullBooleanField(
 		choices=YESNO_TYPES,
 		verbose_name="Do you own any property that is subject to any un-remediated citation of violation of the state and local codes and ordinances?",
-		help_text="The unsafe building code and building code history of properties owned by the prospective buyer, or by individuals or entities related to the prospective buyer, will be a factor in determining eligibility.  Repeat violations, unmitigated violations, and unpaid civil penalties may cause a buyer to be ineligible"
+		help_text="The unsafe building code and building code history of properties owned by the prospective buyer, or by individuals or entities related to the prospective buyer, will be a factor in determining eligibility.  Repeat violations, unmitigated violations, and unpaid civil penalties may cause a buyer to be ineligible",
+		blank=True
 	)
 
 	tax_status_of_properties_owned = models.IntegerField(
 		choices=TAX_STATUS_CHOICES,
 		null=True,
-		verbose_name='Tax status of property owned in Marion County',
+		blank=True,
+		verbose_name='Tax status of property currently owned in Marion County',
 		help_text="If you do not own any property (real estate) in Marion County chose N/A. If you chose 'Unknown' we will contact you for an explanation.",
 	)
 
@@ -248,6 +246,7 @@ class Application(models.Model):
 	prior_tax_foreclosure = models.NullBooleanField(
 		choices=YESNO_TYPES,
 		verbose_name="Were you the prior owner of any property in Marion County that was transferred to the Treasurer or to a local government as a result of tax foreclosure proceedings?",
+		blank=True
 	)
 
 	sidelot_eligible = models.NullBooleanField(
@@ -266,7 +265,7 @@ class Application(models.Model):
 	frozen = models.BooleanField(
 		default=False,
 		verbose_name='Freeze Application for Review',
-		help_text="Frozen applications are ready for review and can not be edited but the applicant"
+		help_text="Frozen applications are ready for review and can not be edited by the applicant"
 	)
 
 	def __unicode__(self):

@@ -8,7 +8,15 @@ from property_inquiry.models import propertyInquiry
 from property_inventory.models import Property
 
 class OrganizationTable(TableReport):
-
+	edit_org = tables2.LinkColumn(
+		'process_application',
+		kwargs={
+			'action':'edit',
+			'id': A('id'),
+			},
+		text='edit',
+		empty_values=(),
+	)
 	class Meta:
 		model = Organization
 		attrs = {"class": "table table-bordered"}

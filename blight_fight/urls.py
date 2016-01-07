@@ -4,6 +4,7 @@ from django.conf import settings
 from django.views.generic.base import TemplateView
 
 from neighborhood_associations.views import get_relevant_neighborhood_assocations
+from applicants.views import edit_organization
 #from applications.views import
 
 
@@ -12,7 +13,7 @@ urlpatterns = patterns('',
     url(r'^$', 'applicants.views.profile_home', name='applicants_home'),
 
 
-    url(r'lookup_street_address/$', 'property_inventory.views.getAddressFromParcel'),
+    url(r'lookup_street_address/$', 'property_inventory.views.getAddressFromParcel', name='get_address_from_parcel'),
 	url(r'lookup_possible_street_addresses/$', 'property_inventory.views.getMatchingAddresses'),
 
     url(r'admin-inquiry-list/$', 'property_inquiry.views.inquiry_list'),
@@ -45,8 +46,10 @@ urlpatterns = patterns('',
 
 	url(r'accounts/profile$', 'applicants.views.profile_home', name='applicants_home'),
 	url(r'accounts/profile/edit$', 'applicants.views.showApplicantProfileForm', name='applicants_profile'),
+	url(r'accounts/organization/edit/(?P<id>\w+)/$', edit_organization.as_view(), name='applicants_organization_edit'),
+    url(r'accounts/organization/new/$', 'applicants.views.add_organization_popup', name='applicants_organization_add'),
 	url(r'accounts/organization$', 'applicants.views.show_organizations', name='applicants_organization'),
-	url(r'accounts/create_organization$', 'applicants.views.add_organization_popup', name='applicants_organization_add'),
+
 	#url(r'map/accounts/', include('allauth.urls')), #django all-auth
 	url(r'accounts/', include('allauth.urls')), #django all-auth
 

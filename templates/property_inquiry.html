@@ -23,12 +23,7 @@
 	</p>
 </div>
 <div class="row">&nbsp</div>
-{% if parcel %}
-	<div id="success" class="alert alert-success" role="alert">
-		Your property inquiry for parcel # {{ parcel }} was successfully submitted. If you like you may submit another
-		but we ask that you limit yourself to 2-3 at any one time.
-	</div>
-{%endif%}
+
 <div class="row">
 
 	<div class="col-md-7">
@@ -74,7 +69,7 @@ function numberWithCommas(x) {
 
 function get_property_attributions(){
 	var	term = $("#id_Property option:selected").text().match(/[0-9]{7}$/),
-		url = "/lookup_street_address/"
+		url = "{% url 'get_address_from_parcel' %}"
 
 	if (term !== null) {
 		var posting = $.get( url, { parcel: term[0] } );
@@ -94,7 +89,9 @@ $('#id_Property').change(function(){
 	get_property_attributions();
 });
 
-$('#id_Property').select2();
+$('#id_Property').select2({
+	placeholder: "Enter address, street name, parcel number or select from dropdown"
+	});
 
 </script>
 

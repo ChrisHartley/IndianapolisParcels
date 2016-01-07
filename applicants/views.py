@@ -1,10 +1,11 @@
-from django.shortcuts import render
-from django.shortcuts import render_to_response
+from django.shortcuts import render, render_to_response, get_object_or_404
 from django.http import HttpResponse
 from django.template import RequestContext
 from django.forms.formsets import formset_factory
 from django.contrib.auth.decorators import login_required
 from django.utils.html import escape, escapejs
+from django.views.generic import View
+
 
 
 from .forms import ApplicantProfileForm, OrganizationForm
@@ -17,14 +18,14 @@ from property_inquiry.models import propertyInquiry
 @login_required
 def profile_home(request):
 	try:
-		property_inquiries = propertyInquiry.objects.filter(user=request.user)
+		property_inquiries = propertyInquiry.objects.filter(user=request.user).order_by('-timestamp')
 		property_inquiries_table = PropertyInquiryTable(property_inquiries)
 	except propertyInquiry.DoesNotExist:
 		property_inquiries_table = None
 
 
 	try:
-		applications = Application.objects.filter(user=request.user)
+		applications = Application.objects.filter(user=request.user).order_by('-modified')
 		applications_table = ApplicationTable(applications)
 	except Application.DoesNotExist:
 		applications_table = None
@@ -81,9 +82,7 @@ def add_organization_popup(request):
 			pending = orgForm.save(commit=False)
 			pending.user = request.user
 			pending.save()
-			return HttpResponse('<script type="text/javascript">opener.dismissAddAnotherPopup(window, "%s", "%s");</script>' % \
-	        # escape() calls force_unicode.
-				(escape(pending.pk), escapejs(pending)))
+			return HttpResponse('<script type="text/javascript">opener.dismissAddAnotherPopup(window, "%s", "%s");</script>' % (escape(pending.pk), escapejs(pending)))
 	else:
 		orgForm = OrganizationForm()
 
@@ -93,28 +92,23 @@ def add_organization_popup(request):
 		'title': "new organization"
 	}, context_instance=RequestContext(request))
 
-@login_required
-def edit_organization(request):
-	success = False
-	if 'edit' in request.GET:
-		try:
-			organization = Organization.objects.get(id=request.GET['edit'])
-		except Organization.DoesNotExist:
-			organization = None
-	if request.method == 'POST':
-		orgForm = OrganizationForm(request.POST, request.FILES, instance=organization)
-		if orgForm.is_valid():
-			pending = orgForm.save(commit=False)
-			pending.user = request.user
-			pending.save()
-			success = True
-	else:
-		orgForm = OrganizationForm()
-	return render_to_response('create_profile.html', {
-		'success': success,
-		'profileForm': orgForm,
-		'title': "new organization"
-	}, context_instance=RequestContext(request))
+
+class edit_organization(View):
+	def get(self, request, id):
+		org_id = request.GET.get('id', None)
+		organization = get_object_or_404(Organization, id=org_id, user=request.user)
+		form = OrganizationForm(instance=organization)
+		return render(request, 'edit_organization.html', {'title': 'edit organization', 'form': form})
+
+	def post(self, request, id):
+		org_id = request.POST.get('id', None)
+		organization = get_object_or_404(Organization, id=org_id, user=request.user)
+		form = OrganizationForm(request.POST, request.FILES, instance=organization)
+		if form.is_valid():
+			form.save(commit=True)
+			return HttpResponseRedirect(reverse('applicants_organization'))
+		else:
+			return render(request, 'edit_organization.html', {'title': 'edit organization', 'form': form})
 
 @login_required
 def show_organizations(request):

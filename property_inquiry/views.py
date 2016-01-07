@@ -1,5 +1,7 @@
 from django.shortcuts import render, get_object_or_404
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import user_passes_test
+
 
 from django_tables2_reports.config import RequestConfigReport as RequestConfig
 
@@ -19,6 +21,7 @@ from property_inquiry.forms import PropertyInquiryForm
 
 
 # Displays form template for property inquiry submissions, and saves those submissions
+@login_required
 def submitPropertyInquiry(request):
 	if request.method == 'POST':
 		form = PropertyInquiryForm(request.POST)
@@ -46,6 +49,7 @@ def property_inquiry_confirmation(request, id):
 	})
 
 # Displays submitted property inquiries
+@user_passes_test(lambda u:u.is_staff, login_url='/map/accounts/login/')
 @login_required
 def inquiry_list(request):
 	config = RequestConfig(request)
@@ -58,6 +62,7 @@ def inquiry_list(request):
 		'table': table
 	}, context_instance=RequestContext(request))
 
+@user_passes_test(lambda u:u.is_staff, login_url='/map/accounts/login/')
 @login_required
 def inquiriesAsJSON(request):
 	object_list = propertyInquiry.objects.all()

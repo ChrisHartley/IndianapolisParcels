@@ -19,10 +19,10 @@ from property_inventory.models import Property
 from django.contrib.auth.models import User
 
 # ajaxuploader requirements
-from django.middleware.csrf import get_token
+from django.middleware.csrf import get_token # not used?
 from ajaxuploader.views import AjaxFileUploader
 
-from formtools.wizard.views import SessionWizardView
+#from formtools.wizard.views import SessionWizardView
 from django.core.files.storage import FileSystemStorage
 
 # used to send confirmation email
@@ -30,18 +30,9 @@ from django.core.mail import send_mail
 from django.template.loader import render_to_string
 
 # used to save incomplete application in process
-import pickle
+#import pickle
 
 from pprint import pprint
-
-
-
-# this is ajax uploader related, but not sure it is actually used, especially since import.html doesn't exist.
-# def start(request):
-#     csrf_token = get_token(request)
-#
-#     return render_to_response('import.html',
-#         {'csrf_token': csrf_token}, context_instance = RequestContext(request))
 
 import_uploader = AjaxFileUploader()
 
@@ -74,12 +65,9 @@ def process_application(request, action, id=None):
 			if application.status == Application.INITIAL_STATUS:
 				application.status = Application.ACTIVE_STATUS
 			save_for_later = request.POST.get('save_for_later')
-			print "save_for_later..%s.." % save_for_later
 			if not save_for_later: # they want to submit the application
-				print "save for later was none"
 				if form.validate_for_submission(id=application.id):
-					print "form was validated for submission successfully"
-					application.frozen = True
+					#application.frozen = True
 					application.status = Application.COMPLETE_STATUS
 					application.save()
 					applicant_email = request.user.email
@@ -97,11 +85,11 @@ def process_application(request, action, id=None):
 					)
 					return HttpResponseRedirect(reverse('application_confirmation', args=(id,) ) )
 				else:
-					print "not valid form"
+					"*!*!* validate_for_submission() returned false"
+
 			else:
 				application.frozen = False
 				application.save()
-				print "saved for later"
 
 	uploaded_files_sow = UploadedFile.objects.filter(user=request.user, application=app.id, file_purpose=UploadedFile.PURPOSE_SOW)
 	uploaded_files_pof = UploadedFile.objects.filter(user=request.user, application=app.id, file_purpose=UploadedFile.PURPOSE_POF)
@@ -118,12 +106,10 @@ def process_application(request, action, id=None):
 
 @login_required
 def delete_uploaded_file(request):
-    print "here we are in delete_uploaded_file"
     if request.method != 'POST':
         return HttpResponseNotAllowed('Error - POST required to delete')
     file_id = request.POST.get('file_id', None)
     selected_file = get_object_or_404(UploadedFile, id=file_id, user=request.user)
-
     data = {"name": selected_file.supporting_document.name, "id": selected_file.id }
     selected_file.delete()
     return JsonResponse(data)

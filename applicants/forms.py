@@ -77,6 +77,13 @@ class SignupForm(forms.Form):
     mailing_address_state = USStateField(widget=USStateSelect, required=True, label='Mailing Address State')
     mailing_address_zip =  USZipCodeField(required=True, label='Zipcode')
 
+    def clean_email(self):
+        email = self.cleaned_data['email']
+        if User.objects.filter(email__exact=email).count() > 0:
+            raise forms.ValidationError("Looks like an account with this email address already exists, did you forget your password?")
+        return email
+
+
     def signup(self, request, user):
         user.first_name = self.cleaned_data['first_name']
         user.last_name = self.cleaned_data['last_name']

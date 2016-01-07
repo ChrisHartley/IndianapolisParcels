@@ -134,6 +134,7 @@ $(function() {
 
 		// define style maps
 
+
 	lbStyle = new OpenLayers.Style({
 		fillColor: '#33A02C',
 		strokeWidth: '.05',
@@ -143,7 +144,31 @@ $(function() {
         fontOpacity: 0.8,
 		fillOpacity: 1,
         fontSize: "12px"
-	});
+	},
+    {
+    rules: [
+        new OpenLayers.Rule({
+          filter: new OpenLayers.Filter.Comparison(
+              {
+                  type: OpenLayers.Filter.Comparison.LIKE,
+                  property: "status",
+                  value: 'Sold'
+               }),
+               symbolizer: {
+                   fillColor: "gray"
+               },
+
+        }),
+        new OpenLayers.Rule({
+                // apply this rule if no others apply
+                elseFilter: true,
+                symbolizer: {
+                    fillColor: "#33A02C"
+                }
+        })
+     ]
+ });
+
 
 	var surplusStyleMap = new OpenLayers.StyleMap({fillColor: '#A6CEE3', strokeWidth: '.05', strokeColor: 'black'});
 	lbStyleMap = new OpenLayers.StyleMap(lbStyle);
