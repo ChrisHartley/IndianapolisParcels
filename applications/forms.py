@@ -42,7 +42,7 @@ class ApplicationForm(forms.ModelForm):
         required=False
     )
     organization = forms.ModelChoiceField(
-        queryset=Organization.objects.all().order_by('name'),
+        queryset=Organization.objects.all(),
         widget=AddAnotherWidgetWrapper(
             forms.Select(),
             Organization,
@@ -72,7 +72,7 @@ class ApplicationForm(forms.ModelForm):
         #self.fields['proof_of_funds'].required = False
         #self.fields['prior_tax_foreclosure'].required = True
         #self.fields['status'].value = 3
-        self.fields['organization'].queryset = Organization.objects.filter(user=user)
+        self.fields['organization'].queryset = Organization.objects.filter(user=user).order_by('name')
         self.helper = FormHelper()
         self.helper.form_id = 'ApplicationForm'
         self.helper.form_class = 'form-horizontal'

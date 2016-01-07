@@ -1,10 +1,12 @@
 from django.shortcuts import render, render_to_response, get_object_or_404
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseRedirect
 from django.template import RequestContext
 from django.forms.formsets import formset_factory
 from django.contrib.auth.decorators import login_required
 from django.utils.html import escape, escapejs
 from django.views.generic import View
+from django.core.urlresolvers import reverse
+
 
 
 
@@ -82,7 +84,7 @@ def add_organization_popup(request):
 			pending = orgForm.save(commit=False)
 			pending.user = request.user
 			pending.save()
-			return HttpResponse('<script type="text/javascript">opener.dismissAddAnotherPopup(window, "%s", "%s");</script>' % (escape(pending.pk), escapejs(pending)))
+			return HttpResponse('<html><body><script type="text/javascript">opener.dismissAddAnotherPopup(window, "%s", "%s");</script></body></html>' % (escape(pending.pk), escapejs(pending)))
 	else:
 		orgForm = OrganizationForm()
 
@@ -95,14 +97,12 @@ def add_organization_popup(request):
 
 class edit_organization(View):
 	def get(self, request, id):
-		org_id = request.GET.get('id', None)
-		organization = get_object_or_404(Organization, id=org_id, user=request.user)
+		organization = get_object_or_404(Organization, id=id, user=request.user)
 		form = OrganizationForm(instance=organization)
 		return render(request, 'edit_organization.html', {'title': 'edit organization', 'form': form})
 
 	def post(self, request, id):
-		org_id = request.POST.get('id', None)
-		organization = get_object_or_404(Organization, id=org_id, user=request.user)
+		organization = get_object_or_404(Organization, id=id, user=request.user)
 		form = OrganizationForm(request.POST, request.FILES, instance=organization)
 		if form.is_valid():
 			form.save(commit=True)
@@ -112,9 +112,10 @@ class edit_organization(View):
 
 @login_required
 def show_organizations(request):
-	organizations = Organization.objects.filter(user=request.user)
-
+	organizations = Organization.objects.filter(user=request.user).order_by('name')
+	organizations_table = OrganizationTable(organizations)
 	return render_to_response('organizations.html', {
 		'organizations': organizations,
+		'table': organizations_table,
 		'title': "organizations"
 	}, context_instance=RequestContext(request))

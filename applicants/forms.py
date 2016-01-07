@@ -59,7 +59,7 @@ class OrganizationForm(forms.ModelForm):
 				),
 	 			FormActions(
 					Button('cancel', 'Cancel'),
-					Submit('save', 'Create organization')
+					Submit('save', 'Save')
 				)
 			)
 			self.helper.form_method = 'post'

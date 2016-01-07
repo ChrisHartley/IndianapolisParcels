@@ -7,11 +7,10 @@ from applications.models import Application
 from property_inquiry.models import propertyInquiry
 from property_inventory.models import Property
 
-class OrganizationTable(TableReport):
+class OrganizationTable(tables2.Table):
 	edit_org = tables2.LinkColumn(
-		'process_application',
+		'applicants_organization_edit',
 		kwargs={
-			'action':'edit',
 			'id': A('id'),
 			},
 		text='edit',
@@ -20,7 +19,7 @@ class OrganizationTable(TableReport):
 	class Meta:
 		model = Organization
 		attrs = {"class": "table table-bordered"}
-		fields = ("name",)
+		fields = ("name","phone_number", "mailing_address_city")
 		#sequence = ("id", "street_address", "parcel", "inquiry_count", "...")
 
 class ApplicationTable(tables2.Table):

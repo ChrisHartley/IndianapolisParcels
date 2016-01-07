@@ -25,6 +25,7 @@ class Organization(models.Model):
 	name = models.CharField(blank=False, max_length=255)
 
 	phone_number = PhoneNumberField()
+	email = models.EmailField(null=True)
 
 	mailing_address_line1 = models.CharField(max_length='100', blank=False, verbose_name='Line 1')
 	mailing_address_line2 = models.CharField(max_length='100', blank=True, verbose_name='Line 2')
@@ -40,6 +41,10 @@ class Organization(models.Model):
 
 	def __unicode__(self):
 		return self.name
+
+	class Meta:
+		verbose_name = "Organization or Third Party"
+		verbose_name_plural = "Organizations or Third Parties"
 
 #	sos_business_entity_report = models.ForeignKey('applications.UploadedFile', related_name="entity_report")
 #	irs_determination_letter = models.ForeignKey('applications.UploadedFile', related_name="determination_letter")
