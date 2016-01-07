@@ -34,6 +34,7 @@ class OrganizationForm(forms.ModelForm):
 						<p>If you are applying on behalf of an organization, family member, client or other third party who will take title, provide their name and contact information.</p>
 					"""),
 					Field('name'),
+					Field('email'),
 					Field('phone_number'),
 					css_class='well'
 				),

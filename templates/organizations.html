@@ -9,28 +9,8 @@
 
 {% block content %}
 {% render_table table %}
+<p class="text-center">
+
+<a href="{% url 'applicants_organization_add' %}" class="btn btn-primary" role="button">Add a new organization/third party</a>
+</p>
 {% endblock content %}
-
-{% block content1 %}
-<table class="table table-bordered">
-    <thead>
-        <tr>
-            <td>Name</td>
-            <td>Edit</td>
-        </tr>
-    </thead>
-    <tbody>
-        {% for organization in organizations %}
-            <tr>
-                <td>{{organization.name}}</td>
-                <td>edit</td>
-            </tr>
-            {% empty %}
-            <tr>
-                <td>No organizations</a>
-            </tr>
-        {% endfor %}
-    </tbody>
-</table>
-
-{% endblock content1 %}
