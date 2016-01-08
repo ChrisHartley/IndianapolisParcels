@@ -187,7 +187,7 @@ class ApplicationForm(forms.ModelForm):
 
         planned_improvements = cleaned_data.get('planned_improvements')
         timeline = cleaned_data.get('timeline')
-        team_members = cleaned_data.get('team_members')
+        #team_members = cleaned_data.get('team_members')
         estimated_cost = cleaned_data.get('estimated_cost')
         source_of_financing = cleaned_data.get('source_of_financing')
 
@@ -231,8 +231,8 @@ class ApplicationForm(forms.ModelForm):
                 self.add_error('timeline', ValidationError(msg))
             if not estimated_cost or estimated_cost == 0:
                 self.add_error('estimated_cost', ValidationError(msg))
-            if not team_members or team_members == "":
-                self.add_error('team_members', ValidationError(msg))
+            #if not team_members or team_members == "":
+            #    self.add_error('team_members', ValidationError(msg))
             if not source_of_financing or source_of_financing == "":
                 self.add_error('source_of_financing', ValidationError(msg))
             if UploadedFile.objects.filter(file_purpose__exact=UploadedFile.PURPOSE_SOW).filter(application__exact=app_id).count() == 0:
