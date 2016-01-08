@@ -21,7 +21,34 @@ class ApplicantProfile(models.Model):
 
 
 class Organization(models.Model):
+
+	FRIEND = 1
+	FAMILY = 2
+	CLIENT = 3
+	EMPLOYER = 4
+
+	RELATIONSHIP_TYPES = (
+		(FRIEND, 'Friend'),
+		(FAMILY, 'Family member'),
+		(CLIENT, 'Client'),
+		(EMPLOYER, 'Employer'),
+	)
+
+	INDIVIDUAL = 1
+	NON_PROFIT_ORGANIZATION = 2
+	FOR_PROFIT_ORGANIZATION = 3
+
+	ENTITY_TYPES = (
+		(INDIVIDUAL, 'Individual'),
+		(NON_PROFIT_ORGANIZATION, 'Non-profit organization'),
+		(FOR_PROFIT_ORGANIZATION, 'For-profit organization'),
+	)
+
+
 	user = models.ForeignKey(User)
+	relationship_to_user = models.IntegerField(choices=RELATIONSHIP_TYPES)
+	entity_type = models.IntegerField(choices=ENTITY_TYPES)
+
 	name = models.CharField(blank=False, max_length=255)
 
 	phone_number = PhoneNumberField()

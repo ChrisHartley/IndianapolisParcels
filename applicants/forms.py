@@ -39,6 +39,12 @@ class OrganizationForm(forms.ModelForm):
 					css_class='well'
 				),
 				Fieldset(
+					'Type and Relationship',
+					Field('relationship_to_user'),
+					Field('entity_type'),
+					css_class='well'
+				),
+				Fieldset(
 					'Mailing Address',
 					Field('mailing_address_line1'),
 					Field('mailing_address_line2'),
