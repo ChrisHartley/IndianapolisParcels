@@ -54,11 +54,12 @@
 		<li>Drawn search area remains across searches until you click the "New Search" button.</li>
 	</ul>
 </div>
-
-<div id="map" style="width: 900px; height: 700px; position:relative;"></div>
+<button type="button" onclick="$('#map').toggle()">show/hide map</button>
+<div id="map" style="width: 100%; height: 700px; position:relative;"></div>
 
 &nbsp;
-		<div class="panel panel-success">
+<button type="button" onclick="$('#search').toggle()">show/hide search</button>
+		<div id="search" class="panel panel-success">
             <div class="panel-heading">
               <h3 class="panel-title">Search Criteria</h3>
             </div>
@@ -67,7 +68,8 @@
 
             </div>
           </div>
-<div>
+<button type="button" onclick="$('#search-results').toggle()">show/hide table</button>
+<div id="search-results">
 	<table id="example" class="table table-bordered">
 		 <thead>
 			<tr>

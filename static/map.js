@@ -125,10 +125,6 @@ $(function() {
 	// set up basemaps
 	stamenLayer = new OpenLayers.Layer.Stamen("toner", {attribution: stamenAttribution});
 	stamenLayer.setName('Stamen Toner');
-	stamenTerrainLayer = new OpenLayers.Layer.Stamen('terrain', {attribution: stamenAttribution});
-	stamenTerrainLayer.setName('Stamen Terrain');
-    OSMlayer = new OpenLayers.Layer.OSM();
-	gmap = new OpenLayers.Layer.Google("Google Streets", {numZoomLevels: 20});
 	ghyb = new OpenLayers.Layer.Google("Google Hybrid",	{type: google.maps.MapTypeId.HYBRID, numZoomLevels: 20});
 
 
@@ -194,11 +190,8 @@ $(function() {
 	map.setLayerIndex(lbLayer, 1);
 
 	map.addLayer(stamenLayer);
-	map.addLayer(OSMlayer);
-	map.addLayer(gmap);
 	map.addLayer(ghyb);
 	map.addLayer(polygonLayer);
-    map.addLayer(stamenTerrainLayer);
 
 	map.addLayer(searchResultsLayer);
 	map.setLayerIndex(searchResultsLayer, 2);

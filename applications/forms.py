@@ -120,14 +120,12 @@ class ApplicationForm(forms.ModelForm):
                     'Planned Improvements',
                     Field('planned_improvements'),
                     Field('timeline'),
-                    #Field('team_members'),
                     css_class='standard-app homestead-app well'
                 ),
                 Fieldset(
                     'Budget and Funding',
                     Field(PrependedAppendedText('estimated_cost', '$', '.00')),
                     Field('source_of_financing'),
-                    #Field('grant_funds'),
                     css_class='standard-app homestead-app well'
                 ),
                 Fieldset(
@@ -137,33 +135,36 @@ class ApplicationForm(forms.ModelForm):
                 ),
                 Fieldset(
                     'Uploaded Files',
-                    HTML('''Previously uploaded files:<ul>
+                    HTML('<p>Before your application can be submitted for review you must attach both a scope of work and proof of funds, as referenced earlier. You can upload those files here.</p>'),
+
+                    HTML('''<p>Previously uploaded files:<ul>
                         {% for file in uploaded_files_all %}
                             <li>{{ file }} <img src="{{STATIC_URL}}admin/img/icon_deletelink.gif" id='uploadedfile_{{ file.id }}' class='uploaded_file_delete' alt='[X]'></img></li>
                             {% empty %}
                                 <li>No files are associated with this application.</li>
                         {% endfor%}
                         </ul>
-                    '''),
-                    HTML('Before your application can be submitted for review you must attach both a scope of work and proof of funds, as referenced earlier. You can upload those files here.'),
-                    HTML('<div class="form-group"><div class="control-label col-lg-4">Scope of Work</div><div id="sow-file-uploader" class="form-control-static col-lg-6">Drop your scope of work file here to upload</div></div>'),
-                    HTML('<div class="form-group"><div class="control-label col-lg-4">Elevation View</div><div id="elevation-file-uploader" class="form-control-static col-lg-6">Drop your elevation view file here to upload</div></div>'),
-                    HTML("""If you are proposing new construction on a vacant lot please upload an elevation voew of your proposed construction"""),
-                    HTML('<div class="form-group"><div class="control-label col-lg-4">Proof of Funds</div><div id="pof-file-uploader" class="form-control-static col-lg-6">Drop your proof of funds file here to upload</div></div>'),
-                    HTML("""
+                    </p>'''),
+                    HTML('<div class="form-group"><div class="control-label col-lg-4">Scope of Work</div><div id="sow-file-uploader" class="form-control-static col-lg-6">Drop your scope of work file here to upload</div>'),
+                    HTML('<div class="help-block col-lg-6 col-lg-offset-4">We highly recommend using our <a href="http://www.renewindianapolis.org/wp-content/uploads/Example-Scope-of-Work-updated.xls">spreadsheet</a> or <a href="http://www.renewindianapolis.org/wp-content/uploads/Example-Scope-of-Work-updated-printable.pdf">printable template</a> as a starting point.</div></div>'),
+                    HTML('<div class="form-group"><div class="control-label col-lg-4">Elevation View</div><div id="elevation-file-uploader" class="form-control-static col-lg-6">Drop your elevation view file here to upload</div>'),
+                    HTML('<div class="help-block col-lg-6 col-lg-offset-4">If you are proposing new construction on a vacant lot you must upload an elevation view of your proposed construction.</div></div>'),
+                    HTML('<div class="form-group"><div class="control-label col-lg-4">Proof of Funds</div><div id="pof-file-uploader" class="form-control-static col-lg-6">Drop your proof of funds file here to upload</div>'),
+                    HTML("""<div class="help-block col-lg-6 col-lg-offset-4">
                             Upload documents demonstrating your plan to pay for your proposed improvements as outlined
                             in the "Budgeting and Financing" section. Examples include: a bank statement, a completed
                             and notarized affidavit, pre-approval letter from a lender, etc
                             <ol>
                             <li>Rehabilitation projects, including homes for rental or for sale projects, must
                                 show acceptable proof of funds for 75-100% of the total project costs less any
-                                materials on hand.  An affidavit of funds may be used for up to 25% of the total
+                                materials on hand.  An <a href="http://www.renewindianapolis.org/wp-content/uploads/Affidavit-self.pdf" target="_blank">affidavit of funds</a> (PDF) may be used for up to 25% of the total
                                 project costs.</li>
                             <li>All proposed new construction projects require proof of funds for 75% of the
-                                total project costs.  An affidavit of funds may be used for up to 25% of the total
+                                total project costs.  An <a href="http://www.renewindianapolis.org/wp-content/uploads/Affidavit-self.pdf" target="_blank">affidavit of funds</a> (PDF) may be used for up to 25% of the total
                                 project costs.</li>
-                            </ol>"""
+                            </ol></div></div>"""
                     ),
+                    HTML('<p>To delete an uploaded file, click "Save Incomplete Application", then scroll down and click the red "X" after the file name.</p>'),
                     css_class='standard-app homestead-app well'
                 ),
                 FormActions(
@@ -187,7 +188,6 @@ class ApplicationForm(forms.ModelForm):
 
         planned_improvements = cleaned_data.get('planned_improvements')
         timeline = cleaned_data.get('timeline')
-        #team_members = cleaned_data.get('team_members')
         estimated_cost = cleaned_data.get('estimated_cost')
         source_of_financing = cleaned_data.get('source_of_financing')
 
@@ -231,8 +231,6 @@ class ApplicationForm(forms.ModelForm):
                 self.add_error('timeline', ValidationError(msg))
             if not estimated_cost or estimated_cost == 0:
                 self.add_error('estimated_cost', ValidationError(msg))
-            #if not team_members or team_members == "":
-            #    self.add_error('team_members', ValidationError(msg))
             if not source_of_financing or source_of_financing == "":
                 self.add_error('source_of_financing', ValidationError(msg))
             if UploadedFile.objects.filter(file_purpose__exact=UploadedFile.PURPOSE_SOW).filter(application__exact=app_id).count() == 0:
