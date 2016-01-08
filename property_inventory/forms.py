@@ -1,17 +1,22 @@
 from django import forms
 from crispy_forms.helper import FormHelper
-from crispy_forms.layout import Submit, Layout, Field, Fieldset, Button, HTML
+from crispy_forms.layout import Submit, Layout, Field, Fieldset, Button, HTML, Div
 from crispy_forms.bootstrap import FormActions
-from django.forms.widgets import HiddenInput
+from django.forms.widgets import HiddenInput, SelectMultiple
 from property_inventory.models import Property, Zipcode, CDC, Zoning
 
 # new search form
 class PropertySearchForm(forms.ModelForm):
+	#zoning = forms.ModelMultipleChoiceField(queryset=Zoning.objects.all().order_by('name'), required=False)
+	#zipcodes = forms.ModelMultipleChoiceField(queryset=Zipcode.objects.all().order_by('name'), required=False)
+	#zipcode1 = forms.ModelChoiceField(queryset=Zipcode.objects.all().order_by('name'), required=False)
+	#cdc = forms.ModelMultipleChoiceField(queryset=CDC.objects.all().order_by('name'), required=False)
+	searchArea = forms.CharField(required=False, widget=HiddenInput())
+	#structureType = forms.ModelMultipleChoiceField(queryset=Property.objects.values_list('structureType', flat=True).distinct('structureType').order_by('structureType'), to_field_name="structureType", label="Structure Type")
 
 	class Meta:
 		model = Property
-		fields = ['parcel', 'streetAddress', 'nsp', 'structureType', 'cdc', 'zone', 'zipcode', 'sidelot_eligible', 'homestead_only', 'bep_demolition']
-
+		fields = ['parcel', 'streetAddress', 'nsp', 'zipcode', 'zone', 'sidelot_eligible', 'homestead_only', 'bep_demolition', 'renew_owned', 'price_obo', 'searchArea']
 
 	def __init__(self, *args, **kwargs):
 		super(PropertySearchForm, self).__init__(*args, **kwargs)
@@ -21,6 +26,8 @@ class PropertySearchForm(forms.ModelForm):
 		self.helper.form_class = 'form-horizontal'
 		self.helper.label_class = 'col-lg-3'
 		self.helper.field_class = 'col-lg-8'
+		self.helper.render_unmentioned_fields = False
+
 		self.helper.form_method = 'get'
 		self.helper.form_action = ''
 		self.helper.layout = Layout(
@@ -30,7 +37,8 @@ class PropertySearchForm(forms.ModelForm):
 				Field('parcel'),
 				Field('streetAddress'),
 			),
-			Fieldset(
+			HTML('<span id="searchToggle">click</span>'),
+			Div(Fieldset(
 				'Additional Search Options >>',
 				Field('nsp'),
 				Field('structureType'),
@@ -40,7 +48,9 @@ class PropertySearchForm(forms.ModelForm):
 				Field('sidelot_eligible'),
 				Field('homestead_only'),
 				Field('bep_demolition'),
-			),
+				Field('renew_owned'),
+				Field('price_obo'),
+			), css_class='moreSearchOptions'),
 			FormActions(
 				Button('cancel', 'Reset'),
 				Submit('save', 'Search')

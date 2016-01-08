@@ -11,21 +11,17 @@ var geojson_format = new OpenLayers.Format.GeoJSON({
                     'externalProjection': new OpenLayers.Projection("EPSG:4326")
 });
 
+buttons: [
+        'copy', 'excel', 'pdf'
+    ]
+
 var table = $('#search_results').DataTable({
                     responsive: true,
-					dom: 'T<"clear">lrtip',
-					tableTools: {
-						"sSwfPath": "https://cdn.datatables.net/tabletools/2.2.4/swf/copy_csv_xls.swf",
-						"aButtons": [
-                            "copy",
-                            {
-                                "sExtends":    "collection",
-                                "sButtonText": "Save",
-                                "aButtons":    [ "csv", "xls", "pdf" ]
-                            },
-                            "print"
-						]
-					},
+					//dom: 'B<"clear">lrtip',
+                    dom: 'iB<"clear">lrtip',
+                    buttons: [
+                        'copy', 'excel', 'pdf'
+                    ],
 
 					"columns": [
 						{"data": "properties.parcel"},
@@ -33,8 +29,10 @@ var table = $('#search_results').DataTable({
                         {"data": "properties.structureType"},
                         {"data": "properties.status"},
 						{"data": "properties.price"},
-                        {"data": "properties.zipcode"},
+                //        {"data": "properties.zipcode"},
+                //        {"data": "properties.zone"},
 						{"data": "properties.nsp"},
+                        {"data": "properties.cdc"},
 						{"data": "properties.sidelot_eligible"},
 						{"data": "properties.homestead_only"},
                         {"data": "properties.renew_owned"},
@@ -89,19 +87,22 @@ function onFeatureUnselect(feature) {
 
 function getSearchArea(){
 	try{
-		$('input[name=property-searchArea]').val(polygonLayer.features[0].geometry.toString());
+		$('input[name=searchArea]').val(polygonLayer.features[0].geometry.toString());
 	}
 	catch(err){ return; }
 }
 
-function zoomChanged(){ // not working yet - how do we change opacity? it is a complete mystery of non-working.
-/*	if (map.getZoom() > 16){
-		console.log(map.getZoom())
-		searchResultsLayer.setOpacity(0.1);
-		lbLayer.setOpacity(0.1);
-		searchResultsLayer.redraw();
-		lbLayer.redraw();
-	} */
+function zoomChanged(){ // not working yet openlayers2 bug? wait for switch to 3 to try and get working again.
+    /*
+    zoom = map.getZoom()
+    if (zoom > 16){
+        map.layers[0].setOpacity(0.1);
+    }
+    if (zoom <= 16){
+        map.layers[0].setOpacity(1);
+    }
+    */
+
 }
 
 
@@ -212,7 +213,7 @@ $(function() {
 	map.addControl(selectControl);
 	selectControl.activate();
 
-	map.events.register("zoomend", map, zoomChanged); // on close zoom increase layer transparency
+	//map.events.register("zoomend", map, zoomChanged); // on close zoom increase layer transparency
 
 });
 
@@ -237,8 +238,10 @@ function getSearchResults(data)  {
 
 
 function toggleSearchOptions(){
-    console.log("Toggle search)");
-	if ( $('#searchToggle').is(':contains("Show more search options >>>")') ){
+//    console.log("Toggle search");
+//    $('moreSearchOptions').hide();
+
+/*	if ( $('#searchToggle').is(':contains("Show more search options >>>")') ){
 		$('#moreSearchOptions').show();
 		$('#searchToggle').html('Show fewer search options <<<');
 		return;
@@ -246,15 +249,17 @@ function toggleSearchOptions(){
 		$('#moreSearchOptions').hide();
 		$('#searchToggle').html('Show more search options >>>');
 	}
-
+*/
 }
 
 
 //jquery ajax form
 $(function(){
+
     $("#intro").dialog({
         autoOpen: true
     });
+
 	var options = {
 		beforeSerialize: function(){
 			getSearchArea();
@@ -264,7 +269,6 @@ $(function(){
 		dataType: 'html', // because it makes it a json javascript object if you chose json
 		success: getSearchResults
 	};
-
 
 	$("#PropertySearchForm").validate({
 		rules: {

@@ -211,8 +211,7 @@ class DisplayNameJsonSerializer(GeoJSONSerializer):
 # search property inventory - new version
 def searchProperties(request):
 #	config = RequestConfig(request)
-	form = SearchForm()
-	f = PropertySearchFilter(request.GET, queryset=Property.objects.filter(propertyType__exact='lb', is_active__exact=True), prefix="property")
+	f = PropertySearchFilter(request.GET, queryset=Property.objects.filter(propertyType__exact='lb', is_active__exact=True))
 
 	if 'returnType' in request.GET and request.GET['returnType']:
 		if request.GET['returnType'] == "geojson":
@@ -220,16 +219,14 @@ def searchProperties(request):
 			s = serializers.serialize('geojson',
 				f,
 			 	geometry_field='geometry',
-			 	fields=('id', 'parcel', 'streetAddress', 'zipcode', 'status', 'structureType', 'sidelot_eligible', 'homestead_only', 'price', 'nsp', 'renew_owned', 'price_obo', 'geometry'),
+			 	fields=('id', 'parcel', 'streetAddress', 'zipcode', 'zone', 'status', 'structureType', 'sidelot_eligible', 'homestead_only', 'price', 'nsp', 'renew_owned', 'price_obo', 'cdc', 'geometry'),
 			 	use_natural_foreign_keys=True
 			 	)
 			return HttpResponse(s, content_type='application/json')
 
 	return render_to_response('property_search.html', {
 		'form_filter': f.form,
-		'form': form,
 		'title': 'Property Search'
-#		'table': table
 	}, context_instance=RequestContext(request))
 
 # used by dataTables
