@@ -220,15 +220,10 @@ def searchProperties(request):
 			s = serializers.serialize('geojson',
 				f,
 			 	geometry_field='geometry',
-			 	fields=('id', 'parcel', 'streetAddress', 'zipcode', 'status', 'structureType', 'sidelot_eligible', 'homestead_only', 'price', 'nsp', 'geometry'),
+			 	fields=('id', 'parcel', 'streetAddress', 'zipcode', 'status', 'structureType', 'sidelot_eligible', 'homestead_only', 'price', 'nsp', 'renew_owned', 'price_obo', 'geometry'),
 			 	use_natural_foreign_keys=True
 			 	)
 			return HttpResponse(s, content_type='application/json')
-
-#		if request.GET['returnType'] == "html":
-#			return render_to_response('table.html', {
-#				'table': table
-#				}, context_instance=RequestContext(request))
 
 	return render_to_response('property_search.html', {
 		'form_filter': f.form,
@@ -242,10 +237,6 @@ def propertiesAsJSON(request):
 	object_list = Property.objects.filter(is_active__exact=True)
 	json = serializers.serialize('json', object_list, use_natural_foreign_keys=True)
 	return HttpResponse(json, content_type='application/json')
-
-# dataTables view - not used?
-def searchPropertiesAJAX(request):
-	return render_to_response('property_search-dataTables.html', context_instance=RequestContext(request))
 
 # populate property popup on map via ajax
 def propertyPopup(request):

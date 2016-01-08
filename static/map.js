@@ -11,7 +11,8 @@ var geojson_format = new OpenLayers.Format.GeoJSON({
                     'externalProjection': new OpenLayers.Projection("EPSG:4326")
 });
 
-var table = $('#example').DataTable({
+var table = $('#search_results').DataTable({
+                    responsive: true,
 					dom: 'T<"clear">lrtip',
 					tableTools: {
 						"sSwfPath": "https://cdn.datatables.net/tabletools/2.2.4/swf/copy_csv_xls.swf",
@@ -29,13 +30,16 @@ var table = $('#example').DataTable({
 					"columns": [
 						{"data": "properties.parcel"},
 						{"data": "properties.streetAddress"},
-						{"data": "properties.zipcode"},
-						{"data": "properties.structureType"},
+                        {"data": "properties.structureType"},
+                        {"data": "properties.status"},
+						{"data": "properties.price"},
+                        {"data": "properties.zipcode"},
 						{"data": "properties.nsp"},
 						{"data": "properties.sidelot_eligible"},
 						{"data": "properties.homestead_only"},
-						{"data": "properties.status"},
-						{"data": "properties.price"}
+                        {"data": "properties.renew_owned"},
+                        {"data": "properties.price_obo"},
+
 
 					]
 	});
