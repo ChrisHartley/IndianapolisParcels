@@ -224,10 +224,14 @@ def searchProperties(request):
 			 	)
 			return HttpResponse(s, content_type='application/json')
 
-	return render_to_response('property_search.html', {
-		'form_filter': f.form,
-		'title': 'Property Search'
-	}, context_instance=RequestContext(request))
+	return render(
+		request,
+		'property_search.html',
+		{
+			'form_filter': f.form,
+			'title':'Property Search'
+		})
+
 
 # used by dataTables
 def propertiesAsJSON(request):

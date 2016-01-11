@@ -37,9 +37,9 @@ class PropertySearchForm(forms.ModelForm):
 				Field('parcel'),
 				Field('streetAddress'),
 			),
-			HTML('<span id="searchToggle">click</span>'),
-			Div(Fieldset(
-				'Additional Search Options >>',
+			Fieldset('',HTML('<button id="searchToggle">Show more search options >>></button><br/>')),
+			Fieldset(
+				'',
 				Field('nsp'),
 				Field('structureType'),
 				Field('cdc'),
@@ -50,7 +50,7 @@ class PropertySearchForm(forms.ModelForm):
 				Field('bep_demolition'),
 				Field('renew_owned'),
 				Field('price_obo'),
-			), css_class='moreSearchOptions'),
+			 css_class='moreSearchOptions'),
 			FormActions(
 				Button('cancel', 'Reset'),
 				Submit('save', 'Search')

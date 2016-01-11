@@ -11,9 +11,15 @@ var geojson_format = new OpenLayers.Format.GeoJSON({
                     'externalProjection': new OpenLayers.Projection("EPSG:4326")
 });
 
-buttons: [
-        'copy', 'excel', 'pdf'
-    ]
+function numberWithCommas(x) {
+    return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+}
+
+function boolean_to_yesno(boolean){
+	if (boolean == true)
+		return "Yes"
+	return "No"
+}
 
 var table = $('#search_results').DataTable({
                     responsive: true,
@@ -28,15 +34,28 @@ var table = $('#search_results').DataTable({
 						{"data": "properties.streetAddress"},
                         {"data": "properties.structureType"},
                         {"data": "properties.status"},
-						{"data": "properties.price"},
+						{"data": "properties.price",
+                            "render": function ( data ) {
+                           return numberWithCommas(data);
+                           }},
                 //        {"data": "properties.zipcode"},
                 //        {"data": "properties.zone"},
-						{"data": "properties.nsp"},
+						{"data": "properties.nsp",
+                         "render": function(data){ return boolean_to_yesno(data); }
+                        },
                         {"data": "properties.cdc"},
-						{"data": "properties.sidelot_eligible"},
-						{"data": "properties.homestead_only"},
-                        {"data": "properties.renew_owned"},
-                        {"data": "properties.price_obo"},
+						{"data": "properties.sidelot_eligible",
+                         "render": function(data){ return boolean_to_yesno(data); }
+                        },
+						{"data": "properties.homestead_only",
+                         "render": function(data){ return boolean_to_yesno(data); }
+                        },
+                        {"data": "properties.renew_owned",
+                         "render": function(data){ return boolean_to_yesno(data); }
+                        },
+                        {"data": "properties.price_obo",
+                         "render": function(data){ return boolean_to_yesno(data); }
+                        },
 
 
 					]
@@ -171,7 +190,6 @@ $(function() {
  });
 
 
-	var surplusStyleMap = new OpenLayers.StyleMap({fillColor: '#A6CEE3', strokeWidth: '.05', strokeColor: 'black'});
 	lbStyleMap = new OpenLayers.StyleMap(lbStyle);
 	var searchResultStyleMap = new OpenLayers.StyleMap({fillColor: '#1F78B4', strokeWidth: '.05', strokeColor: 'black', opacity: '0.9'});
 
@@ -239,17 +257,17 @@ function getSearchResults(data)  {
 
 function toggleSearchOptions(){
 //    console.log("Toggle search");
-//    $('moreSearchOptions').hide();
+//    $('.moreSearchOptions').toggle(400);
 
-/*	if ( $('#searchToggle').is(':contains("Show more search options >>>")') ){
-		$('#moreSearchOptions').show();
+	if ( $('#searchToggle').is(':contains("Show more search options >>>")') ){
+		$('.moreSearchOptions').show(400);
 		$('#searchToggle').html('Show fewer search options <<<');
 		return;
 	}else{
-		$('#moreSearchOptions').hide();
+		$('.moreSearchOptions').hide(400);
 		$('#searchToggle').html('Show more search options >>>');
 	}
-*/
+
 }
 
 
@@ -293,6 +311,10 @@ $(function() {
 		$("#intro").dialog('open');
         return false;
     });
+    $('.moreSearchOptions').hide(400);
+
+
+
 	$('#searchToggle').click(function() { toggleSearchOptions(); });
 	$('#downloadButton').click(function() { getCSV(); } );
 

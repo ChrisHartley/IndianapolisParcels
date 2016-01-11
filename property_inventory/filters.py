@@ -34,11 +34,16 @@ class ApplicationStatusFilters(django_filters.FilterSet):
 
 class PropertySearchFilter(django_filters.FilterSet):
 	streetAddress = django_filters.CharFilter(lookup_type='icontains', label="Street address")
-	structureType = django_filters.ModelMultipleChoiceFilter(
-		queryset=Property.objects.order_by('structureType').distinct('structureType').values_list('structureType', flat=False),
-		to_field_name="structureType",
-		label="Structure Type",
-	)
+	parcel = django_filters.CharFilter(lookup_type='icontains', label="Parcel number")
+	st = Property.objects.order_by('structureType').distinct('structureType').values_list('structureType', flat=True).order_by('structureType')
+	structure_types = zip(st, st)
+	structureType = django_filters.MultipleChoiceFilter(choices=structure_types, name='structureType', label='Structure Type')
+
+	# structureType = django_filters.ModelMultipleChoiceFilter(
+	# 	queryset=Property.objects.order_by('structureType').distinct('structureType').values('structureType'),
+	# 	to_field_name="structureType",
+	# 	label="Structure Type",
+	# )
 
 	#structureType = django_filters.ModelMultipleChoiceFilter(queryset=Property.objects.values_list('structureType', flat=True).distinct('structureType').order_by('structureType'), to_field_name="structureType", label="Structure Type")
 	#zoning = django_filters.ModelMultipleChoiceFilter(queryset=Zoning.objects.values_list('name', flat=True).distinct('name').order_by('name'), to_field_name="name", label="Zoning")
