@@ -2,7 +2,9 @@
 {% load render_table from django_tables2 %}
 
 {% block content %}
+<p>
 {% render_table table %}
+</p>
 <p class="text-center">
     <a href="{% url 'applicants_organization_add' %}" class="btn btn-primary" role="button">Add a new organization/third party</a>
 </p>
