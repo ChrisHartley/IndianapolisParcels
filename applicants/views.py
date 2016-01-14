@@ -102,10 +102,13 @@ class edit_organization(View):
 			template = 'create_organization_popup.html'
 		else:
 			template = 'create_organization.html'
+
+		organization = None
+
 		if id:
 			organization = get_object_or_404(Organization, id=id, user=request.user)
 		form = OrganizationForm(instance=organization)
-		
+
 		return render(request, template, {'title': 'edit organization', 'form': form})
 
 	def post(self, request, id=None):
