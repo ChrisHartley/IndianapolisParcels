@@ -28,16 +28,17 @@ var table = $('#search_results').DataTable({
                     buttons: [
                         'copy', 'excel', 'pdf'
                     ],
-
+                    "language": {
+                         "emptyTable": "Use the search form above"
+                     },
 					"columns": [
 						{"data": "properties.parcel"},
 						{"data": "properties.streetAddress"},
                         {"data": "properties.structureType"},
                         {"data": "properties.status"},
 						{"data": "properties.price",
-                            "render": function ( data ) {
-                           return numberWithCommas(data);
-                           }},
+                         "render": function ( data ) { return numberWithCommas(data); }
+                        },
                 //        {"data": "properties.zipcode"},
                 //        {"data": "properties.zone"},
 						{"data": "properties.nsp",
@@ -62,8 +63,6 @@ var table = $('#search_results').DataTable({
 	});
 
 var stamenAttribution = 'Map tiles by <a href="http://stamen.com">Stamen Design</a>, under <a href="http://creativecommons.org/licenses/by/3.0">CC BY 3.0</a>. Data by <a href="http://openstreetmap.org">OpenStreetMap</a>, under <a href="http://creativecommons.org/licenses/by-sa/3.0">CC BY SA</a>.';
-
-
 
 
 function toggleDraw(element) {

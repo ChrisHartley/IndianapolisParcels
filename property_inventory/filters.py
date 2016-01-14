@@ -1,9 +1,13 @@
 import django_filters
 from django_filters import MethodFilter
-from django.db.models import Count
+from django.db.models import Count, Q
+from django import forms
+
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Submit
+
 from django.contrib.gis.geos import GEOSGeometry # used for centroid calculation
+
 from property_inventory.models import Property, Zoning
 from property_inventory.forms import PropertySearchForm
 
@@ -32,12 +36,24 @@ class ApplicationStatusFilters(django_filters.FilterSet):
 		model = Property
 		fields = ['all_applicants', 'streetAddress']
 
+
+class ChoiceMethodFilter(django_filters.MethodFilter):
+	field_class = forms.ChoiceField
+
 class PropertySearchFilter(django_filters.FilterSet):
 	streetAddress = django_filters.CharFilter(lookup_type='icontains', label="Street address")
 	parcel = django_filters.CharFilter(lookup_type='icontains', label="Parcel number")
 	st = Property.objects.order_by('structureType').distinct('structureType').values_list('structureType', flat=True).order_by('structureType')
 	structure_types = zip(st, st)
 	structureType = django_filters.MultipleChoiceFilter(choices=structure_types, name='structureType', label='Structure Type')
+
+
+
+
+	status_choices = [('available','Available'), ('review','Application under review'), ('approved','Approved for Sale'), ('sold','Sold')]
+	#status = django_filters.MultipleChoiceFilter(choices=status_choices, required=False, lookup_type='icontains')
+	status = ChoiceMethodFilter(label='Status', widget=forms.Select, action='filter_status', choices=status_choices)
+
 
 	# structureType = django_filters.ModelMultipleChoiceFilter(
 	# 	queryset=Property.objects.order_by('structureType').distinct('structureType').values('structureType'),
@@ -53,12 +69,32 @@ class PropertySearchFilter(django_filters.FilterSet):
 	#zipcode = forms.ModelMultipleChoiceField(queryset=Zipcode.objects.all().order_by('name'), required=False)
 	#cdc = forms.ModelMultipleChoiceField(queryset=CDC.objects.all().order_by('name'), required=False)
 
+
+
 	searchArea = MethodFilter(action="filter_searchArea")
 
 	class Meta:
 		model = Property
 		#fields = ['parcel', 'streetAddress', 'nsp', 'structureType', 'cdc', 'zone', 'sidelot_eligible', 'homestead_only', 'bep_demolition']
 		form = PropertySearchForm
+
+	def filter_status(self, queryset, value):
+		if value == 'available':
+			return queryset.filter(status__icontains='Available')
+		if value == 'review':
+			return queryset.filter(
+				( Q(renew_owned__exact=False) & Q(status__icontains='Sale approved by Board of Directors') )
+				| Q(status__icontains='Sale approved by Review Committee')
+			)
+		if value == 'approved':
+			return queryset.filter(
+				( Q(renew_owned__exact=True) & Q(status__icontains='Sale approved by Board of Directors') )
+				| Q(status__icontains='Sale approved by MDC')
+			)
+		if value == 'sold':
+			return queryset.filter(status__contains='Sold')
+
+		return queryset
 
 	def filter_searchArea(self, queryset, value):
 		try:

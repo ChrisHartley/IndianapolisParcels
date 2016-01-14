@@ -12,7 +12,10 @@ class PropertySearchForm(forms.ModelForm):
 	#zipcode1 = forms.ModelChoiceField(queryset=Zipcode.objects.all().order_by('name'), required=False)
 	#cdc = forms.ModelMultipleChoiceField(queryset=CDC.objects.all().order_by('name'), required=False)
 	searchArea = forms.CharField(required=False, widget=HiddenInput())
-	#structureType = forms.ModelMultipleChoiceField(queryset=Property.objects.values_list('structureType', flat=True).distinct('structureType').order_by('structureType'), to_field_name="structureType", label="Structure Type")
+	status_choices = [('Available','Available'), ('Sale','Application under review'), ('MDC','Approved for Sale'), ('Sold','Sold')]
+	status = forms.MultipleChoiceField(choices=status_choices, required=False)
+
+
 
 	class Meta:
 		model = Property
@@ -36,6 +39,7 @@ class PropertySearchForm(forms.ModelForm):
 				HTML('<input type="checkbox" onclick="toggleDraw(this);" name="searchPolygon" value="polygon">Draw search area on map</input>'),
 				Field('parcel'),
 				Field('streetAddress'),
+				Field('status'),
 			),
 			Fieldset('',HTML('<button id="searchToggle">Show more search options >>></button><br/>')),
 			Fieldset(

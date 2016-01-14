@@ -34,9 +34,9 @@ INSTALLED_APPS = (
 	'django_filters', # added 20150225
 	'allauth',	# added 20150526
 	'allauth.account', # added 20150526
-	'endless_pagination', # added 20150610 for old style map search.
-    'django.contrib.humanize', # added 20150708 to format prices in template
-    'formtools',    # added 20151028 to use form wizard for application form
+#	'endless_pagination', # added 20150610 for old style map search.
+#    'django.contrib.humanize', # added 20150708 to format prices in template
+#    'formtools',    # added 20151028 to use form wizard for application form
     'ajaxuploader',
 	'property_inventory',
 	'annual_report_form',
@@ -45,7 +45,8 @@ INSTALLED_APPS = (
 	'property_condition',
     'applications',
 	'applicants',
-    'accella_records'
+    #'accella_records',
+    #'debug_toolbar',
 )
 
 MIDDLEWARE_CLASSES = (
