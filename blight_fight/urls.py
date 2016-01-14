@@ -12,9 +12,7 @@ urlpatterns = patterns('',
     url(r'admin/', include(admin.site.urls)),
     url(r'^$', 'applicants.views.profile_home', name='applicants_home'),
 
-
     url(r'lookup_street_address/$', 'property_inventory.views.getAddressFromParcel', name='get_address_from_parcel'),
-	url(r'lookup_possible_street_addresses/$', 'property_inventory.views.getMatchingAddresses'),
 
     url(r'admin-inquiry-list/$', 'property_inquiry.views.inquiry_list'),
 
@@ -26,11 +24,8 @@ urlpatterns = patterns('',
 
 	url(r'application_status/$', 'property_inventory.views.showApplications'),
 
-	url(r'search/$', 'property_inventory.views.search'),
-	url(r'search-map/$', 'property_inventory.views.showMap'),
 	url(r'search_property/$', 'property_inventory.views.searchProperties'),
 	url(r'propertiesJSON/$', 'property_inventory.views.propertiesAsJSON',  name='properties_ajax_url'),
-	#url(r'search_propertyAJAX/$', 'property_inventory.views.searchPropertiesAJAX'),
 	url(r'propertyPopup/$', 'property_inventory.views.propertyPopup'),
 
 	url(r'admin-condition-report/$', 'property_condition.views.condition_report_list'),
@@ -42,7 +37,6 @@ urlpatterns = patterns('',
 
 	url(r'json_applications$', 'applications.views.applications_asJson', name='applications_ajax'),
 	url(r'admin_applications$', TemplateView.as_view(template_name="admin_datatables.html")),
-
 
 	url(r'accounts/profile$', 'applicants.views.profile_home', name='applicants_home'),
 	url(r'accounts/profile/edit$', 'applicants.views.showApplicantProfileForm', name='applicants_profile'),
