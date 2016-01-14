@@ -46,8 +46,9 @@ urlpatterns = patterns('',
 
 	url(r'accounts/profile$', 'applicants.views.profile_home', name='applicants_home'),
 	url(r'accounts/profile/edit$', 'applicants.views.showApplicantProfileForm', name='applicants_profile'),
-	url(r'accounts/organization/edit/(?P<id>\w+)/$', edit_organization.as_view(), name='applicants_organization_edit'),
-    url(r'accounts/organization/new/$', 'applicants.views.add_organization_popup', name='applicants_organization_add'),
+    url(r'accounts/organization/new/$', edit_organization.as_view(), name='applicants_organization_add'),
+    url(r'accounts/organization/edit/(?P<id>\w+)/$', edit_organization.as_view(), name='applicants_organization_edit'),
+	#    url(r'accounts/organization/new/$', 'applicants.views.add_organization_popup', name='applicants_organization_add'),
 	url(r'accounts/organization$', 'applicants.views.show_organizations', name='applicants_organization'),
 
 	#url(r'map/accounts/', include('allauth.urls')), #django all-auth

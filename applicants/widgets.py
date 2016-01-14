@@ -38,7 +38,7 @@ class AddAnotherWidgetWrapper(forms.Widget):
         info = (model._meta.app_label, model._meta.object_name.lower())
         self.widget.choices = self.choices
         output = [self.widget.render(name, value, *args, **kwargs)]
-        related_url = reverse('%s_%s_add' % info)
+        related_url = '%s?_popup=1' % reverse('%s_%s_add' % info)
         output.append(('<a href="%s" class="add-another" id="add_id_%s" ' +
                       'onclick="return showAddAnotherPopup(this);"> add new ')
                       % (related_url, name))

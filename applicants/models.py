@@ -26,33 +26,38 @@ class Organization(models.Model):
 	FAMILY = 2
 	CLIENT = 3
 	EMPLOYER = 4
+	OWNER = 5
 
 	RELATIONSHIP_TYPES = (
 		(FRIEND, 'Friend'),
 		(FAMILY, 'Family member'),
 		(CLIENT, 'Client'),
-		(EMPLOYER, 'Employer'),
+		(EMPLOYER, 'Employee'),
+		(OWNER, 'Owner'),
 	)
 
 	INDIVIDUAL = 1
 	NON_PROFIT_ORGANIZATION = 2
 	FOR_PROFIT_ORGANIZATION = 3
+	INDIVIDUAL_INVESTMENT_VEHICLE = 4
 
 	ENTITY_TYPES = (
 		(INDIVIDUAL, 'Individual'),
 		(NON_PROFIT_ORGANIZATION, 'Non-profit organization'),
-		(FOR_PROFIT_ORGANIZATION, 'For-profit organization'),
+		(FOR_PROFIT_ORGANIZATION, 'For-profit organization (LLC, etc)'),
+		(INDIVIDUAL_INVESTMENT_VEHICLE, 'Individual Investment Vehicle (eg Self Directed IRA)'),
 	)
 
 
 	user = models.ForeignKey(User)
-	relationship_to_user = models.IntegerField(choices=RELATIONSHIP_TYPES)
-	entity_type = models.IntegerField(choices=ENTITY_TYPES)
+	relationship_to_user = models.IntegerField(choices=RELATIONSHIP_TYPES, help_text='Your relationship to this person or organization', verbose_name='Relationship to you')
+	entity_type = models.IntegerField(choices=ENTITY_TYPES, help_text='Is this a person, corporation, investment account')
+
 
 	name = models.CharField(blank=False, max_length=255)
 
-	phone_number = PhoneNumberField()
-	email = models.EmailField(null=True)
+	phone_number = PhoneNumberField(blank=True)
+	email = models.EmailField(blank=True)
 
 	mailing_address_line1 = models.CharField(max_length='100', blank=False, verbose_name='Line 1')
 	mailing_address_line2 = models.CharField(max_length='100', blank=True, verbose_name='Line 2')

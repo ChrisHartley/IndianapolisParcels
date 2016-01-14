@@ -10,7 +10,7 @@ from .widgets import AddAnotherWidgetWrapper
 
 
 class OrganizationForm(forms.ModelForm):
-	phone_number = USPhoneNumberField()
+	phone_number = USPhoneNumberField(required=False)
 	mailing_address_state = USStateField(widget=USStateSelect, required=True, label='State')
 	mailing_address_zip =  USZipCodeField(required=True, label='Zipcode')
 
@@ -40,8 +40,8 @@ class OrganizationForm(forms.ModelForm):
 				),
 				Fieldset(
 					'Type and Relationship',
-					Field('relationship_to_user'),
 					Field('entity_type'),
+					Field('relationship_to_user'),
 					css_class='well'
 				),
 				Fieldset(

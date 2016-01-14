@@ -88,7 +88,7 @@ def add_organization_popup(request):
 	else:
 		orgForm = OrganizationForm()
 
-	return render_to_response('create_organization.html', {
+	return render_to_response('create_organization_popup.html', {
 		'form': orgForm,
 		'success': success,
 		'title': "new organization"
@@ -96,19 +96,38 @@ def add_organization_popup(request):
 
 
 class edit_organization(View):
-	def get(self, request, id):
-		organization = get_object_or_404(Organization, id=id, user=request.user)
+	def get(self, request, id=None):
+		print "id is: %s" % id
+		if '_popup' in request.GET:
+			template = 'create_organization_popup.html'
+		else:
+			template = 'create_organization.html'
+		if id:
+			organization = get_object_or_404(Organization, id=id, user=request.user)
 		form = OrganizationForm(instance=organization)
-		return render(request, 'edit_organization.html', {'title': 'edit organization', 'form': form})
+		
+		return render(request, template, {'title': 'edit organization', 'form': form})
 
-	def post(self, request, id):
-		organization = get_object_or_404(Organization, id=id, user=request.user)
+	def post(self, request, id=None):
+		print "id is: %s" % id
+		if '_popup' in request.GET:
+			template = 'create_organization_popup.html'
+		else:
+			template = 'create_organization.html'
+		organization = None
+
+		if id:
+			organization = get_object_or_404(Organization, id=id, user=request.user)
 		form = OrganizationForm(request.POST, request.FILES, instance=organization)
 		if form.is_valid():
-			form.save(commit=True)
+			pending = form.save(commit=False)
+			pending.user = request.user
+			pending.save()
+			if '_popup' in request.GET:
+				return HttpResponse('<html><body><script type="text/javascript">opener.dismissAddAnotherPopup(window, "%s", "%s");</script></body></html>' % (escape(pending.pk), escapejs(pending)))
 			return HttpResponseRedirect(reverse('applicants_organization'))
 		else:
-			return render(request, 'edit_organization.html', {'title': 'edit organization', 'form': form})
+			return render(request, template, {'title': 'edit organization', 'form': form})
 
 @login_required
 def show_organizations(request):
