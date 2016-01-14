@@ -1,16 +1,9 @@
 {% extends 'allauth-wp-base.html' %}
 {% load render_table from django_tables2 %}
 
-{% block extra_head %}
-<!-- Bootstrap -->
-<script src="{{ STATIC_URL }}RelatedObjectLookups.js"></script>
-{% endblock extra_head %}
-
-
 {% block content %}
 {% render_table table %}
 <p class="text-center">
-
-<a href="{% url 'applicants_organization_add' %}" class="btn btn-primary" role="button">Add a new organization/third party</a>
+    <a href="{% url 'applicants_organization_add' %}" class="btn btn-primary" role="button">Add a new organization/third party</a>
 </p>
 {% endblock content %}
