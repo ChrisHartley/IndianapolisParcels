@@ -4,14 +4,10 @@
 {% endblock extra_head %}
 
 {% block content %}
-<row class="col-md-12">&nbsp</row>
 <row class="col-md-12">
 <span class="col-md-7">
     {% if not profile %}
     <div class="alert alert-warning">Please complete your profile with your full name and contact information.</div>
-    {% endif %}
-    {% if not profile %}
-    <div class="alert alert-warning">Please verify your email address.</div>
     {% endif %}
 
     <p class="lead">

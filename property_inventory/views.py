@@ -29,6 +29,13 @@ from property_inventory.tables import PropertySearchTable
 from property_inventory.forms import PropertySearchForm, SearchForm
 from property_inventory.filters import PropertySearchFilter
 
+def show_all_properties(request):
+	#all_prop_select = Property.objects.all().select_related('cdc', 'zone', 'zipcode')
+	all_prop_select = None
+	all_prop_prefetch = Property.objects.all().prefetch_related('cdc', 'zone', 'zipcode')
+
+	return render(request, 'testing.html', {'all_properties_select': all_prop_select, 'all_properties_prefetch': all_prop_prefetch })
+
 # given a parcel number return a json with a number of fields
 def getAddressFromParcel(request):
 	if 'parcel' in request.GET and request.GET['parcel']:
@@ -86,7 +93,7 @@ class DisplayNameJsonSerializer(GeoJSONSerializer):
 # search property inventory - new version
 def searchProperties(request):
 #	config = RequestConfig(request)
-	f = PropertySearchFilter(request.GET, queryset=Property.objects.filter(propertyType__exact='lb', is_active__exact=True))
+	f = PropertySearchFilter(request.GET, queryset=Property.objects.filter(propertyType__exact='lb', is_active__exact=True).prefetch_related('cdc', 'zone', 'zipcode'))
 
 	if 'returnType' in request.GET and request.GET['returnType']:
 		if request.GET['returnType'] == "geojson":

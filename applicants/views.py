@@ -49,7 +49,7 @@ def profile_home(request):
 		'applications': applications_table,
 		'organizations': organizations_table,
 		'profile': profile,
-		'title': "home"
+		'title': "my account"
 	}, context_instance=RequestContext(request))
 
 @login_required

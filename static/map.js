@@ -21,7 +21,10 @@ function boolean_to_yesno(boolean){
 	return "No"
 }
 
-var table = $('#search_results').DataTable({
+
+
+
+var table = jQuery('#search_results').DataTable({
                     responsive: true,
 					//dom: 'B<"clear">lrtip',
                     dom: 'iB<"clear">lrtip',
@@ -62,6 +65,8 @@ var table = $('#search_results').DataTable({
 					]
 	});
 
+
+
 var stamenAttribution = 'Map tiles by <a href="http://stamen.com">Stamen Design</a>, under <a href="http://creativecommons.org/licenses/by/3.0">CC BY 3.0</a>. Data by <a href="http://openstreetmap.org">OpenStreetMap</a>, under <a href="http://creativecommons.org/licenses/by-sa/3.0">CC BY SA</a>.';
 
 
@@ -90,7 +95,7 @@ function onFeatureSelect(feature) {
 	popup = new OpenLayers.Popup.FramedCloud("chicken",
                          feature.geometry.getBounds().getCenterLonLat(),
                          null,
-						 $.ajax({ type: "GET", url: '/propertyPopup/', data: {parcel: feature.attributes.parcel}, async: false}).responseText,
+						 jQuery.ajax({ type: "GET", url: '/propertyPopup/', data: {parcel: feature.attributes.parcel}, async: false}).responseText,
                          null, true, onPopupClose);
     feature.popup = popup;
     map.addPopup(popup);
@@ -105,7 +110,7 @@ function onFeatureUnselect(feature) {
 
 function getSearchArea(){
 	try{
-		$('input[name=searchArea]').val(polygonLayer.features[0].geometry.toString());
+		jQuery('input[name=searchArea]').val(polygonLayer.features[0].geometry.toString());
 	}
 	catch(err){ return; }
 }
@@ -124,8 +129,8 @@ function zoomChanged(){ // not working yet openlayers2 bug? wait for switch to 3
 }
 
 
-
-$(function() {
+jQuery(document).ready(function($)
+{
 
 	map = new OpenLayers.Map( 'map', {controls: [
 		new OpenLayers.Control.PanZoomBar(),
@@ -236,7 +241,7 @@ $(function() {
 
 
 function getCSV(){
-	var tmp = $("#myForm").serialize();
+	var tmp = jQuery("#myForm").serialize();
 	document.location.href = "?property-report-propertysearchtable=csv" + tmp;
 }
 
@@ -258,20 +263,20 @@ function toggleSearchOptions(){
 //    console.log("Toggle search");
 //    $('.moreSearchOptions').toggle(400);
 
-	if ( $('#searchToggle').is(':contains("Show more search options >>>")') ){
-		$('.moreSearchOptions').show(400);
-		$('#searchToggle').html('Show fewer search options <<<');
+	if ( jQuery('#searchToggle').is(':contains("Show more search options >>>")') ){
+		jQuery('.moreSearchOptions').show(400);
+		jQuery('#searchToggle').html('Show fewer search options <<<');
 		return;
 	}else{
-		$('.moreSearchOptions').hide(400);
-		$('#searchToggle').html('Show more search options >>>');
+		jQuery('.moreSearchOptions').hide(400);
+        jQuery('#searchToggle').html('Show more search options >>>');
 	}
 
 }
 
 
 //jquery ajax form
-$(function(){
+jQuery(document).ready(function($){
 
     $("#intro").dialog({
         autoOpen: true
@@ -305,15 +310,13 @@ $(function(){
 	});
 });
 
-$(function() {
+jQuery(document).ready(function($){
+
 	$('#help-hints').click(function () {
 		$("#intro").dialog('open');
         return false;
     });
     $('.moreSearchOptions').hide(400);
-
-
-
 	$('#searchToggle').click(function() { toggleSearchOptions(); });
 	$('#downloadButton').click(function() { getCSV(); } );
 

@@ -11,6 +11,7 @@ from applicants.views import edit_organization
 urlpatterns = patterns('',
     url(r'admin/', include(admin.site.urls)),
     url(r'^$', 'applicants.views.profile_home', name='applicants_home'),
+    url(r'test/$', 'property_inventory.views.show_all_properties'),
 
     url(r'lookup_street_address/$', 'property_inventory.views.getAddressFromParcel', name='get_address_from_parcel'),
 
@@ -25,7 +26,7 @@ urlpatterns = patterns('',
 	url(r'application_status/$', 'property_inventory.views.showApplications'),
 
 	url(r'search_property/$', 'property_inventory.views.searchProperties'),
-	url(r'propertiesJSON/$', 'property_inventory.views.propertiesAsJSON',  name='properties_ajax_url'),
+	#url(r'propertiesJSON/$', 'property_inventory.views.propertiesAsJSON',  name='properties_ajax_url'),
 	url(r'propertyPopup/$', 'property_inventory.views.propertyPopup'),
 
 	url(r'admin-condition-report/$', 'property_condition.views.condition_report_list'),

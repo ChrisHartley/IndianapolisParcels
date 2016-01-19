@@ -2,13 +2,13 @@
 
 {% block wpwrap-header %}
 <!-- Bootstrap -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
+
 <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
 <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css">
 <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap-theme.min.css">
 
 {% block extra_head %}
-
-
 {% endblock extra_head %}
 
 {% endblock wpwrap-header%}
@@ -27,8 +27,13 @@
 </div>
 {% endif %}
 
-<div>
-    <ul class="nav nav-tabs" role="navigation">
+    <ul class="nav navbar-nav navbar-right">
+        <li id="fat-menu" class="dropdown">
+    <a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
+      Dropdown <span class="caret"></span>
+    </a>
+</li>
+    <ul class="dropdown-menu" role="navigation">
 {% if user.is_authenticated %}
 <li><a href="{% url 'applicants_home' %}">Home</a></li>
 <li><a href="{% url 'applicants_profile' %}">Profile</a></li>
@@ -40,7 +45,8 @@
 <li><a href="{% url 'account_signup' %}">Create Account</a></li>
 {% endif %}
   </ul>
-</div>
+  </ul>
+
 <div class="col-lg-11">
 {% block content %}
 {% endblock %}
