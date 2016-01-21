@@ -1,11 +1,7 @@
-{% extends 'allauth-base.html' %}
+{% extends 'allauth-wp-base.html' %}
 
 {% block extra_head %}
-<!-- Bootstrap -->
-<script src="//code.jquery.com/jquery-2.1.4.min.js"></script>
-<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
-<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css">
-<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap-theme.min.css">
+
 {% endblock extra_head %}
 
 {% block content %}
@@ -15,10 +11,10 @@
 </p>
 <p>
     {% if Property.renew_owned %}
-    Someone from Renew Indianapolis will contact you within 5 business days to schedule a visit to the property.
+    Someone from Renew Indianapolis will contact you via email or phone within 5 business days to schedule a visit to the property.
     {% else %}
     Your request will be forwarded to the Department of Metropolitan Development at the City Of Indianapolis, who will contact you
-    within 5 business days to schedule a visit to the property.
+    via email or phone within 5 business days to schedule a visit to the property.
     {% endif %}
 </p>
 

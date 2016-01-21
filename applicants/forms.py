@@ -10,7 +10,7 @@ from .widgets import AddAnotherWidgetWrapper
 
 
 class OrganizationForm(forms.ModelForm):
-	phone_number = USPhoneNumberField(required=False)
+	phone_number = USPhoneNumberField(required=False`)
 	mailing_address_state = USStateField(widget=USStateSelect, required=True, label='State')
 	mailing_address_zip =  USZipCodeField(required=True, label='Zipcode')
 
@@ -29,7 +29,7 @@ class OrganizationForm(forms.ModelForm):
 
 			self.helper.layout = Layout(
 				Fieldset(
-					'Add Organization or Third Party',
+					'Add Third Party Buyer',
 					HTML("""
 						<p>If you are applying on behalf of an organization, family member, client or other third party who will take title, provide their name and contact information.</p>
 					"""),

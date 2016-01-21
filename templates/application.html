@@ -20,10 +20,16 @@
 
 {% load crispy_forms_tags %}
 
+{% if form.has_errors %}
+<p>
+It looks like your application has a few problems before it can be submitted. No big deal, just take
+take a look at the sections highlighted below. If you need help or have questions you can reach us
+via phone at (317) 454-8521 during normal business hours or by email at
+<a href='mailto:chris.hartley@renewindianapolis.org'>chris.hartley@renewindianapolis.org</a>
+</p>
+{% endif %}
+
 {% crispy form %}
-
-
-
 
 {% endblock content%}
 
@@ -122,9 +128,11 @@ $(function(){
 $('#id_application_type').change(function() {
 	showAppropriateSections($(this).val());
 });
+
 $('#id_Property').change(function(){
 	get_property_attributions();
 });
+// If a property is a rental and NSP then we need to show income qualification question.
 $('#id_is_rental').change(function(){
 	if ($('#id_is_rental').val() == 'True'){
 		if ( $( "#nsp" ).is(":visible") ){
@@ -134,9 +142,8 @@ $('#id_is_rental').change(function(){
 	else{
 		$('#div_id_nsp_income_qualifier').hide(400);
 	}
-
-
 });
+
 $('#id_Property').select2({
 	placeholder: "Enter address, street name, parcel number or select from dropdown"
 	}
