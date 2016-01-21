@@ -10,7 +10,7 @@ from .widgets import AddAnotherWidgetWrapper
 
 
 class OrganizationForm(forms.ModelForm):
-	phone_number = USPhoneNumberField(required=False`)
+	phone_number = USPhoneNumberField(required=False)
 	mailing_address_state = USStateField(widget=USStateSelect, required=True, label='State')
 	mailing_address_zip =  USZipCodeField(required=True, label='Zipcode')
 
