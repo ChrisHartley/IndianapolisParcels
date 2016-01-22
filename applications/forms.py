@@ -216,6 +216,9 @@ class ApplicationForm(forms.ModelForm):
         if prior_tax_foreclosure is None or prior_tax_foreclosure is True:
             self.add_error('prior_tax_foreclosure', ValidationError("If you have previously lost a property in a tax foreclosure in Marion County you are not eligible to purchase properties from Renew Indianapolis."))
 
+        if property_selected is None or property_selected == "":
+            self.add_error('Property', ValidationError("You must select a property"))
+
         if Application.SIDELOT == application_type:
             msg = "This is a required question."
             if not sidelot_eligible:

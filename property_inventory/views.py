@@ -115,11 +115,11 @@ def searchProperties(request):
 		})
 
 
-# used by dataTables
-def propertiesAsJSON(request):
-	object_list = Property.objects.filter(is_active__exact=True)
-	json = serializers.serialize('json', object_list, use_natural_foreign_keys=True)
-	return HttpResponse(json, content_type='application/json')
+# used by dataTables -- not used anymore?
+# def propertiesAsJSON(request):
+# 	object_list = Property.objects.filter(is_active__exact=True)
+# 	json = serializers.serialize('json', object_list, use_natural_foreign_keys=True)
+# 	return HttpResponse(json, content_type='application/json')
 
 # populate property popup on map via ajax
 def propertyPopup(request):

@@ -17,31 +17,41 @@
     </div>
     <div class="row">
         <div class="col-lg-8 col-lg-offset-2 col-md-10 col-xs-12">
-    {% if messages %}
-    <div>
-      <strong>Messages:</strong>
-      <ul>
-	{% for message in messages %}
-	<li>{{message}}</li>
-	{% endfor %}
-      </ul>
-    </div>
-    {% endif %}
-        <div>
-            <ul class="nav nav-tabs" role="navigation">
-        {% if user.is_authenticated %}
-        <li><a href="{% url 'applicants_home' %}">Home</a></li>
-        <li><a href="{% url 'applicants_profile' %}">Profile</a></li>
-        <li><a href="{% url 'applicants_organization' %}">Organizations</a></li>
-        <li><a href="{% url 'account_email' %}">Change E-mail</a></li>
-        <li><a href="{% url 'account_logout' %}">Sign Out</a></li>
-        {% else %}
-        <li><a href="{% url 'account_login' %}">Sign In</a></li>
-        <li><a href="{% url 'account_signup' %}">Create Account</a></li>
-        {% endif %}
+            {% if messages %}
+                <div>
+                    <strong>Messages:</strong>
+                    <ul>
+                       {% for message in messages %}
+                          <li>{{message}}</li>
+                       {% endfor %}
+                   </ul>
+                </div>
+            {% endif %}
 
-      </ul>
-    </div>
+    <ul class="nav navbar-nav navbar-right">
+        <li class="dropdown">
+            <a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
+                Menu <span class="glyphicon glyphicon-chevron-down" aria-hidden="true"></span>
+            </a>
+
+            <ul class="dropdown-menu">
+                {% if user.is_authenticated %}
+                    <li><a href="{% url 'applicants_home' %}">Home</a></li>
+                    <li><a href="{% url 'applicants_profile' %}">Edit Profile</a></li>
+                    <li><a href="{% url 'applicants_organization' %}">Edit Third Party Buyers</a></li>
+                    <li><a href="{% url 'account_email' %}">Change E-mail</a></li>
+                    <li><a href="{% url 'account_logout' %}">Sign Out</a></li>
+                {% else %}
+                    <li><a href="{% url 'account_login' %}">Sign In</a></li>
+                    <li><a href="{% url 'account_signup' %}">Create Account</a></li>
+                {% endif %}
+            </ul>
+        </li>
+    </ul>
+</div>
+</div>
+    <div class="row">
+        <div class="col-lg-8 col-lg-offset-2 col-md-10 col-xs-12">
 
     {% block content %}
     {% endblock content %}
@@ -54,5 +64,5 @@
 </div> <!-- row -->
 
 </div> <!-- container -->
-  </body>
+</body>
 </html>

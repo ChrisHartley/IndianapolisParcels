@@ -21,12 +21,17 @@
 {% load crispy_forms_tags %}
 
 {% if form.errors %}
-<p class="well">
-It looks like your application has a few problems before it can be submitted. No big deal, just take
-take a look at the sections highlighted below. If you need help or have questions you can reach us
-via phone at (317) 454-8521 during normal business hours or by email at
-<a href='mailto:chris.hartley@renewindianapolis.org'>chris.hartley@renewindianapolis.org</a>
-</p>
+<div class="panel panel-warning">
+	<div class='panel-heading'>
+		<h2 class='panel-title'>Whoops!</h2>
+	</div>
+	<div class='panel-body'>
+		It looks like your application has a few problems to fix before it can be submitted. No big deal, just take
+		take a look at the sections highlighted below. If you need to come back later, don't worry <b>your progress has been saved</b>.
+		If you need help or have questions you can reach us via phone at (317) 454-8521 during normal business hours or by email at
+		<a href='mailto:chris.hartley@renewindianapolis.org'>chris.hartley@renewindianapolis.org</a>
+	</div>
+</div>
 {% endif %}
 
 {% crispy form %}

@@ -87,9 +87,8 @@ def process_application(request, action, id=None):
 				else:
 					"*!*!* validate_for_submission() returned false"
 
-			else:
-				application.frozen = False
-				application.save()
+			application.frozen = False
+			application.save()
 
 	uploaded_files_sow = UploadedFile.objects.filter(user=request.user, application=app.id, file_purpose=UploadedFile.PURPOSE_SOW)
 	uploaded_files_pof = UploadedFile.objects.filter(user=request.user, application=app.id, file_purpose=UploadedFile.PURPOSE_POF)
