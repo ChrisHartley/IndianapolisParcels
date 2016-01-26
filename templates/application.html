@@ -247,6 +247,9 @@ $(function(){
 	});
 });
 
+window.onbeforeunload = function() {
+    return "Have you saved your application? Unsaved changes will be lost.";
+}
 
 </script>
 
