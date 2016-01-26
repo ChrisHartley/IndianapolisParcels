@@ -13,13 +13,14 @@ from django.utils.encoding import is_protected_type
 import os
 from django.forms import inlineformset_factory
 
-from .forms import ApplicationForm, UploadedFileForm #, ApplicationForm0,ApplicationForm1,ApplicationForm2,ApplicationForm3,ApplicationForm4,ApplicationForm5
+# , ApplicationForm0,ApplicationForm1,ApplicationForm2,ApplicationForm3,ApplicationForm4,ApplicationForm5
+from .forms import ApplicationForm, UploadedFileForm
 from .models import UploadedFile, Application
 from property_inventory.models import Property
 from django.contrib.auth.models import User
 
 # ajaxuploader requirements
-from django.middleware.csrf import get_token # not used?
+from django.middleware.csrf import get_token  # not used?
 from ajaxuploader.views import AjaxFileUploader
 
 #from formtools.wizard.views import SessionWizardView
@@ -36,116 +37,126 @@ from pprint import pprint
 
 import_uploader = AjaxFileUploader()
 
+
 @login_required
 def process_application(request, action, id=None):
-	if action == 'edit':
-		app = get_object_or_404(Application, id=id, user=request.user)
-		if app.frozen == True:
-			return HttpResponse("This application has been submitted and can not be editted. To unfreeze this application email chris.hartley@renewindianapolis.org.", status=403)
-		form = ApplicationForm(instance=app, user=request.user, id=app.pk)
-	if action == 'new':
-		## see if they already have an application with initial status, if so use that one again, if not create one.
-		## Problem - multiple browser windows, or multiple browsers (eg start app on phone, continue on computer, then save phone app before computer app,
-		## they share an ID and will overwrite each other. So not doing this for now. We'll see if it is a problem having a blank app saved for each app start
-		# try:
-		# 	app = Application.objects.get(user.request=user, status=Application.INITIAL_STATUS).first()
-		# except model.DoesNotExist:
-		# 	app = Application(user=request.user, status=Application.INITIAL_STATUS)
-		# 	app.save()
-		app = Application(user=request.user, status=Application.INITIAL_STATUS)
-		app.save()
-		form = ApplicationForm(instance=app, user=request.user, id=app.pk)
-	if action == 'save':
-		if request.method != 'POST':
-			return HttpResponseNotAllowed('Error - POST required to save')
-		app = get_object_or_404(Application, id=id, user=request.user)
-		form = ApplicationForm(request.POST, request.FILES, user=request.user, instance=app, id=app.pk)
-		if form.is_valid():
-			application = form.save(commit=False)
-			if application.status == Application.INITIAL_STATUS:
-				application.status = Application.ACTIVE_STATUS
-			save_for_later = request.POST.get('save_for_later')
-			if not save_for_later: # they want to submit the application
-				if form.validate_for_submission(id=application.id):
-					#application.frozen = True
-					application.status = Application.COMPLETE_STATUS
-					application.save()
-					applicant_email = request.user.email
-					property_address = app.Property
-					msg_plain = render_to_string('email/application_submitted.txt', {
-						'user': request.user.first_name,
-						'Property': property_address,
-						}
-					)
-					send_mail(
-						'Application received: {0}'.format(property_address),
-						msg_plain,
-						'info@renewindianapolis.org',
-						[applicant_email],
-					)
-					return HttpResponseRedirect(reverse('application_confirmation', args=(id,) ) )
-				else:
-					"*!*!* validate_for_submission() returned false"
+    if action == 'edit':
+        app = get_object_or_404(Application, id=id, user=request.user)
+        if app.frozen == True:
+            return HttpResponse("This application has been submitted and can not be editted. To unfreeze this application email chris.hartley@renewindianapolis.org.", status=403)
+        form = ApplicationForm(instance=app, user=request.user, id=app.pk)
+    if action == 'new':
+        # see if they already have an application with initial status, if so use that one again, if not create one.
+        # Problem - multiple browser windows, or multiple browsers (eg start app on phone, continue on computer, then save phone app before computer app,
+        # they share an ID and will overwrite each other. So not doing this for now. We'll see if it is a problem having a blank app saved for each app start
+        # try:
+        # 	app = Application.objects.get(user.request=user, status=Application.INITIAL_STATUS).first()
+        # except model.DoesNotExist:
+        # 	app = Application(user=request.user, status=Application.INITIAL_STATUS)
+        # 	app.save()
+        app = Application(user=request.user, status=Application.INITIAL_STATUS)
+        app.save()
+        form = ApplicationForm(instance=app, user=request.user, id=app.pk)
+    if action == 'save':
+        if request.method != 'POST':
+            return HttpResponseNotAllowed('Error - POST required to save')
+        app = get_object_or_404(Application, id=id, user=request.user)
+        form = ApplicationForm(request.POST, request.FILES,
+                               user=request.user, instance=app, id=app.pk)
+        if form.is_valid():
+            application = form.save(commit=False)
+            if application.status == Application.INITIAL_STATUS:
+                application.status = Application.ACTIVE_STATUS
+            save_for_later = request.POST.get('save_for_later')
+            if not save_for_later:  # they want to submit the application
+                if form.validate_for_submission(id=application.id):
+                    #application.frozen = True
+                    application.status = Application.COMPLETE_STATUS
+                    application.save()
+                    applicant_email = request.user.email
+                    property_address = app.Property
+                    msg_plain = render_to_string('email/application_submitted.txt', {
+                        'user': request.user.first_name,
+                        'Property': property_address,
+                    }
+                    )
+                    send_mail(
+                        'Application received: {0}'.format(property_address),
+                        msg_plain,
+                        'info@renewindianapolis.org',
+                        [applicant_email],
+                    )
+                    return HttpResponseRedirect(reverse('application_confirmation', args=(id,)))
+                else:
+                    "*!*!* validate_for_submission() returned false"
 
-			application.frozen = False
-			application.save()
+            application.frozen = False
+            application.save()
 
-	uploaded_files_sow = UploadedFile.objects.filter(user=request.user, application=app.id, file_purpose=UploadedFile.PURPOSE_SOW)
-	uploaded_files_pof = UploadedFile.objects.filter(user=request.user, application=app.id, file_purpose=UploadedFile.PURPOSE_POF)
-	uploaded_files_all = UploadedFile.objects.filter(user=request.user, application=app.id)
+    uploaded_files_sow = UploadedFile.objects.filter(
+        user=request.user, application=app.id, file_purpose=UploadedFile.PURPOSE_SOW)
+    uploaded_files_pof = UploadedFile.objects.filter(
+        user=request.user, application=app.id, file_purpose=UploadedFile.PURPOSE_POF)
+    uploaded_files_all = UploadedFile.objects.filter(
+        user=request.user, application=app.id)
 
-	return render_to_response('application.html', {
-		'form': form,
-		'app_id': app.id,
-		'uploaded_files_sow': uploaded_files_sow,
-		'uploaded_files_pof': uploaded_files_pof,
-		'uploaded_files_all': uploaded_files_all,
-		'title': 'application',
-	}, context_instance=RequestContext(request))
+    return render_to_response('application.html', {
+        'form': form,
+        'app_id': app.id,
+        'uploaded_files_sow': uploaded_files_sow,
+        'uploaded_files_pof': uploaded_files_pof,
+        'uploaded_files_all': uploaded_files_all,
+        'title': 'application',
+    }, context_instance=RequestContext(request))
+
 
 @login_required
 def delete_uploaded_file(request):
     if request.method != 'POST':
         return HttpResponseNotAllowed('Error - POST required to delete')
     file_id = request.POST.get('file_id', None)
-    selected_file = get_object_or_404(UploadedFile, id=file_id, user=request.user)
-    data = {"name": selected_file.supporting_document.name, "id": selected_file.id }
+    selected_file = get_object_or_404(
+        UploadedFile, id=file_id, user=request.user)
+    data = {"name": selected_file.supporting_document.name, "id": selected_file.id}
     selected_file.delete()
     return JsonResponse(data)
 
 
-
 class DisplayNameJsonSerializer(Serializer):
-	def handle_field(self, obj, field):
-		value = field._get_val_from_obj(obj)
-		display_method = "get_%s_display" % field.name
-		if hasattr(obj, display_method):
-		    self._current[field.name] = getattr(obj, display_method)()
-		elif is_protected_type(value):
-		    self._current[field.name] = value
-		else:
-		    self._current[field.name] = field.value_to_string(obj)
+
+    def handle_field(self, obj, field):
+        value = field._get_val_from_obj(obj)
+        display_method = "get_%s_display" % field.name
+        if hasattr(obj, display_method):
+            self._current[field.name] = getattr(obj, display_method)()
+        elif is_protected_type(value):
+            self._current[field.name] = value
+        else:
+            self._current[field.name] = field.value_to_string(obj)
 
 
 @login_required
 def applications_asJson(request):
-	json_serializer = DisplayNameJsonSerializer()
-	json = json_serializer.serialize(Application.objects.exclude(status=Application.INITIAL_STATUS), use_natural_foreign_keys=True)
-	return HttpResponse(json, content_type='application/json')
+    json_serializer = DisplayNameJsonSerializer()
+    json = json_serializer.serialize(Application.objects.exclude(
+        status=Application.INITIAL_STATUS), use_natural_foreign_keys=True)
+    return HttpResponse(json, content_type='application/json')
+
 
 @login_required
 def applications_datatable(request):
-	return render_to_response('admin_datatables.html', {
-		'title': 'applications'
-	}, context_instance=RequestContext(request))
+    return render_to_response('admin_datatables.html', {
+        'title': 'applications'
+    }, context_instance=RequestContext(request))
+
 
 @login_required
 def application_confirmation(request, id):
-	app = get_object_or_404(Application, id=id, user=request.user)
-	return render(request, 'confirmation.html', {
-		'title': 'thank you',
-		'Property': app.Property,
-	})
+    app = get_object_or_404(Application, id=id, user=request.user)
+    return render(request, 'confirmation.html', {
+        'title': 'thank you',
+        'Property': app.Property,
+    })
 
 # APPLICATION_FORMS = [
 #     ('QualifyingQuestions', ApplicationForm0),
@@ -267,4 +278,5 @@ def application_confirmation(request, id):
 #         raise Http404("Application does not exist")
 #     #print application_form_wizard_view(request)
 #     #return HttpResponseRedirect('/apply2/')
-#     return application_form_wizard_view(request, initial_dict=pickle.loads(prev_data.postdata))
+# return application_form_wizard_view(request,
+# initial_dict=pickle.loads(prev_data.postdata))

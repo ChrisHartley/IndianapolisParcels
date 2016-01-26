@@ -14,6 +14,7 @@ class AddAnotherWidgetWrapper(forms.Widget):
     admin interface. Modeled after
     django.contrib.admin.widgets.RelatedFieldWidgetWrapper
     """
+
     def __init__(self, widget, model):
         #self.is_hidden = widget.is_hidden
         self.needs_multipart_form = widget.needs_multipart_form
@@ -40,7 +41,7 @@ class AddAnotherWidgetWrapper(forms.Widget):
         output = [self.widget.render(name, value, *args, **kwargs)]
         related_url = '%s?_popup=1' % reverse('%s_%s_add' % info)
         output.append(('<a href="%s" class="add-another" id="add_id_%s" ' +
-                      'onclick="return showAddAnotherPopup(this);"> add new ')
+                       'onclick="return showAddAnotherPopup(this);"> add new ')
                       % (related_url, name))
         output.append('<img src="%s" width="10" height="10" alt="%s"/></a>'
                       % (static('admin/img/icon_addlink.gif'),

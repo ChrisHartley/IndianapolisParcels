@@ -14,31 +14,37 @@ from property_condition.forms import ConditionReportForm
 from property_condition.filters import ConditionReportFilters
 from property_condition.tables import ConditionReportTable
 
-# Displays form template for property condition submissions, and saves those submissions
+# Displays form template for property condition submissions, and saves
+# those submissions
+
+
 @user_passes_test(lambda u: u.groups.filter(name='City Staff').exists() or u.is_staff)
 def submitConditionReport(request):
-	success = False
-	if request.method == 'POST':
-		form = ConditionReportForm(request.POST, request.FILES)
-		if form.is_valid():
-			form.save()
-			success = True
-	form = ConditionReportForm()
-	return render_to_response('condition_report.html', {
-		'form': form,
-		'title': 'condition report',
-		'success': success
-	}, context_instance=RequestContext(request))
+    success = False
+    if request.method == 'POST':
+        form = ConditionReportForm(request.POST, request.FILES)
+        if form.is_valid():
+            form.save()
+            success = True
+    form = ConditionReportForm()
+    return render_to_response('condition_report.html', {
+        'form': form,
+        'title': 'condition report',
+        'success': success
+    }, context_instance=RequestContext(request))
 
 # Displays submitted property condition reports
 #@user_passes_test(lambda u: u.groups.filter(name='City Staff').exists() or u.is_staff)
+
+
 def condition_report_list(request):
-	config = RequestConfig(request)
-	f = ConditionReportFilters(request.GET, queryset=ConditionReport.objects.all().order_by('-timestamp'))
-	table = ConditionReportTable(f)
-	config.configure(table)
-	return render_to_response('admin-with-filter-table.html', {
-		'filter': f,
-		'title': 'Condition Reports Admin',
-		'table': table
-	}, context_instance=RequestContext(request))
+    config = RequestConfig(request)
+    f = ConditionReportFilters(
+        request.GET, queryset=ConditionReport.objects.all().order_by('-timestamp'))
+    table = ConditionReportTable(f)
+    config.configure(table)
+    return render_to_response('admin-with-filter-table.html', {
+        'filter': f,
+        'title': 'Condition Reports Admin',
+        'table': table
+    }, context_instance=RequestContext(request))

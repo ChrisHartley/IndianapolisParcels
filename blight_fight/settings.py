@@ -26,25 +26,25 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'django.contrib.sites', #required by allauth
-    'django.contrib.gis', # added 20150225
-	'crispy_forms', # added 20150225
-	'django_tables2', # added 20150225
-	'django_tables2_reports', # added 20150225
-	'django_filters', # added 20150225
-	'allauth',	# added 20150526
-	'allauth.account', # added 20150526
-#	'endless_pagination', # added 20150610 for old style map search.
-#    'django.contrib.humanize', # added 20150708 to format prices in template
-#    'formtools',    # added 20151028 to use form wizard for application form
+    'django.contrib.sites',  # required by allauth
+    'django.contrib.gis',  # added 20150225
+    'crispy_forms',  # added 20150225
+    'django_tables2',  # added 20150225
+    'django_tables2_reports',  # added 20150225
+    'django_filters',  # added 20150225
+    'allauth',  # added 20150526
+    'allauth.account',  # added 20150526
+    #	'endless_pagination', # added 20150610 for old style map search.
+    #    'django.contrib.humanize', # added 20150708 to format prices in template
+    #    'formtools',    # added 20151028 to use form wizard for application form
     'ajaxuploader',
-	'property_inventory',
-	'annual_report_form',
-	'property_inquiry',
-	'neighborhood_associations',
-	'property_condition',
+    'property_inventory',
+    'annual_report_form',
+    'property_inquiry',
+    'neighborhood_associations',
+    'property_condition',
     'applications',
-	'applicants',
+    'applicants',
     #'accella_records',
     'debug_toolbar',
 )
@@ -57,7 +57,7 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.auth.middleware.SessionAuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-	'django_tables2_reports.middleware.TableReportMiddleware',
+    'django_tables2_reports.middleware.TableReportMiddleware',
 )
 
 ROOT_URLCONF = 'blight_fight.urls'
@@ -68,7 +68,7 @@ WSGI_APPLICATION = 'blight_fight.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.contrib.gis.db.backends.postgis',
-        'NAME': 'blight_fight', # change this to a new db to prevent problems on dev server
+        'NAME': 'blight_fight',  # change this to a new db to prevent problems on dev server
         'USER': 'chris',
         'PASSWORD': 'chris',
         'HOST': '',
@@ -107,7 +107,7 @@ TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         'DIRS': [
-            	BASE_DIR + '/templates',
+            BASE_DIR + '/templates',
         ],
         'APP_DIRS': True,
         'OPTIONS': {
@@ -121,9 +121,9 @@ TEMPLATES = [
                 'django.template.context_processors.static',
                 'django.template.context_processors.tz',
                 'django.contrib.messages.context_processors.messages',
-				"django.core.context_processors.request",
-				'allauth.account.context_processors.account',
-#				'allauth.socialaccount.context_processors.socialaccount',
+                "django.core.context_processors.request",
+                'allauth.account.context_processors.account',
+                #				'allauth.socialaccount.context_processors.socialaccount',
             ],
         },
     },
@@ -147,7 +147,7 @@ LOGOUT_URL = '/map/accounts/logout'
 #AUTH_USER_MODEL = 'applicants.ApplicantUser'
 AUTH_PROFILE_MODULE = 'applicants.ApplicantProfile'
 
-#django all-auth related
+# django all-auth related
 SITE_ID = 2
 
 # set all-auth to use email as username
@@ -159,18 +159,21 @@ ACCOUNT_USER_DISPLAY = lambda user: user.email
 ACCOUNT_EMAIL_VERIFICATION = 'mandatory'
 ACCOUNT_SIGNUP_FORM_CLASS = 'applicants.forms.SignupForm'
 
-# Email settings - for development. Typically over-written by production settings for production use
+# Email settings - for development. Typically over-written by production
+# settings for production use
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
 # used by django-passwords
-PASSWORD_COMPLEXITY = { # You can omit any or all of these for no limit for that particular set
+PASSWORD_COMPLEXITY = {  # You can omit any or all of these for no limit for that particular set
     "UPPER": 1,        # Uppercase
     "LOWER": 1,        # Lowercase
     "LETTERS": 0,       # Either uppercase or lowercase letters
     "DIGITS": 1,       # Digits
     "PUNCTUATION": 0,  # Punctuation (string.punctuation)
     "SPECIAL": 0,      # Not alphanumeric, space or punctuation character
-    "WORDS": 0         # Words (alphanumeric sequences separated by a whitespace or punctuation character)
+    # Words (alphanumeric sequences separated by a whitespace or punctuation
+    # character)
+    "WORDS": 0
 }
 
 
@@ -181,8 +184,9 @@ MEDIA_URL = '/media/'
 # for django-tables2-reports
 EXCEL_SUPPORT = 'xlwt'
 
-# Production settings are kept in a separate file, settings_production.py which overrides db, email, secret key, etc with production values
+# Production settings are kept in a separate file, settings_production.py
+# which overrides db, email, secret key, etc with production values
 try:
-	from settings_production import *
-except ImportError:	#
-	pass
+    from settings_production import *
+except ImportError:
+    pass
