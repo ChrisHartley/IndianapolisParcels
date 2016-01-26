@@ -46,7 +46,7 @@ INSTALLED_APPS = (
     'applications',
     'applicants',
     #'accella_records',
-    'debug_toolbar',
+    #'debug_toolbar',
 )
 
 MIDDLEWARE_CLASSES = (
