@@ -60,9 +60,10 @@ class OrganizationForm(forms.ModelForm):
                 HTML("""
 						<p>Organizations should provide additional identifying and financial documents.</p>
 					"""),
-                Field('sos_business_entity_report'),
-                Field('irs_determination_letter'),
-                Field('most_recent_financial_statement'),
+                #Field('sos_business_entity_report'),
+                #Field('irs_determination_letter'),
+                #Field('most_recent_financial_statement'),
+                HTML('<div class="form-group"><div class="control-label col-lg-4">Attach a file</div><div id="file-uploader" class="form-control-static col-lg-6">Drop your file here to upload</div>'),
                 css_class='well'
             ),
             FormActions(

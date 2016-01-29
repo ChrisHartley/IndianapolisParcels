@@ -10,6 +10,7 @@ from django.core.urlresolvers import reverse
 
 from .forms import ApplicantProfileForm, OrganizationForm
 from .models import ApplicantProfile, Organization
+from user_files.models import UploadedFile
 from .tables import PropertyInquiryTable, ApplicationTable, OrganizationTable
 from applications.models import Application
 from property_inquiry.models import propertyInquiry
@@ -112,7 +113,10 @@ class edit_organization(View):
                 Organization, id=id, user=request.user)
         form = OrganizationForm(instance=organization)
 
-        return render(request, template, {'title': 'edit organization', 'form': form})
+        uploaded_files = UploadedFile.objects.filter(
+            user=request.user, organization=organization)
+
+        return render(request, template, {'title': 'edit organization', 'form': form, 'files': uploaded_files})
 
     def post(self, request, id=None):
         print "id is: %s" % id

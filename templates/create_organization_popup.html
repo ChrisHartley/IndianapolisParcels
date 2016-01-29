@@ -10,6 +10,9 @@
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css">
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap-theme.min.css">
 
+<script src="{{ STATIC_URL }}ajaxuploader/js/fileuploader.js" ></script>
+<link href="{{ STATIC_URL }}ajaxuploader/css/fileuploader.css" media="screen" rel="stylesheet" type="text/css" />
+
 {% endblock header %}
 
 {% block body %}
@@ -29,4 +32,35 @@ setTimeout(function(){
 <div class="row">&nbsp</div>
 
 </div>
+<script>
+$(function(){
+	var sowuploader = new qq.FileUploader({
+		action: "{% url 'my_ajax_upload' %}",
+		element: $('#file-uploader')[0],
+		multiple: true,
+		onComplete: function(id, fileName, responseJSON) {
+			if(responseJSON.success) {
+				//alert("success!");
+			} else {
+				alert("Upload Failed!");
+				console.log(fileName);
+				console.log(responseJSON);
+			}
+		},
+		onAllComplete: function(uploads) {
+			// uploads is an array of maps
+			// the maps look like this: {file: FileObject, response: JSONServerResponse}
+			alert("Uploads complete!");
+		},
+		params: {
+			'csrf_token': '{{ csrf_token }}',
+			'csrf_name': 'csrfmiddlewaretoken',
+			'csrf_xname': 'X-CSRFToken',
+			'file_purpose': '1',
+			'application': '{{ app_id }}',
+
+		},
+	});
+});
+</script>
 {% endblock body %}

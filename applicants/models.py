@@ -2,6 +2,7 @@ from django.db import models
 #from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin
 from django.contrib.auth.models import User
 from localflavor.us.models import PhoneNumberField
+
 #from applications.models import UploadedFile
 
 
@@ -25,7 +26,6 @@ class ApplicantProfile(models.Model):
 
     def __unicode__(self):
         return self.user.first_name
-
 
 class Organization(models.Model):
 
@@ -81,12 +81,12 @@ class Organization(models.Model):
         max_length='100', blank=False, verbose_name='Zipcode')
 
     date_created = models.DateTimeField(auto_now_add=True)
-    sos_business_entity_report = models.FileField(verbose_name='Secretary of State Business Entity Report',
-                                                  help_text='Available from the Secretary of State\'s website <a href="https://secure.in.gov/sos/online_corps/name_search.aspx">here</a>.', blank=True, null=True)
-    irs_determination_letter = models.FileField(
-        verbose_name='IRS Determination Letter', help_text='Required for 501(c)3 non-profits', blank=True, null=True)
-    most_recent_financial_statement = models.FileField(
-        verbose_name='Most Recent Financial Statement', help_text='If available', blank=True, null=True)
+    # sos_business_entity_report = models.FileField(verbose_name='Secretary of State Business Entity Report',
+    #                                               help_text='Available from the Secretary of State\'s website <a href="https://secure.in.gov/sos/online_corps/name_search.aspx">here</a>.', blank=True, null=True)
+    # irs_determination_letter = models.FileField(
+    #     verbose_name='IRS Determination Letter', help_text='Required for 501(c)3 non-profits', blank=True, null=True)
+    # most_recent_financial_statement = models.FileField(
+    #     verbose_name='Most Recent Financial Statement', help_text='If available', blank=True, null=True)
 
     def __unicode__(self):
         return self.name
@@ -94,27 +94,3 @@ class Organization(models.Model):
     class Meta:
         verbose_name = "Organization or Third Party"
         verbose_name_plural = "Organizations or Third Parties"
-
-#	sos_business_entity_report = models.ForeignKey('applications.UploadedFile', related_name="entity_report")
-#	irs_determination_letter = models.ForeignKey('applications.UploadedFile', related_name="determination_letter")
-#	most_recent_financial_statement = models.ForeignKey('applications.UploadedFile', related_name="financial_statement")
-
-# class ApplicantUser(AbstractBaseUser, PermissionsMixin):
-#	email = models.EmailField(verbose_name='email address', unique=True, max_length=255)
-#	name = models.CharField(max_length='255', null=True, blank=True)
-#	organization = models.CharField(max_length='255', null=True, blank=True)
-#	date_created = models.DateTimeField(auto_now_add=True)
-
-
-#	#objects = AuthUserManager()
-#	USERNAME_FIELD = 'email'
-#	REQUIRED_FIELDS = ['name', 'password']
-
-#	def get_full_name(self):
-#		return self.name
-
-#	def get_short_name(self):
-#		return self.email
-
-#	def __unicode__(self):
-#		return self.email

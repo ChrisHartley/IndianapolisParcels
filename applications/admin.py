@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Application, UploadedFile
+from .models import Application
 
 
 class ApplicationAdmin(admin.ModelAdmin):
@@ -7,4 +7,3 @@ class ApplicationAdmin(admin.ModelAdmin):
     pass
 
 admin.site.register(Application, ApplicationAdmin)
-admin.site.register(UploadedFile)

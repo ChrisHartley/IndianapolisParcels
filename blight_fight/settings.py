@@ -45,6 +45,7 @@ INSTALLED_APPS = (
     'property_condition',
     'applications',
     'applicants',
+    'user_files',
     #'accella_records',
     #'debug_toolbar',
 )

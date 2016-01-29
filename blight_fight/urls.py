@@ -72,10 +72,10 @@ urlpatterns = patterns('',
                        # django all-auth
                        url(r'accounts/', include('allauth.urls')),
 
-                       url(r'application/delete_file/$',
-                           'applications.views.delete_uploaded_file', name='uploadedfile_delete'),
-                       url(r'application/upload_file/$',
-                           'applications.views.import_uploader', name='my_ajax_upload'),
+                       url(r'utils/delete_file/$',
+                           'user_files.views.delete_uploaded_file', name='uploadedfile_delete'),
+                       url(r'utils/upload_file/$',
+                           'user_files.views.import_uploader', name='my_ajax_upload'),
                        url(r'application/thanks/(?P<id>[0-9]+)$',
                            'applications.views.application_confirmation', name='application_confirmation'),
 

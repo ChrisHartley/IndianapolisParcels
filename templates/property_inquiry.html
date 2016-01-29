@@ -85,14 +85,18 @@ function get_property_attributions(){
 		});
 	}
 }
-$('#id_Property').change(function(){
-	get_property_attributions();
-});
+jQuery(document).ready(function($) {
+    // $() will work as an alias for jQuery() inside of this function
+
+	$('#id_Property').change(function(){
+		get_property_attributions();
+	});
+
 
 $('#id_Property').select2({
 	placeholder: "Enter address, street name, parcel number or select from dropdown"
 	});
-
+});
 </script>
 
 {% endblock content %}

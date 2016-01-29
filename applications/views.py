@@ -13,29 +13,24 @@ from django.utils.encoding import is_protected_type
 import os
 from django.forms import inlineformset_factory
 
-# , ApplicationForm0,ApplicationForm1,ApplicationForm2,ApplicationForm3,ApplicationForm4,ApplicationForm5
-from .forms import ApplicationForm, UploadedFileForm
-from .models import UploadedFile, Application
+
+from .forms import ApplicationForm
+#from user_files.forms import UploadedFileForm
+from .models import Application
 from property_inventory.models import Property
+from user_files.models import UploadedFile
 from django.contrib.auth.models import User
 
-# ajaxuploader requirements
-from django.middleware.csrf import get_token  # not used?
-from ajaxuploader.views import AjaxFileUploader
 
 #from formtools.wizard.views import SessionWizardView
-from django.core.files.storage import FileSystemStorage
+#from django.core.files.storage import FileSystemStorage
 
 # used to send confirmation email
 from django.core.mail import send_mail
 from django.template.loader import render_to_string
 
-# used to save incomplete application in process
-#import pickle
-
 from pprint import pprint
 
-import_uploader = AjaxFileUploader()
 
 
 @login_required
@@ -110,16 +105,7 @@ def process_application(request, action, id=None):
     }, context_instance=RequestContext(request))
 
 
-@login_required
-def delete_uploaded_file(request):
-    if request.method != 'POST':
-        return HttpResponseNotAllowed('Error - POST required to delete')
-    file_id = request.POST.get('file_id', None)
-    selected_file = get_object_or_404(
-        UploadedFile, id=file_id, user=request.user)
-    data = {"name": selected_file.supporting_document.name, "id": selected_file.id}
-    selected_file.delete()
-    return JsonResponse(data)
+
 
 
 class DisplayNameJsonSerializer(Serializer):
