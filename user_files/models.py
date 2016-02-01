@@ -82,12 +82,14 @@ class UploadedFile(models.Model):
             print 'returning in virus_scan called from create_on_upload'
             return
 
+        #if 'application' in request.GET:
+        #    if request.GET.get
         try:
-            app = Application.objects.get(id=request.GET.get('application'))
+            app = Application.objects.get(id=request.GET.get('application', None))
         except Application.DoesNotExist:
             app = None
         try:
-            org = Organization.objects.get(id=request.GET.get('organization'))
+            org = Organization.objects.get(id=request.GET.get('organization', None))
         except Organization.DoesNotExist:
             org = None
 
