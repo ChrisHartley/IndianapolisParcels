@@ -64,8 +64,8 @@ class Organization(models.Model):
 
     name = models.CharField(blank=False, max_length=255)
 
-    phone_number = PhoneNumberField(blank=True)
-    email = models.EmailField(blank=True)
+    phone_number = PhoneNumberField(blank=True, default='')
+    email = models.EmailField(blank=True, default='')
 
     mailing_address_line1 = models.CharField(
         max_length='100', blank=False, verbose_name='Line 1')
