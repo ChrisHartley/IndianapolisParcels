@@ -60,7 +60,7 @@ class PropertySearchForm(forms.ModelForm):
                 Field('price_obo'),
                 css_class='moreSearchOptions'),
             FormActions(
-                Button('cancel', 'Reset'),
+                #Button('cancel', 'Reset'),
                 Submit('save', 'Search')
             )
         )

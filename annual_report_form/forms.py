@@ -60,7 +60,7 @@ class annualReportForm(ModelForm):
                      ),
             FormActions(
                 Submit('save', 'Submit Report'),
-                Button('cancel', 'Cancel')
+                #Button('cancel', 'Cancel')
             )
 
         )

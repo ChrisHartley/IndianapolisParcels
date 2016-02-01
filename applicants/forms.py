@@ -67,7 +67,7 @@ class OrganizationForm(forms.ModelForm):
                 css_class='well'
             ),
             FormActions(
-                Button('cancel', 'Cancel'),
+                #Button('cancel', 'Cancel'),
                 Submit('save', 'Save')
             )
         )
@@ -158,7 +158,7 @@ class ApplicantProfileForm(forms.ModelForm):
                 css_class='well'
             ),
             FormActions(
-                Button('cancel', 'Cancel'),
+                #Button('cancel', 'Cancel'),
                 Submit('save', 'Save')
             )
         )
