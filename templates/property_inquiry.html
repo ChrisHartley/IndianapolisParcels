@@ -67,26 +67,27 @@ function numberWithCommas(x) {
     return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 }
 
-function get_property_attributions(){
-	var	term = $("#id_Property option:selected").text().match(/[0-9]{7}$/),
-		url = "{% url 'get_address_from_parcel' %}"
-
-	if (term !== null) {
-		var posting = $.get( url, { parcel: term[0] } );
-
-		// Put the results in a div
-		posting.done(function( data ) {
-			$( "#structureType" ).text(data[0].fields.structureType);
-			$( "#status" ).text(data[0].fields.status);
-			$( "#homestead_only" ).text(boolean_to_yesno(data[0].fields.homestead_only));
-			$( "#nsp" ).text(boolean_to_yesno(data[0].fields.nsp));
-			$( "#price" ).text('$'+numberWithCommas(data[0].fields.price));
-
-		});
-	}
-}
 jQuery(document).ready(function($) {
-    // $() will work as an alias for jQuery() inside of this function
+	function get_property_attributions(){
+		var	term = $("#id_Property option:selected").text().match(/[0-9]{7}$/),
+			url = "{% url 'get_address_from_parcel' %}"
+
+		if (term !== null) {
+			var posting = $.get( url, { parcel: term[0] } );
+
+			// Put the results in a div
+			posting.done(function( data ) {
+				$( "#structureType" ).text(data[0].fields.structureType);
+				$( "#status" ).text(data[0].fields.status);
+				$( "#homestead_only" ).text(boolean_to_yesno(data[0].fields.homestead_only));
+				$( "#nsp" ).text(boolean_to_yesno(data[0].fields.nsp));
+				$( "#price" ).text('$'+numberWithCommas(data[0].fields.price));
+
+			});
+		}
+	}
+
+
 
 	$('#id_Property').change(function(){
 		get_property_attributions();
