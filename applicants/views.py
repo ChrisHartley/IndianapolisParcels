@@ -118,7 +118,7 @@ class edit_organization(View):
         uploaded_files = UploadedFile.objects.filter(
             user=request.user, organization=organization)
 
-        return render(request, template, {'title': 'edit organization', 'org_id': organization.id, 'form': form, 'files': uploaded_files})
+        return render(request, template, {'title': 'edit organization', 'form': form, 'files': uploaded_files})
 
     def post(self, request, id=None):
         print "id is: %s" % id
