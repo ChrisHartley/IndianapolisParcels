@@ -76,7 +76,7 @@ def showApplicantProfileForm(request):
         'success': success
     }, context_instance=RequestContext(request))
 
-
+# no longer used?
 @login_required
 def add_organization_popup(request):
     success = False
@@ -97,6 +97,7 @@ def add_organization_popup(request):
     }, context_instance=RequestContext(request))
 
 
+@login_required
 class edit_organization(View):
 
     def get(self, request, id=None):
@@ -111,12 +112,14 @@ class edit_organization(View):
         if id:
             organization = get_object_or_404(
                 Organization, id=id, user=request.user)
+        # else:
+        #     organization = Organization(user=request.user)
         form = OrganizationForm(instance=organization)
 
         uploaded_files = UploadedFile.objects.filter(
             user=request.user, organization=organization)
 
-        return render(request, template, {'title': 'edit organization', 'form': form, 'files': uploaded_files})
+        return render(request, template, {'title': 'edit organization', 'org_id': organization.id, 'form': form, 'files': uploaded_files})
 
     def post(self, request, id=None):
         print "id is: %s" % id

@@ -81,8 +81,8 @@ class Organization(models.Model):
         max_length='100', blank=False, verbose_name='Zipcode')
 
     date_created = models.DateTimeField(auto_now_add=True)
-    # sos_business_entity_report = models.FileField(verbose_name='Secretary of State Business Entity Report',
-    #                                               help_text='Available from the Secretary of State\'s website <a href="https://secure.in.gov/sos/online_corps/name_search.aspx">here</a>.', blank=True, null=True)
+    sos_business_entity_report = models.FileField(verbose_name='Secretary of State Business Entity Report',
+                                                   help_text='Available from the Secretary of State\'s website <a href="https://secure.in.gov/sos/online_corps/name_search.aspx">here</a>.', blank=True, null=True)
     # irs_determination_letter = models.FileField(
     #     verbose_name='IRS Determination Letter', help_text='Required for 501(c)3 non-profits', blank=True, null=True)
     # most_recent_financial_statement = models.FileField(
