@@ -148,7 +148,7 @@ class ApplicationForm(forms.ModelForm):
                 css_class='standard-app homestead-app well'
             ),
             FormActions(
-                Button('cancel', 'Cancel'),
+                #Button('cancel', 'Cancel'),
                 Submit('save_for_later', 'Save Incomplete Application'),
                 Submit('save', 'Validate and Submit Application'),
             )
