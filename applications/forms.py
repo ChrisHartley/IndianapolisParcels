@@ -149,7 +149,7 @@ class ApplicationForm(forms.ModelForm):
             ),
             FormActions(
                 #Button('cancel', 'Cancel'),
-                Submit('save_for_later', 'Save Incomplete Application'),
+                Submit('save_for_later', 'Save Application'),
                 Submit('save', 'Validate and Submit Application'),
             )
         )
