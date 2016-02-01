@@ -97,7 +97,6 @@ def add_organization_popup(request):
     }, context_instance=RequestContext(request))
 
 
-@login_required
 class edit_organization(View):
 
     def get(self, request, id=None):
