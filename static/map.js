@@ -203,7 +203,7 @@ jQuery(document).ready(function($)
 
 	lbLayer = new OpenLayers.Layer.Vector("Landbank Properties", {
 		protocol: new OpenLayers.Protocol.HTTP({
-			url: "/search_property/?returnType=geojson",
+			url: "/map/search_property/?returnType=geojson",
 			format: new OpenLayers.Format.GeoJSON()
 		}),
 		strategies: [
