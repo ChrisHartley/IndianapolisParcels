@@ -247,8 +247,18 @@ $(function(){
 	});
 });
 
+document.querySelector('#submit-id-save_for_later').addEventListener("click", function(){
+    window.btn_clicked = true;      //set btn_clicked to true
+});
+
+document.querySelector('#submit-id-save').addEventListener("click", function(){
+    window.btn_clicked = true;      //set btn_clicked to true
+});
+
 window.onbeforeunload = function() {
-    return "Have you saved your application? Unsaved changes will be lost.";
+	  if (!window.btn_clicked){
+    	return "Have you saved your application? Unsaved changes will be lost.";
+		}
 }
 
 </script>
