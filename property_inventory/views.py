@@ -23,6 +23,7 @@ from django.views.decorators.csrf import csrf_exempt
 from django.db.models import Q
 import operator
 from django.contrib.gis.geos import GEOSGeometry  # used for centroid calculation
+from djqscsv import render_to_csv_response
 
 from property_inventory.models import Property, Zipcode, CDC, Zoning
 from property_inventory.filters import ApplicationStatusFilters
@@ -31,6 +32,10 @@ from property_inventory.tables import PropertySearchTable
 from property_inventory.forms import PropertySearchForm, SearchForm
 from property_inventory.filters import PropertySearchFilter
 
+def get_inventory_csv(request):
+    qs = Property.objects.all().values('parcel', 'streetAddress', 'zipcode__name', 'zone__name','cdc__name', 'applicant', 'status','area', 'price', 'price_obo')
+    #qs = Property.objects.all().prefetch_related('cdc', 'zone', 'zipcode')
+    return render_to_csv_response(qs)
 
 def show_all_properties(request):
     #all_prop_select = Property.objects.all().select_related('cdc', 'zone', 'zipcode')
