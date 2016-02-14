@@ -1,4 +1,7 @@
 from django import forms
+#from allauth.accounts.forms import SignupForm
+#from allauth.account.forms import SignupForm as allauthSignupForm
+#from allauth import accounts
 from applicants.models import Organization, ApplicantProfile
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Submit, Layout, Fieldset, ButtonHolder, Div, Button, MultiField, Field, HTML
@@ -60,7 +63,7 @@ class OrganizationForm(forms.ModelForm):
                 HTML("""
 						<p>Organizations should provide additional identifying and financial documents.</p>
 					"""),
-                #Field('sos_business_entity_report'),
+                Field('sos_business_entity_report'),
                 #Field('irs_determination_letter'),
                 #Field('most_recent_financial_statement'),
                 HTML('<div class="form-group"><div class="control-label col-lg-4">Attach a file</div><div id="file-uploader" class="form-control-static col-lg-6">Drop your file here to upload</div>'),
@@ -73,7 +76,6 @@ class OrganizationForm(forms.ModelForm):
         )
         self.helper.form_method = 'post'
         self.helper.form_action = ''
-
 
 class SignupForm(forms.Form):
     first_name = forms.CharField(max_length=30, label='First name')
@@ -97,6 +99,11 @@ class SignupForm(forms.Form):
             raise forms.ValidationError(
                 "Looks like an account with this email address already exists, did you forget your password?")
         return email
+    def raise_duplicate_email_error(self):
+        # here I tried to override the method, but it is not called
+        raise forms.ValidationError(
+            _("An account already exists with this e-mail address."
+              " Please sign in to that account."))
 
     def signup(self, request, user):
         user.first_name = self.cleaned_data['first_name']
@@ -164,3 +171,10 @@ class ApplicantProfileForm(forms.ModelForm):
         )
         self.helper.form_method = 'post'
         self.helper.form_action = ''
+
+# class CustomSignupForm(allauthSignupForm ):
+#     def raise_duplicate_email_error(self):
+#         # here I tried to override the method, but it is not called
+#         raise forms.ValidationError(
+#             _("An account already exists with this e-mail address."
+#               " Please sign in to that account."))

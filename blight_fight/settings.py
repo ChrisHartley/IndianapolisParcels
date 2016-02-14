@@ -159,6 +159,9 @@ ACCOUNT_AUTHENTICATION_METHOD = 'email'
 ACCOUNT_USER_DISPLAY = lambda user: user.email
 ACCOUNT_EMAIL_VERIFICATION = 'mandatory'
 ACCOUNT_SIGNUP_FORM_CLASS = 'applicants.forms.SignupForm'
+#SOCIALACCOUNT_FORMS = {
+#    'signup': 'applicants.forms.CustomSignupForm'
+#}
 
 # Email settings - for development. Typically over-written by production
 # settings for production use

@@ -1,19 +1,15 @@
 {% extends 'allauth-wp-base.html' %}
 {% load crispy_forms_tags %}
-{% block header %}
-<!-- jQuery and UI-->
+{% block extra_head %}
+<!-- jQuery and UI
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
 <script type="text/javascript" src="//code.jquery.com/ui/1.10.3/jquery-ui.min.js"></script>
-
-<!-- Bootstrap -->
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css">
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap-theme.min.css">
-
+-->
+<!-- Ajax Uploader -->
 <script src="{{ STATIC_URL }}ajaxuploader/js/fileuploader.js" ></script>
 <link href="{{ STATIC_URL }}ajaxuploader/css/fileuploader.css" media="screen" rel="stylesheet" type="text/css" />
 
-{% endblock header %}
+{% endblock extra_head %}
 
 {% block content %}
     <div class="row">
@@ -22,10 +18,10 @@
     <div class="row">&nbsp</div>
 
 <script>
-$(function(){
+jQuery(document).ready((function($){
 	var sowuploader = new qq.FileUploader({
 		action: "{% url 'my_ajax_upload' %}",
-		element: $('#file-uploader')[0],
+		element: $('#id_sos_business_entity_report')[0],
 		multiple: true,
 		onComplete: function(id, fileName, responseJSON) {
 			if(responseJSON.success) {
@@ -50,6 +46,6 @@ $(function(){
 
 		},
 	});
-});
+}));
 </script>
 {% endblock content %}

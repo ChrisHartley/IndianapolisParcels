@@ -15,6 +15,8 @@ from .tables import PropertyInquiryTable, ApplicationTable, OrganizationTable
 from applications.models import Application
 from property_inquiry.models import propertyInquiry
 
+#class CustomFormSignupView(allauth.account.views.SignupView):
+#    form_class = CustomSignupForm
 
 @login_required
 def profile_home(request):
