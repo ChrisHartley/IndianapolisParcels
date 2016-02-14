@@ -28,7 +28,11 @@ for a {{ site_name }} account and sign in below:{% endblocktrans %}</p>
 {% include "socialaccount/snippets/login_extra.html" %}
 
 {% else %}
-<p>{% blocktrans %}If you have not created an account yet, then please
+<p>{% blocktrans %}We just launched a new application system to provide you with
+   a better experience. You will now need to create an account and sign in before
+   submitting an application or scheduling a property visit.</p>
+   <p>
+  If you have not created an account yet, then please
 <a href="{{ signup_url }}">create an account</a> first.{% endblocktrans %}</p>
 {% endif %}
 
