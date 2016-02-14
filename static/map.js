@@ -95,7 +95,7 @@ function onFeatureSelect(feature) {
 	popup = new OpenLayers.Popup.FramedCloud("chicken",
                          feature.geometry.getBounds().getCenterLonLat(),
                          null,
-						 jQuery.ajax({ type: "GET", url: '/propertyPopup/', data: {parcel: feature.attributes.parcel}, async: false}).responseText,
+						 jQuery.ajax({ type: "GET", url: '/map/propertyPopup/', data: {parcel: feature.attributes.parcel}, async: false}).responseText,
                          null, true, onPopupClose);
     feature.popup = popup;
     map.addPopup(popup);
