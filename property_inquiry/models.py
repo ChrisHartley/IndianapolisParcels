@@ -13,3 +13,6 @@ class propertyInquiry(models.Model):
 
     class Meta:
         verbose_name_plural = "property inquiries"
+
+    def __unicode__(self):
+        return '%s - %s' % (self.Property, self.user.email)
