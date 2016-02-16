@@ -78,27 +78,6 @@ def showApplicantProfileForm(request):
         'success': success
     }, context_instance=RequestContext(request))
 
-# no longer used?
-@login_required
-def add_organization_popup(request):
-    success = False
-    if request.method == 'POST':
-        orgForm = OrganizationForm(request.POST, request.FILES)
-        if orgForm.is_valid():
-            pending = orgForm.save(commit=False)
-            pending.user = request.user
-            pending.save()
-            return HttpResponse('<html><body><script type="text/javascript">opener.dismissAddAnotherPopup(window, "%s", "%s");</script></body></html>' % (escape(pending.pk), escapejs(pending)))
-    else:
-        orgForm = OrganizationForm()
-
-    return render_to_response('create_organization_popup.html', {
-        'form': orgForm,
-        'success': success,
-        'title': "new organization"
-    }, context_instance=RequestContext(request))
-
-
 class edit_organization(View):
 
     def get(self, request, id=None):

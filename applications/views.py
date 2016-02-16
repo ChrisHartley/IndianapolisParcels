@@ -7,6 +7,7 @@ from django.core.serializers.json import Serializer
 #from django.core.serializers.json import DjangoJSONEncoder
 from django.template import RequestContext
 from django.contrib.auth.decorators import login_required
+from django.contrib.admin.views.decorators import staff_member_required
 from django.forms.formsets import formset_factory
 from django.forms.models import modelformset_factory
 from django.utils.encoding import is_protected_type
@@ -21,9 +22,6 @@ from property_inventory.models import Property
 from user_files.models import UploadedFile
 from django.contrib.auth.models import User
 
-
-#from formtools.wizard.views import SessionWizardView
-#from django.core.files.storage import FileSystemStorage
 
 # used to send confirmation email
 from django.core.mail import send_mail
@@ -121,7 +119,7 @@ class DisplayNameJsonSerializer(Serializer):
             self._current[field.name] = field.value_to_string(obj)
 
 
-@login_required
+@staff_member_required
 def applications_asJson(request):
     json_serializer = DisplayNameJsonSerializer()
     json = json_serializer.serialize(Application.objects.exclude(
@@ -129,7 +127,7 @@ def applications_asJson(request):
     return HttpResponse(json, content_type='application/json')
 
 
-@login_required
+@staff_member_required
 def applications_datatable(request):
     return render_to_response('admin_datatables.html', {
         'title': 'applications'
@@ -143,126 +141,3 @@ def application_confirmation(request, id):
         'title': 'thank you',
         'Property': app.Property,
     })
-
-# APPLICATION_FORMS = [
-#     ('QualifyingQuestions', ApplicationForm0),
-#     ('PropertyAndApplicationType', ApplicationForm1),
-#     ('EndBuyerAndUse', ApplicationForm2),
-#     ('Improvements', ApplicationForm3),
-#     ('Financing', ApplicationForm4),
-#     ('Sidelot', ApplicationForm5),
-# ]
-#
-#
-# def standard_app_selected(wizard):
-#     cleaned_data = wizard.get_cleaned_data_for_step('PropertyAndApplicationType') or {'application_type': 'none'}
-#     return cleaned_data['application_type'] == Application.STANDARD
-#
-# def sidelot_app_selected(wizard):
-#     cleaned_data = wizard.get_cleaned_data_for_step('PropertyAndApplicationType') or {'application_type': 'none'}
-#     return cleaned_data['application_type'] == Application.SIDELOT
-#
-# def homestead_app_selected(wizard):
-#     cleaned_data = wizard.get_cleaned_data_for_step('PropertyAndApplicationType') or {'application_type': 'none'}
-#     return cleaned_data['application_type'] == Application.HOMESTEAD
-#
-#
-# class ApplicationFormWizard(SessionWizardView):
-#     form_list = APPLICATION_FORMS
-#     location=os.path.join(settings.MEDIA_ROOT, 'applicants', 'files')
-#     file_storage = FileSystemStorage(settings.MEDIA_ROOT)
-#     template_name = 'application_steps.html'
-#     instance = None
-#     condition_dict={
-#         'EndBuyerAndUse': standard_app_selected,
-#         'Improvements': standard_app_selected or homestead_app_selected,
-#         'Financing': standard_app_selected or homestead_app_selected,
-#         'Sidelot': sidelot_app_selected,
-#     }
-#
-#     # def get_form_initial(self, step):
-#     #     initial = {}
-#     #     print "in get_form_initial()"
-#     #     try:
-#     #         data = IncompleteApplication.objects.get(user=self.request.user)
-#     #         print "loaded incompleteapplication"
-#     #         unpickled_data = pickle.loads(data.postdata)
-#     #         pprint(unpickled_data)
-#     #         initial = unpickled_data['step_data']
-#     #         #initial['']
-#     #         #pprint(initial)
-#     #         #pprint(initial['QualifyingQuestions'])
-#     #
-#     #     except:
-#     #         pass
-#     #     # if step in self.request.session['wizard_application_form_wizard']['step_data']:
-#     #     #     pprint(self.request.session['wizard_application_form_wizard']['step_data'][step])
-#     #     #     for key, value in self.request.session['wizard_application_form_wizard']['step_data'][step]:
-#     #     #         initial[key] = value
-#     #     #         print key,value
-#     #     print "Step is:", step
-#     #     try:
-#     #         print "returning initial from saved data"
-#     #         return self.initial_dict.get(step, initial[step])
-#     #     except:
-#     #         print "returning blank initial"
-#     #         return self.initial_dict.get(step, {})
-#     #     #return self.request.session['wizard_application_form_wizard']['step_data']
-#     #
-#     # def process_step(self, form):
-#     #     try:
-#     #         data = IncompleteApplication.objects.get(user=self.request.user)
-#     #         print "loaded incompleteapplication"
-#     #     except:
-#     #         data = IncompleteApplication(user=self.request.user)
-#     #         print "exception created incompleteapplication"
-#     #     #for k,v in self.request.session:
-#     #     #pprint(self.request.session['wizard_application_form_wizard'])
-#     #
-#     #     data.postdata=pickle.dumps(self.request.session['wizard_application_form_wizard']['step_data'])
-#     #     data.save()
-#     #     print "saved progress"
-#     #     return self.get_form_step_data(form)
-#
-#     def get_form_instance(self, step):
-#         if self.instance is None:
-#             self.instance = Application(user=self.request.user)
-#         return self.instance
-#
-#     def done(self, form_list, form_dict, **kwargs):
-#         self.instance.save()
-#         applicant_email = self.instance.user.email
-#         property_address = form_dict['PropertyAndApplicationType'].cleaned_data['Property']
-#         msg_plain = render_to_string('email/application_submitted.txt', {
-#             'user': self.instance.user.first_name,
-#             'Property': property_address,
-#
-#             }
-#         )
-#         send_mail(
-#             'Application received: {0}'.format(property_address),
-#             msg_plain,
-#             'info@renewindianapolis.org',
-#             [applicant_email],
-#         )
-#         # delete pickle for application in progress
-#         IncompleteApplication.objects.get(user=self.request.user).delete()
-#         return HttpResponseRedirect('/page-to-redirect-to-when-done/')
-#
-# application_form_wizard_view = ApplicationFormWizard.as_view()
-#
-# def ResumeApplicationFormWizard(request):
-#     try:
-#         prev_data = IncompleteApplication.objects.get(user=request.user)
-#         print prev_data
-#         #request.POST = pickle.loads(prev_data.postdata)
-#         #s['wizard_application_form_wizard'] = pickle.loads(prev_data.postdata)
-#         #s.save()
-#         request.session['wizard_application_form_wizard']['step_data'] = pickle.loads(prev_data.postdata)
-#
-#     except:
-#         raise Http404("Application does not exist")
-#     #print application_form_wizard_view(request)
-#     #return HttpResponseRedirect('/apply2/')
-# return application_form_wizard_view(request,
-# initial_dict=pickle.loads(prev_data.postdata))
