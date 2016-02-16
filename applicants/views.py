@@ -29,7 +29,7 @@ def profile_home(request):
 
     try:
         applications = Application.objects.filter(
-            user=request.user).order_by('-modified')
+            user=request.user).exclude(status=Application.INITIAL_STATUS).order_by('-modified')
         applications_table = ApplicationTable(applications)
     except Application.DoesNotExist:
         applications_table = None
