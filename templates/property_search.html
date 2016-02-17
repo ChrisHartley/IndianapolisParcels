@@ -3,6 +3,7 @@
 {% load crispy_forms_tags %}
 
 {% block wpwrap-header %}
+  <meta charset="utf-8">
 <!-- jQuery UI used for dialog() -->
 <script src="//code.jquery.com/ui/1.11.4/jquery-ui.min.js"></script>
 <link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/flick/jquery-ui.css">
@@ -85,7 +86,7 @@
 
 </div>
 <div>
-	<a href="{% url 'inventory_download' %}">Download the complete inventory as a spreadsheet</a>
+	<a class="btn btn-info btn-lg" role="button" href="{% url 'inventory_download' %}"><span class="glyphicon glyphicon-floppy-save" aria-hidden="true"></span> download our complete inventory as a spreadsheet</a>
 </div>
 <script src={% static "map.js" %}></script>
 {% endblock wpwrap-content %}
