@@ -42,12 +42,15 @@ var table = jQuery('#search_results').DataTable({
 						{"data": "properties.price",
                          "render": function ( data ) { return numberWithCommas(data); }
                         },
-                //        {"data": "properties.zipcode"},
-                //        {"data": "properties.zone"},
+            {"data": "properties.zipcode"},
+            {"data": "properties.zone"},
 						{"data": "properties.nsp",
                          "render": function(data){ return boolean_to_yesno(data); }
                         },
-                        {"data": "properties.cdc"},
+            {"data": "properties.quiet_title_complete",
+                         "render": function(data){ return boolean_to_yesno(data); }
+                        },
+            {"data": "properties.cdc"},
 						{"data": "properties.sidelot_eligible",
                          "render": function(data){ return boolean_to_yesno(data); }
                         },
