@@ -45,8 +45,6 @@ def show_all_properties(request):
     return render(request, 'testing.html', {'all_properties_select': all_prop_select, 'all_properties_prefetch': all_prop_prefetch})
 
 # given a parcel number return a json with a number of fields
-
-
 def getAddressFromParcel(request):
     if 'parcel' in request.GET and request.GET['parcel']:
         parcelNumber = request.GET.__getitem__('parcel')
@@ -120,7 +118,7 @@ def searchProperties(request):
                                       f,
                                       geometry_field='geometry',
                                       fields=('id', 'parcel', 'streetAddress', 'zipcode', 'zone', 'status', 'structureType',
-                                              'sidelot_eligible', 'homestead_only', 'price', 'nsp', 'renew_owned', 'price_obo', 'cdc', 'geometry'),
+                                              'sidelot_eligible', 'homestead_only', 'price', 'nsp', 'renew_owned', 'price_obo', 'cdc', 'quiet_title_complete', 'geometry'),
                                       use_natural_foreign_keys=True
                                       )
             return HttpResponse(s, content_type='application/json')
