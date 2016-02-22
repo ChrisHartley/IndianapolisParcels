@@ -44,25 +44,36 @@ var table = jQuery('#search_results').DataTable({
                         },
             {"data": "properties.zipcode"},
             {"data": "properties.zone"},
+            {"data": "properties.cdc"},
+
 						{"data": "properties.nsp",
                          "render": function(data){ return boolean_to_yesno(data); }
                         },
             {"data": "properties.quiet_title_complete",
                          "render": function(data){ return boolean_to_yesno(data); }
                         },
-            {"data": "properties.cdc"},
 						{"data": "properties.sidelot_eligible",
                          "render": function(data){ return boolean_to_yesno(data); }
                         },
 						{"data": "properties.homestead_only",
                          "render": function(data){ return boolean_to_yesno(data); }
-                        },
-                        {"data": "properties.renew_owned",
-                         "render": function(data){ return boolean_to_yesno(data); }
-                        },
-                        {"data": "properties.price_obo",
-                         "render": function(data){ return boolean_to_yesno(data); }
-                        },
+                       },
+           {"data": "properties.urban_garden",
+                        "render": function(data){ return boolean_to_yesno(data); }
+                      },
+          {"data": "properties.bep_demolition",
+                       "render": function(data){ return boolean_to_yesno(data); }
+                     },
+
+            {"data": "properties.area",
+                      "render": function ( data ) { return numberWithCommas(data); }
+                    },
+            {"data": "properties.renew_owned",
+             "render": function(data){ return boolean_to_yesno(data); }
+            },
+            {"data": "properties.price_obo",
+             "render": function(data){ return boolean_to_yesno(data); }
+            },
 
 
 					]

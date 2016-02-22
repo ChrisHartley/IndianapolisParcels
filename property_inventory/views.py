@@ -33,7 +33,7 @@ from property_inventory.forms import PropertySearchForm, SearchForm
 from property_inventory.filters import PropertySearchFilter
 
 def get_inventory_csv(request):
-    qs = Property.objects.all().values('parcel', 'streetAddress', 'zipcode__name', 'quiet_title_complete','nsp','zone__name','cdc__name', 'applicant', 'status','area', 'price', 'price_obo')
+    qs = Property.objects.all().values('parcel', 'streetAddress', 'zipcode__name', 'structureType','quiet_title_complete','nsp','zone__name','cdc__name', 'urban_garden', 'bep_demolition','homestead_only','applicant', 'status','area', 'price', 'price_obo', 'renew_owned')
     #qs = Property.objects.all().prefetch_related('cdc', 'zone', 'zipcode')
     return render_to_csv_response(qs)
 
@@ -118,7 +118,8 @@ def searchProperties(request):
                                       f,
                                       geometry_field='geometry',
                                       fields=('id', 'parcel', 'streetAddress', 'zipcode', 'zone', 'status', 'structureType',
-                                              'sidelot_eligible', 'homestead_only', 'price', 'nsp', 'renew_owned', 'price_obo', 'cdc', 'quiet_title_complete', 'geometry'),
+                                              'sidelot_eligible', 'homestead_only', 'bep_demolition', 'quiet_title_complete',
+                                              'urban_garden','price', 'nsp', 'renew_owned', 'area','price_obo', 'cdc', 'geometry'),
                                       use_natural_foreign_keys=True
                                       )
             return HttpResponse(s, content_type='application/json')
