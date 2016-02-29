@@ -45,7 +45,7 @@ class PropertySearchForm(forms.ModelForm):
                 Field('status'),
             ),
             Fieldset('', HTML(
-                '<button id="searchToggle">Show more search options >>></button><br/>')),
+                '<a href="#" class="btn btn-default" id="searchToggle" role="button">Show more search options >>></a><br/>')),
             Fieldset(
                 '',
                 Field('nsp'),
