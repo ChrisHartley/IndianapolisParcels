@@ -8,7 +8,12 @@ class UploadedFileInline(admin.TabularInline):
 
 
 class ApplicationAdmin(admin.ModelAdmin):
-    #    search_fields = ('parcel', 'streetAddress')
+
+
+    list_display = ('modified','Property', 'get_user', 'organization','status')
+    search_fields = ('Property__parcel', 'Property__streetAddress', 'user__email', 'user__first_name', 'user__last_name')
     inlines = [ UploadedFileInline]
+    def get_user(self, obj):
+        return obj.user.first_name + ' ' + obj.user.last_name + ' - ' + obj.user.email
 
 admin.site.register(Application, ApplicationAdmin)
