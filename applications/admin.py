@@ -4,7 +4,7 @@ from user_files.models import UploadedFile
 
 class UploadedFileInline(admin.TabularInline):
     model = UploadedFile
-    extra = 0
+    extra = 1
 
 
 class ApplicationAdmin(admin.ModelAdmin):
