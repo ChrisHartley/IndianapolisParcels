@@ -12,8 +12,6 @@ from applicants.widgets import AddAnotherWidgetWrapper
 from django.core.exceptions import ValidationError
 
 
-
-
 class ApplicationForm(forms.ModelForm):
     Property = forms.ModelChoiceField(
         queryset=Property.objects.exclude(status__contains='Sale approved by MDC').exclude(is_active__exact=False).exclude(

@@ -198,7 +198,7 @@ class Application(models.Model):
         blank=True
     )
 
-    staff_pof_total = models.IntegerField(
+    staff_pof_total = models.DecimalField(max_digits=10, decimal_places=2,
         help_text="Total funds demonstrated",
         verbose_name='Staff determined PoF',
         null=True,
