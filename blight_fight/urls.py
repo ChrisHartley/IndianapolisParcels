@@ -59,7 +59,8 @@ urlpatterns = patterns('',
                            name='applications_ajax'),
                        url(r'admin_applications$', TemplateView.as_view(
                            template_name="admin_datatables.html")),
-
+                       url(r'admin_applications_view/(?P<id>\w+)/$',
+                            'applications.views.admin_view_application', name='application_view'),
                        url(r'accounts/profile$', 'applicants.views.profile_home',
                            name='applicants_home'),
                        url(r'accounts/profile/edit$',
@@ -80,6 +81,9 @@ urlpatterns = patterns('',
                            'user_files.views.delete_uploaded_file', name='uploadedfile_delete'),
                        url(r'utils/upload_file/$',
                            'user_files.views.import_uploader', name='my_ajax_upload'),
+                       url(r'utils/download_file/(?P<id>\w+)$',
+                           'user_files.views.send_file', name='download_file'),
+
                        url(r'application/thanks/(?P<id>[0-9]+)$',
                            'applications.views.application_confirmation', name='application_confirmation'),
 
@@ -87,7 +91,7 @@ urlpatterns = patterns('',
                            'applications.views.process_application', name='process_application'),
                        url(r'application/(?P<action>\w+)/(?P<id>[0-9]+)/$',
                            'applications.views.process_application', name='process_application'),
-
+                       url(r'^asdfasdf/$', TemplateView.as_view(template_name='new_map_test.html'))
 
 
                        )
