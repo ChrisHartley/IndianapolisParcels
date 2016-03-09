@@ -19,6 +19,7 @@ from .forms import ApplicationForm
 #from user_files.forms import UploadedFileForm
 from .models import Application
 from property_inventory.models import Property
+from applicants.models import ApplicantProfile
 from user_files.models import UploadedFile
 from django.contrib.auth.models import User
 
@@ -119,7 +120,6 @@ class DisplayNameJsonSerializer(Serializer):
             self._current[field.name] = field.value_to_string(obj)
 
 
-@staff_member_required
 def applications_asJson(request):
     json_serializer = DisplayNameJsonSerializer()
     json = json_serializer.serialize(Application.objects.exclude(
@@ -133,6 +133,25 @@ def applications_datatable(request):
         'title': 'applications'
     }, context_instance=RequestContext(request))
 
+@staff_member_required
+def admin_view_application(request, id):
+    app = get_object_or_404(Application, id=id)
+    print app
+    applicant = app.user
+    print applicant
+    applicant_profile = get_object_or_404(ApplicantProfile, user=applicant)
+    print applicant_profile
+    form = ApplicationForm(instance=app, user=applicant, id=app.pk)
+    print "form.is_bound: ",form.is_bound
+    print "errors here:", form.errors
+    print form.is_valid()
+    if form.is_valid():
+        saved_form = form.save(commit=False)
+        blah = form.validate_for_submission(id=saved_form.id)
+        print blah
+    else:
+        print "errors", form.errors
+    return render(request, 'application_view.html', {'application': app, 'applicant': applicant, 'applicant_profile': applicant_profile})
 
 @login_required
 def application_confirmation(request, id):

@@ -55,12 +55,12 @@ urlpatterns = patterns('',
                        url(r'admin_annual_report/$',
                            'annual_report_form.views.showAnnualReportIndex'),
 
-                       url(r'json_applications$', 'applications.views.applications_asJson',
-                           name='applications_ajax'),
-                       url(r'admin_applications$', TemplateView.as_view(
-                           template_name="admin_datatables.html")),
-                       url(r'admin_applications_view/(?P<id>\w+)/$',
-                            'applications.views.admin_view_application', name='application_view'),
+                       #url(r'json_applications$', 'applications.views.applications_asJson',
+                    #       name='applications_ajax'),
+                     #  url(r'admin_applications$', TemplateView.as_view(
+                    #       template_name="admin_datatables.html")),
+                       #url(r'admin_applications_view/(?P<id>\w+)/$',
+                        #    'applications.views.admin_view_application', name='application_view'),
                        url(r'accounts/profile$', 'applicants.views.profile_home',
                            name='applicants_home'),
                        url(r'accounts/profile/edit$',
@@ -91,7 +91,7 @@ urlpatterns = patterns('',
                            'applications.views.process_application', name='process_application'),
                        url(r'application/(?P<action>\w+)/(?P<id>[0-9]+)/$',
                            'applications.views.process_application', name='process_application'),
-                       url(r'^asdfasdf/$', TemplateView.as_view(template_name='new_map_test.html'))
+                       #url(r'^asdfasdf/$', TemplateView.as_view(template_name='new_map_test.html'))
 
 
                        )
