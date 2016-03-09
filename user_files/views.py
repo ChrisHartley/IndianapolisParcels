@@ -18,11 +18,12 @@ def send_file(request, id):
     iterator for chunks of 8KB.
     """
     requested_file = get_object_or_404(UploadedFile, id=id)
-    filename = str(requested_file.supporting_document.name) 
+    filename = str(requested_file.supporting_document.name)
     wrapper = FileWrapper(open(filename,'rb'))
     content_type = mimetypes.MimeTypes().guess_type(filename)[0]
     response = HttpResponse(wrapper, content_type=content_type)
     response['Content-Length'] = os.path.getsize(filename)
+    response['Content-Disposition'] = 'attachment; filename="{}"'.format(filename)
     return response
 
 import_uploader = AjaxFileUploader()
