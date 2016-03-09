@@ -7,12 +7,11 @@ from django.core.urlresolvers import reverse
 
 class UploadedFileInline(admin.TabularInline):
     model = UploadedFile
-    #fields = ('file_download',)
+    fields = ('file_purpose', 'file_purpose_other_explanation', 'file_download',)
     readonly_fields = ('file_download',)
     extra = 0
 
     def file_download(self, obj):
-        print "!!",reverse("download_file", kwargs={'id':obj.id})
         return mark_safe('<a href="{}">{}</a>'.format(
             reverse("download_file", kwargs={'id':obj.id}),
                 "Download"
@@ -22,7 +21,7 @@ class UploadedFileInline(admin.TabularInline):
 class ApplicationAdmin(admin.ModelAdmin):
     list_display = ('modified','Property', 'user_link', 'organization','application_type','status')
     list_filter = ('status','application_type')
-    search_fields = ('Property__parcel', 'Property__streetAddress', 'user__email', 'user__first_name', 'user__last_name')
+    search_fields = ('Property__parcel', 'Property__streetAddress', 'user__email', 'user__first_name', 'user__last_name', 'organization__name')
     inlines = [ UploadedFileInline ]
     def user_link(self, obj):
        return mark_safe('<a href="{}">{}</a>'.format(
