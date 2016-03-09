@@ -23,7 +23,7 @@ def send_file(request, id):
     content_type = mimetypes.MimeTypes().guess_type(filename)[0]
     response = HttpResponse(wrapper, content_type=content_type)
     response['Content-Length'] = os.path.getsize(filename)
-    response['Content-Disposition'] = 'attachment; filename="{}"'.format(filename)
+    response['Content-Disposition'] = 'attachment; filename="{}"'.format(os.path.basename(filename))
     return response
 
 import_uploader = AjaxFileUploader()
