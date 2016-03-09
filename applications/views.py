@@ -55,6 +55,8 @@ def process_application(request, action, id=None):
         if request.method != 'POST':
             return HttpResponseNotAllowed('Error - POST required to save')
         app = get_object_or_404(Application, id=id, user=request.user)
+        if app.frozen == True:
+            return HttpResponse("This application has been submitted and can not be editted. To unfreeze this application email chris.hartley@renewindianapolis.org.", status=403)
         form = ApplicationForm(request.POST, request.FILES,
                                user=request.user, instance=app, id=app.pk)
         if form.is_valid():
@@ -106,7 +108,7 @@ def process_application(request, action, id=None):
 
 
 
-
+# no longer needed since switching to admin app instead of home rolled dataTables
 class DisplayNameJsonSerializer(Serializer):
 
     def handle_field(self, obj, field):
@@ -118,20 +120,6 @@ class DisplayNameJsonSerializer(Serializer):
             self._current[field.name] = value
         else:
             self._current[field.name] = field.value_to_string(obj)
-
-
-def applications_asJson(request):
-    json_serializer = DisplayNameJsonSerializer()
-    json = json_serializer.serialize(Application.objects.exclude(
-        status=Application.INITIAL_STATUS), use_natural_foreign_keys=True)
-    return HttpResponse(json, content_type='application/json')
-
-
-@staff_member_required
-def applications_datatable(request):
-    return render_to_response('admin_datatables.html', {
-        'title': 'applications'
-    }, context_instance=RequestContext(request))
 
 @staff_member_required
 def admin_view_application(request, id):
