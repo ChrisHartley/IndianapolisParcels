@@ -29,7 +29,7 @@ from property_inventory.models import Property, Zipcode, CDC, Zoning
 from property_inventory.filters import ApplicationStatusFilters
 from property_inventory.tables import PropertyStatusTable
 from property_inventory.tables import PropertySearchTable
-from property_inventory.forms import PropertySearchForm, SearchForm
+from property_inventory.forms import PropertySearchForm
 from property_inventory.filters import PropertySearchFilter
 
 def get_inventory_csv(request):
