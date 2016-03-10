@@ -104,41 +104,11 @@ class Application(models.Model):
         blank=True
     )
 
-    # scope_of_work = models.FileField(
-    # 	upload_to=UploadToApplicationDir('files/'),
-    # 	help_text="""The scope of work is a detailed, step by step list of what improvements you
-    # 		will make to the property along with how much you expect each step to cost. If you need to
-    # 		gain access to the property to do this you can submit the <a href="/property-inquiry-form/">Property Inquiry form</a> and
-    # 		someone from the city will contact you to set up a time for your and anyone you need to
-    # 		bring with you to see the property. We highly recommend using our <a href="/wp-content/uploads/Example-Scope-of-Work-updated.xls">Example Scope of Work</a>
-    # 		as a template.
-    # 		""",
-    # 	null=True,
-    # 	blank=True
-    #
-    # )
-
-    # elevation_view = models.FileField(
-    # 	upload_to=UploadToApplicationDir('files/'),
-    # 	help_text="""An elevation view is required for new construction. The elevation view
-    # 		does not need to be final but should be representative of your final plans. This is not required if you are rehabbing an existing structure.
-    # 	""",
-    # 	null=True,
-    # 	blank=True
-    #
-    # )
-
     long_term_ownership = models.CharField(
         max_length=255,
         help_text="Who will own the property long-term?",
         blank=True
     )
-
-    # team_members = models.TextField(
-    #	max_length=5120,
-    #	help_text="Have you identified which contractors, property managers, construction managers, or others will be part of this work? What experience do they have?",
-    #	blank=True
-    #)
 
     estimated_cost = models.PositiveIntegerField(
         null=True,
@@ -155,25 +125,6 @@ class Application(models.Model):
 		""",
         blank=True
     )
-
-    # proof_of_funds = models.FileField(
-    # 	upload_to=UploadToApplicationDir('files/'),
-    # 	null=True,
-    # 	blank=True,
-    # 	help_text="""Acceptable proof of funds may include: a bank statement showing the cash on
-    # 				hand, a letter from the bank showing pre-approval, a letter from an investor stating
-    # 				there are funds available for the applicant to use on the property development, or an
-    # 				IRA statement showing cash on hand that is approved for investment.  This is not an
-    # 				exhaustive list of what may constitute proof of funds, other proof of funds tools may
-    # 				be accepted.  Additionally for a pre-approval letter, an applicant will be asked to
-    # 				update the approval status at a later date, including a possible simultaneous closing."""
-    # )
-
-    # grant_funds = models.TextField(
-    # 	max_length=5120,
-    # 	help_text="List grants you plan to utilize, if any. If you aren't using grants, leave this blank. Note whether any grants are committed, applied for, or planned. Renew Indianapolis does not offer any grants at this time.",
-    # 	blank=True
-    # )
 
     timeline = models.TextField(
         max_length=5120,
@@ -272,74 +223,7 @@ class Application(models.Model):
         return '%s - %s' % (self.user.email, self.Property)
 
 
-# class UploadedFile(models.Model):
-#     PURPOSE_SOW = 1
-#     PURPOSE_POF = 2
-#     PURPOSE_LOS = 3
-#     PURPOSE_ELEVATION_VIEW = 4
-#     PURPOSE_SCHEDULE_OF_VALUES = 5
-#     PURPOSE_OTHER = 6
-#     PURPOSE_SOS_ENTITY_REPORT = 7
-#     PURPOSE_IRS_DETERMINATION_LETTER = 8
-#     PURPOSE_MOST_RECENT_FINANCIAL_STATEMENT = 9
-#
-#     FILE_PURPOSE_CHOICES = (
-#         (PURPOSE_SOW, 'Scope of Work'),
-#         (PURPOSE_POF, 'Proof of Funds'),
-#         (PURPOSE_LOS, 'Letter of Support'),
-#         (PURPOSE_ELEVATION_VIEW, 'Elevation View'),
-#         (PURPOSE_SCHEDULE_OF_VALUES, 'Schedule of Values'),
-#         (PURPOSE_SOS_ENTITY_REPORT, 'Secretary of State Business Entity Report'),
-#         (PURPOSE_IRS_DETERMINATION_LETTER, 'IRS Determination Letter'),
-#         (PURPOSE_MOST_RECENT_FINANCIAL_STATEMENT,
-#          "Organization's Most Recent Financial Statement"),
-#         (PURPOSE_OTHER, 'Other')
-#
-#     )
-#     user = models.ForeignKey(User)
-#     application = models.ForeignKey(Application)
-#     created = models.DateTimeField(auto_now_add=True)
-#     supporting_document = models.FileField(
-#         upload_to="attachments/%Y/%m/%d", max_length=512)
-#     file_purpose = models.IntegerField(choices=FILE_PURPOSE_CHOICES)
-#     file_purpose_other_explanation = models.CharField(
-#         verbose_name='What is this file?',
-#         blank=True,
-#         max_length=255
-#     )
-#
-#     def __unicode__(self):
-#         return os.path.basename(self.supporting_document.name)
-#
-#     @receiver(file_uploaded, sender=AjaxFileUploader)
-#     def create_on_upload(sender, backend, request, **kwargs):
-#         if virus_scan(backend):
-#             return
-#         app = Application.objects.get(id=request.GET['application'])
-#         new_path = os.path.join(
-#             settings.MEDIA_ROOT, request.user.email, os.path.basename(backend.path))
-#         dst_dir = os.path.join(settings.MEDIA_ROOT, request.user.email)
-#         basename = os.path.basename(new_path)
-#         head, tail = os.path.splitext(basename)
-#         dst_file = os.path.join(dst_dir, basename)
-#         # rename if necessary
-#         count = 0
-#         while os.path.exists(dst_file):
-#             count += 1
-#             dst_file = os.path.join(dst_dir, '%s-%d%s' % (head, count, tail))
-#
-#         os.renames(backend.path, dst_file)
-#         UploadedFile.objects.create(file_purpose=request.GET[
-#                                     'file_purpose'], supporting_document=new_path, user=request.user, application=app)
-
-
 class Meeting(models.Model):
-
-    APPROVED_STATUS = 1
-    NOT_APPROVED_STATUS = 2
-    TABLED_STATUS = 3
-    SCHEDULED_STATUS = 4
-
     REVIEW_COMMITTEE = 1
     BOARD_OF_DIRECTORS = 2
     MDC = 3
@@ -352,13 +236,30 @@ class Meeting(models.Model):
         (RFP_COMMITTEE, 'RFP Committee'),
     )
 
+    meeting_date = models.DateField()
+    meeting_type = models.IntegerField(choices=MEETING_TYPE_CHOICES)
+
+    def __unicode__(self):
+        return '%s - %s' % (self.get_meeting_type_display(), self.meeting_date)
+
+
+class MeetingLink(models.Model):
+
+    APPROVED_STATUS = 1
+    NOT_APPROVED_STATUS = 2
+    TABLED_STATUS = 3
+    SCHEDULED_STATUS = 4
+
     STATUS_CHOICES = (
         (APPROVED_STATUS, 'Approved'),
         (NOT_APPROVED_STATUS, 'Not Approved'),
         (TABLED_STATUS, 'Tabled'),
         (SCHEDULED_STATUS, 'Scheduled'),
     )
-    meeting_type = models.IntegerField(choices=MEETING_TYPE_CHOICES)
-    meeting_outcome = models.IntegerField(choices=STATUS_CHOICES, null=True)
-    meeting_date = models.DateField()
+    meeting = models.ForeignKey(Meeting)
+    meeting_outcome = models.IntegerField(choices=STATUS_CHOICES, null=False, default=SCHEDULED_STATUS)
     application = models.ForeignKey(Application)
+    notes = models.CharField(max_length=1024, blank=True, null=False)
+
+    def __unicode__(self):
+        return '%s - %s' % (self.meeting, self.get_meeting_outcome_display())

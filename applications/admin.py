@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Application
+from .models import Application, Meeting, MeetingLink
 from user_files.models import UploadedFile
 
 from django.utils.safestring import mark_safe
@@ -7,7 +7,7 @@ from django.core.urlresolvers import reverse
 
 class UploadedFileInline(admin.TabularInline):
     model = UploadedFile
-    fields = ('file_purpose', 'file_purpose_other_explanation', 'supporting_document', 'file_download',)
+    fields = ('file_purpose', 'file_purpose_other_explanation', 'supporting_document', 'file_download','user','application')
     readonly_fields = ('file_download',)
     extra = 0
 
@@ -17,6 +17,10 @@ class UploadedFileInline(admin.TabularInline):
                 "Download"
             ))
         #return mark_safe("<a href='download link'>download link</a>")
+
+class MeetingLinkInline(admin.TabularInline):
+    model = MeetingLink
+    extra = 1
 
 class ApplicationAdmin(admin.ModelAdmin):
     list_display = ('modified','Property', 'user_link', 'organization','application_type','status')
@@ -42,7 +46,7 @@ class ApplicationAdmin(admin.ModelAdmin):
         })
 
     )
-    inlines = [ UploadedFileInline ]
+    inlines = [ UploadedFileInline, MeetingLinkInline ]
     def user_readable(self, obj):
         email_link = '<a target="_blank" href="https://mail.google.com/a/landbankofindianapolis.org/mail/u/1/?view=cm&fs=1&to={0}&su={1}&body={2}&tf=1">{3}</a>'.format(obj.user.email, 'Application: '+str(obj.Property), 'Hi ' +obj.user.first_name+',', obj.user.email)
         name_link = '<a href="{}">{}</a>'.format(
@@ -70,4 +74,11 @@ class ApplicationAdmin(admin.ModelAdmin):
             ))
     user_link.short_description = 'user'
 
+
+class MeetingAdmin(admin.ModelAdmin):
+    model = Meeting
+    inlines = [MeetingLinkInline]
+
 admin.site.register(Application, ApplicationAdmin)
+admin.site.register(Meeting, MeetingAdmin)
+admin.site.register(MeetingLink)
