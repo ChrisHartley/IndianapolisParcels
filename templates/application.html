@@ -117,8 +117,10 @@ $(function() {
 				'csrfmiddlewaretoken': '{{ csrf_token }}',
 			},
 			function(data){
-				$(event.target).parent().remove();
-				alert('File deleted:', data.name);
+				if (data.protected != true){
+					$(event.target).parent().remove();
+				}
+				alert(data.message);
 			} )
 	});
 });
