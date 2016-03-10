@@ -36,7 +36,7 @@ class ApplicationAdmin(admin.ModelAdmin):
             'fields': ( ('conflict_board_rc', 'conflict_board_rc_name'), 'active_citations', 'prior_tax_foreclosure', 'tax_status_of_properties_owned', 'other_properties_names_owned')
         }),
         ('Application Details', {
-            'fields': ('application_type','planned_improvements','estimated_cost','source_of_financing','is_rental','nsp_income_qualifier','long_term_ownership','timeline')
+            'fields': ('application_type','planned_improvements','estimated_cost','source_of_financing','is_rental','nsp_income_qualifier','long_term_ownership','timeline','sidelot_eligible')
 
         }),
         ('Staff fields', {
@@ -54,6 +54,7 @@ class ApplicationAdmin(admin.ModelAdmin):
                  obj.user.first_name + ' ' + obj.user.last_name
              )
         return mark_safe(name_link + ' - ' + email_link)
+    user_readable.short_description = 'user'
 
     def property_type(self, obj):
         return obj.Property.structureType
