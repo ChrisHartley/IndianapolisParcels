@@ -77,6 +77,8 @@ class ApplicationAdmin(admin.ModelAdmin):
 
 class MeetingAdmin(admin.ModelAdmin):
     model = Meeting
+    list_filter = ('meeting_type',)
+    list_display = ('meeting_type', 'meeting_date')
     inlines = [MeetingLinkInline]
 
 admin.site.register(Application, ApplicationAdmin)
