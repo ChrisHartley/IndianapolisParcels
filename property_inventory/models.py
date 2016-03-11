@@ -81,9 +81,9 @@ class Property(models.Model):
     is_active = models.BooleanField(
         default=True, help_text="Is this property listing active?")
     price_obo = models.BooleanField(
-        default=False, help_text="Price is Or Best Offer")
+        default=False, help_text="Price is Or Best Offer", verbose_name="Price is 'Or Best Offer'")
     renew_owned = models.BooleanField(
-        default=False, help_text="Property is owned directly by Renew Indianapolis or a wholly owned subsidiary.")
+        default=False, help_text="Property is owned directly by Renew Indianapolis or a wholly owned subsidiary.", verbose_name="Owned by Renew Indianapolis directly")
 
     class Meta:
         verbose_name_plural = "properties"
