@@ -1,4 +1,9 @@
 {% extends 'wp-template-header.html' %}
+
+{% block wpwrap-header %}
+<link href="{{ STATIC_URL }}paleblue/css/screen.css" media="all" rel="stylesheet" type="text/css" />
+{% endblock wpwrap-header %}
+
 {% block wpwrap-content %}
 {% load render_table from django_tables2 %}
 {% load crispy_forms_tags %}
