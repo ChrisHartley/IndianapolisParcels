@@ -1,7 +1,7 @@
-from django.contrib import admin
+from django.contrib.gis import admin
 from .models import Property, CDC
 
-class PropertyAdmin(admin.ModelAdmin):
+class PropertyAdmin(admin.OSMGeoAdmin):
     search_fields = ('parcel', 'streetAddress')
 
 
