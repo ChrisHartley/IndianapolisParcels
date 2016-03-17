@@ -31,6 +31,7 @@ from django.template.loader import render_to_string
 from pprint import pprint
 
 
+from django.views.generic import DetailView
 
 @login_required
 def process_application(request, action, id=None):
@@ -121,25 +122,25 @@ class DisplayNameJsonSerializer(Serializer):
         else:
             self._current[field.name] = field.value_to_string(obj)
 
-@staff_member_required
-def admin_view_application(request, id):
-    app = get_object_or_404(Application, id=id)
-    print app
-    applicant = app.user
-    print applicant
-    applicant_profile = get_object_or_404(ApplicantProfile, user=applicant)
-    print applicant_profile
-    form = ApplicationForm(instance=app, user=applicant, id=app.pk)
-    print "form.is_bound: ",form.is_bound
-    print "errors here:", form.errors
-    print form.is_valid()
-    if form.is_valid():
-        saved_form = form.save(commit=False)
-        blah = form.validate_for_submission(id=saved_form.id)
-        print blah
-    else:
-        print "errors", form.errors
-    return render(request, 'application_view.html', {'application': app, 'applicant': applicant, 'applicant_profile': applicant_profile})
+# @staff_member_required
+# def admin_view_application(request, id):
+#     app = get_object_or_404(Application, id=id)
+#     print app
+#     applicant = app.user
+#     print applicant
+#     applicant_profile = get_object_or_404(ApplicantProfile, user=applicant)
+#     print applicant_profile
+#     form = ApplicationForm(instance=app, user=applicant, id=app.pk)
+#     print "form.is_bound: ",form.is_bound
+#     print "errors here:", form.errors
+#     print form.is_valid()
+#     if form.is_valid():
+#         saved_form = form.save(commit=False)
+#         blah = form.validate_for_submission(id=saved_form.id)
+#         print blah
+#     else:
+#         print "errors", form.errors
+#     return render(request, 'application_view.html', {'application': app, 'applicant': applicant, 'applicant_profile': applicant_profile})
 
 @login_required
 def application_confirmation(request, id):
@@ -148,3 +149,13 @@ def application_confirmation(request, id):
         'title': 'thank you',
         'Property': app.Property,
     })
+
+class ApplicationDetail(DetailView):
+    model = Application
+    context_object_name = 'application'
+    template_name = 'application_display.html'
+
+class ApplicationDisplay(DetailView):
+    model = Application
+    context_object_name = 'application'
+    template_name = 'application_detail.html'

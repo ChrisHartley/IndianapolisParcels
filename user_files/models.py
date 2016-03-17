@@ -60,8 +60,8 @@ class UploadedFile(models.Model):
 
     )
     user = models.ForeignKey(User)
-    organization = models.ForeignKey(Organization, null=True, blank=True)
-    application = models.ForeignKey(Application, null=True, blank=True)
+    organization = models.ForeignKey(Organization, null=True, blank=True, related_name="file")
+    application = models.ForeignKey(Application, null=True, blank=True, related_name="file")
     created = models.DateTimeField(auto_now_add=True)
     supporting_document = models.FileField(
         upload_to="attachments/%Y/%m/%d", max_length=512)

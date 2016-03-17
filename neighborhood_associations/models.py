@@ -25,3 +25,5 @@ class Neighborhood_Association(Overlay):
     contact_email_address = models.CharField(max_length=255)
     last_updated = models.DateField()
     area2 = models.FloatField()
+    class Meta:
+        ordering = ['name']

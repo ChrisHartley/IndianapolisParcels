@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Application, Meeting, MeetingLink
+from .models import Application, Meeting, MeetingLink, NeighborhoodNotification
 from user_files.models import UploadedFile
 
 from django.utils.safestring import mark_safe
@@ -22,14 +22,19 @@ class MeetingLinkInline(admin.TabularInline):
     model = MeetingLink
     extra = 1
 
+class NeighborhoodNotificationAdmin(admin.TabularInline):
+    model = NeighborhoodNotification
+    #admin_order_field = 'book__author'
+    extra = 1
+
 class ApplicationAdmin(admin.ModelAdmin):
-    list_display = ('modified','Property', 'user_link', 'organization','application_type','status')
+    list_display = ('modified','Property', 'user_link', 'organization','application_type','scheduled_meeting', 'status')
     list_filter = ('status','application_type')
     search_fields = ('Property__parcel', 'Property__streetAddress', 'user__email', 'user__first_name', 'user__last_name', 'organization__name')
-    readonly_fields = ('created', 'modified', 'user_readable', 'property_type', 'property_status','property_nsp','property_sidelot')
+    readonly_fields = ('created', 'modified', 'user_readable', 'property_type', 'property_status','property_nsp','property_sidelot','scheduled_meeting','application_summary_page','application_detail_page')
     fieldsets = (
         (None, {
-            'fields': ( ('user','user_readable','organization'), ('created', 'modified'), ('Property', 'property_type','property_status','property_nsp','property_sidelot'), 'status')
+            'fields': ( ('user','user_readable','organization'), ('created', 'modified'), ('Property', 'property_type','property_status','property_nsp','property_sidelot'), 'status', ('application_summary_page','application_detail_page'))
 
         }),
         ('Qualifying Questions', {
@@ -41,12 +46,23 @@ class ApplicationAdmin(admin.ModelAdmin):
         }),
         ('Staff fields', {
             'classes': ('collapse',),
-            'fields': ('staff_summary','staff_pof_total',('staff_recommendation','staff_recommendation_notes','frozen'))
+            'fields': ('staff_summary','staff_pof_total',('staff_recommendation','staff_recommendation_notes','staff_points_to_consider','frozen'))
 
         })
 
     )
-    inlines = [ UploadedFileInline, MeetingLinkInline ]
+    inlines = [ UploadedFileInline, NeighborhoodNotificationAdmin, MeetingLinkInline ]
+
+    def application_summary_page(self, obj):
+        summary_link = '<a target="_blank" href="{}">{}</a>'.format(
+            reverse("application_summary_page", args=(obj.id,)), "View Summary Page")
+        return mark_safe(summary_link)
+
+    def application_detail_page(self, obj):
+        summary_link = '<a target="_blank" href="{}">{}</a>'.format(
+            reverse("application_detail_page", args=(obj.id,)), "View Detail Page")
+        return mark_safe(summary_link)
+
     def user_readable(self, obj):
         email_link = '<a target="_blank" href="https://mail.google.com/a/landbankofindianapolis.org/mail/u/1/?view=cm&fs=1&to={0}&su={1}&body={2}&tf=1">{3}</a>'.format(obj.user.email, 'Application: '+str(obj.Property), 'Hi ' +obj.user.first_name+',', obj.user.email)
         name_link = '<a href="{}">{}</a>'.format(
@@ -58,6 +74,10 @@ class ApplicationAdmin(admin.ModelAdmin):
 
     def property_type(self, obj):
         return obj.Property.structureType
+
+    def scheduled_meeting(self, obj):
+        return obj.meeting.latest('meeting')
+    scheduled_meeting.admin_order_field = 'meeting'
 
     def property_nsp(self, obj):
         return obj.Property.nsp

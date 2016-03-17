@@ -2,8 +2,11 @@ from django.conf.urls import patterns, include, url
 from django.contrib import admin
 from django.conf import settings
 from django.views.generic.base import TemplateView
+from django.contrib.admin.views.decorators import staff_member_required
+
 
 from neighborhood_associations.views import get_relevant_neighborhood_assocations
+from applications.views import ApplicationDetail, ApplicationDisplay
 from applicants.views import edit_organization
 # from applications.views import
 
@@ -12,7 +15,6 @@ urlpatterns = patterns('',
                        url(r'admin/', include(admin.site.urls)),
                        url(r'^$', 'applicants.views.profile_home',
                            name='applicants_home'),
-                       url(r'test/$', 'property_inventory.views.show_all_properties'),
 
                        url(r'lookup_street_address/$', 'property_inventory.views.getAddressFromParcel',
                            name='get_address_from_parcel'),
@@ -55,12 +57,7 @@ urlpatterns = patterns('',
                        url(r'admin_annual_report/$',
                            'annual_report_form.views.showAnnualReportIndex'),
 
-                       #url(r'json_applications$', 'applications.views.applications_asJson',
-                    #       name='applications_ajax'),
-                     #  url(r'admin_applications$', TemplateView.as_view(
-                    #       template_name="admin_datatables.html")),
-                       #url(r'admin_applications_view/(?P<id>\w+)/$',
-                        #    'applications.views.admin_view_application', name='application_view'),
+
                        url(r'accounts/profile$', 'applicants.views.profile_home',
                            name='applicants_home'),
                        url(r'accounts/profile/edit$',
@@ -87,11 +84,14 @@ urlpatterns = patterns('',
                        url(r'application/thanks/(?P<id>[0-9]+)$',
                            'applications.views.application_confirmation', name='application_confirmation'),
 
+                       url(r'application/view/(?P<pk>[0-9]+)/$', staff_member_required(ApplicationDetail.as_view()), name="application_summary_page"),
+                       url(r'application/view/complete/(?P<pk>[0-9]+)/$', staff_member_required(ApplicationDisplay.as_view()), name="application_detail_page"),
+
                        url(r'application/(?P<action>\w+)/$',
                            'applications.views.process_application', name='process_application'),
                        url(r'application/(?P<action>\w+)/(?P<id>[0-9]+)/$',
                            'applications.views.process_application', name='process_application'),
-                       #url(r'^asdfasdf/$', TemplateView.as_view(template_name='new_map_test.html'))
+
 
 
                        )

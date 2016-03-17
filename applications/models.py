@@ -3,7 +3,7 @@ from django.contrib.auth.models import User
 
 from property_inventory.models import Property
 from applicants.models import Organization
-
+from neighborhood_associations.models import Neighborhood_Association
 from django.utils.deconstruct import deconstructible
 
 
@@ -156,6 +156,14 @@ class Application(models.Model):
         blank=True
     )
 
+    staff_pof_description = models.CharField(max_length=1024, blank=True, verbose_name="Staff description of proof of funds provided")
+
+    staff_points_to_consider = models.CharField(
+        verbose_name="Staff's suggested points to consider",
+        max_length=255,
+        blank=True
+    )
+
     # neighborhood notification - boolean or file? boolean and then collection
     # of files
 
@@ -222,6 +230,12 @@ class Application(models.Model):
             return '%s - %s - %s' % (self.user.email, self.organization.name, self.Property)
         return '%s - %s' % (self.user.email, self.Property)
 
+class NeighborhoodNotification(models.Model):
+    application = models.ForeignKey(Application, related_name="notification")
+    neighborhood = models.ForeignKey(Neighborhood_Association, blank=True)
+    #neighborhood = models.CharField(blank=True, max_length=1024)
+    #neighborhood = models.IntegerField(blank=True)
+    feedback = models.CharField(blank=True, max_length=1024)
 
 class Meeting(models.Model):
     REVIEW_COMMITTEE = 1
@@ -256,10 +270,17 @@ class MeetingLink(models.Model):
         (TABLED_STATUS, 'Tabled'),
         (SCHEDULED_STATUS, 'Scheduled'),
     )
-    meeting = models.ForeignKey(Meeting)
+    meeting = models.ForeignKey(Meeting, related_name='meeting_link')
     meeting_outcome = models.IntegerField(choices=STATUS_CHOICES, null=False, default=SCHEDULED_STATUS)
-    application = models.ForeignKey(Application)
+    application = models.ForeignKey(Application, related_name='meeting')
     notes = models.CharField(max_length=1024, blank=True, null=False)
+
+    @property
+    def meeting_date(self):
+        return self.meeting.meeting_date
 
     def __unicode__(self):
         return '%s - %s' % (self.meeting, self.get_meeting_outcome_display())
+
+    class Meta:
+        get_latest_by = 'meeting_date'

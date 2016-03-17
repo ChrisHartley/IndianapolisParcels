@@ -35,7 +35,7 @@ INSTALLED_APPS = (
     'allauth',  # added 20150526
     'allauth.account',  # added 20150526
     #	'endless_pagination', # added 20150610 for old style map search.
-    #    'django.contrib.humanize', # added 20150708 to format prices in template
+    'django.contrib.humanize', # added 20150708 to format prices in template
     #    'formtools',    # added 20151028 to use form wizard for application form
     'ajaxuploader',
     'property_inventory',
@@ -96,7 +96,7 @@ STATIC_URL = '/static/'
 
 STATICFILES_DIRS = (
     os.path.join(BASE_DIR, "static"),
-    '/home/chris/Projects/geodjango/blight_fight/static/',
+    '/home/chris/Projects/geodjango/static/',
 )
 
 # custom things added by Chris

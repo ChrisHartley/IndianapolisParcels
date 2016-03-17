@@ -19,6 +19,7 @@ class Overlay(models.Model):
 
     class Meta:
         abstract = True
+        ordering = ['name']
 
 
 class Zipcode(Overlay):
