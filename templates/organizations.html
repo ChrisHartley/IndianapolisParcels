@@ -1,0 +1,33 @@
+{% extends 'allauth-wp-base.html' %}
+{% load render_table from django_tables2 %}
+
+{% block content %}
+
+<h1>Third Party Buyers</h1>
+<p class='lead'>
+    Renew Indianapolis allows third-party application submissions,
+    provided the applicant who will take title to the property provides
+    authorization.  In these cases, the third-party should complete the
+    application in his/her account, but note the affiliated entity or
+    individual on the application.
+</p>
+<p>
+    Examples of this include a Realtor applying on behalf of a client, a family member or friend
+    completing an application on behalf of another person, an employee applying for a company, or an
+    owner applying for a property that will be owned through a self-directed IRA.
+</p>
+<p>
+    The entities or individuals that have provided authorization allowing you to submit applications on
+    their behalf appear on this page.  You can also add new entities or individuals on this page.
+</p>
+<p>
+    If you are applying for a property that you will personally own, then you don't need to do anything
+    here.
+</p>
+<p>
+{% render_table table %}
+</p>
+<p class="text-center">
+    <a href="{% url 'applicants_organization_add' %}" class="btn btn-primary" role="button">Add a new organization/third party</a>
+</p>
+{% endblock content %}

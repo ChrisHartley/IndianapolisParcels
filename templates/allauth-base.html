@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{% block head_title %}{% endblock %}</title>
+    {% block extra_head %}
+    {% endblock %}
+  </head>
+  <body>
+    {% block body %}
+
+<div class="container">
+    <div class="row">
+        <div class="col-xs-12 col-md-offset-2 col-lg-offset-4">
+            <a href="/"><img src="/wp-content/uploads/RenewIndpl4Cawd.png"/></a>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-8 col-lg-offset-2 col-md-10 col-xs-12">
+            {% if messages %}
+                <div>
+                    <strong>Messages:</strong>
+                    <ul>
+                       {% for message in messages %}
+                          <li>{{message}}</li>
+                       {% endfor %}
+                   </ul>
+                </div>
+            {% endif %}
+
+    <ul class="nav navbar-nav navbar-left">
+        <li class="dropdown">
+            <a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
+                Application Menu <span class="glyphicon glyphicon-chevron-down" aria-hidden="true"></span>
+            </a>
+
+            <ul class="dropdown-menu">
+                {% if user.is_authenticated %}
+                    <li><a href="{% url 'applicants_home' %}">Home</a></li>
+                    <li><a href="{% url 'applicants_profile' %}">Edit Profile</a></li>
+                    <li><a href="{% url 'applicants_organization' %}">Edit Third Party Buyers</a></li>
+                    <li><a href="{% url 'account_email' %}">Change E-mail</a></li>
+                    <li><a href="{% url 'account_logout' %}">Sign Out</a></li>
+                {% else %}
+                    <li><a href="{% url 'account_login' %}">Sign In</a></li>
+                    <li><a href="{% url 'account_signup' %}">Create Account</a></li>
+                {% endif %}
+            </ul>
+        </li>
+    </ul>
+</div>
+</div>
+    <div class="row">
+        <div class="col-lg-8 col-lg-offset-2 col-md-10 col-xs-12">
+
+    {% block content %}
+    {% endblock content %}
+
+    {% endblock body %}
+
+    {% block extra_body %}
+    {% endblock %}
+</div>
+</div> <!-- row -->
+
+</div> <!-- container -->
+</body>
+</html>

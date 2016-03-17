@@ -1,0 +1,66 @@
+{% extends 'base-popup.html' %}
+{% load crispy_forms_tags %}
+{% block header %}
+<!-- jQuery and UI-->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+<script type="text/javascript" src="//code.jquery.com/ui/1.10.3/jquery-ui.min.js"></script>
+
+<!-- Bootstrap -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap-theme.min.css">
+
+<script src="{{ STATIC_URL }}ajaxuploader/js/fileuploader.js" ></script>
+<link href="{{ STATIC_URL }}ajaxuploader/css/fileuploader.css" media="screen" rel="stylesheet" type="text/css" />
+
+{% endblock header %}
+
+{% block body %}
+<div class="container">
+    <div class="row">
+{% if success %}
+<div class="alert alert-success" role="alert">Organization created</div>
+<script>
+setTimeout(function(){
+    window.close();
+}, 5000);
+</script>
+{% endif %}
+{% crispy form %}
+
+</div>
+<div class="row">&nbsp</div>
+
+</div>
+<script>
+$(function(){
+	var sowuploader = new qq.FileUploader({
+		action: "{% url 'my_ajax_upload' %}",
+		element: $('#file-uploader')[0],
+		multiple: true,
+		onComplete: function(id, fileName, responseJSON) {
+			if(responseJSON.success) {
+				//alert("success!");
+			} else {
+				alert("Upload Failed!");
+				console.log(fileName);
+				console.log(responseJSON);
+			}
+		},
+		onAllComplete: function(uploads) {
+			// uploads is an array of maps
+			// the maps look like this: {file: FileObject, response: JSONServerResponse}
+			alert("Uploads complete!");
+		},
+		params: {
+			'csrf_token': '{{ csrf_token }}',
+			'csrf_name': 'csrfmiddlewaretoken',
+			'csrf_xname': 'X-CSRFToken',
+			'file_purpose': '1',
+			'application': '{{ app_id }}',
+
+		},
+	});
+});
+</script>
+{% endblock body %}

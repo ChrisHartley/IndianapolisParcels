@@ -1,0 +1,46 @@
+{% extends 'base-simple.html' %}
+{% load humanize %}
+{% block center%}
+<p class="text-right">
+  Renew Indianapolis<br/>
+  Application and Staff Summary<br/>
+  {% for meeting in application.meeting.all %}
+    {{meeting}}<br/>
+  {% endfor %}
+</p>
+<h1>{{application.Property.streetAddress}} <small>{{application.user.first_name}} {{application.user.last_name}}
+  {% if application.organization %}
+{{application.organization}}
+{% endif %}</small></h1>
+<dl>
+<dt>Property</dt><dd>{{application.Property.streetAddress}}</dd>
+<dt>Parcel</dt><dd>{{application.Property.parcel}}</dd>
+
+<dt>Application Type</dt><dd>{{application.get_application_type_display}}</dd>
+<dt>Applicant</dt><dd>{{application.user.first_name}} {{application.user.last_name}}</dd>
+{% if application.organization %}
+  <dt>Organization</dt><dd>{{application.organization}}</dd>
+{% endif %}
+<dt>NSP</dt><dd>{{applicant.Property.nsp|yesno:"Yes,No,Error"}}</dd>
+<dt>Staff Summary</dt>
+<dd>
+  {{application.staff_summary}}
+</dd>
+
+<dt>Value in Scope of Work/Schedule of Values</dt><dd>${{application.estimated_cost|intcomma}}</dd>
+<p>Neighborhood Notifications<br/>
+  {% for notification in application.notification.all %}
+    <dt>{{notification.neighborhood}}</dt>
+      <dd>{% if notification.feedback|length != 0 %} {{notification.feedback}} {% else %} No feedback received {% endif %}</dd>
+  {% endfor %}
+</p>
+<dt>Points to consider</dt><dd>{{application.staff_points_to_consider}}</dd>
+<dt>Staff Recommendation</dt><dd>{{application.staff_recommendation|yesno:"Yes,No,None"}}
+  {% if application.staff_recommendation_notes %} ({{application.staff_recommendation_notes}}) {% endif %}
+</dd>
+<dt></dt><dd></dd>
+
+</dl>
+<img src="https://maps.googleapis.com/maps/api/streetview?size=400x400&location={{application.Property.streetAddress}}, Indianapolis, IN" class="img-thumbnail"/>
+<img src="https://www.renewindianapolis.org/inventory_maps/parcel_{{application.Property.parcel}}.jpg" class="img-thumbnail" width="300"/>
+{% endblock center %}

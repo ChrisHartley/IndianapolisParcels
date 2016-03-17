@@ -1,0 +1,103 @@
+{% extends 'allauth-wp-base.html' %}
+
+{% block extra_head %}
+<link href="//cdnjs.cloudflare.com/ajax/libs/select2/4.0.0/css/select2.min.css" rel="stylesheet" />
+<script src="//cdnjs.cloudflare.com/ajax/libs/select2/4.0.0/js/select2.min.js"></script>
+
+{% endblock extra_head %}
+
+{% block content %}
+<div class="row">&nbsp</div>
+
+<div class="row">
+	<p class="lead">
+		We recommend completing a scope of work during your visit to the property.
+	</p>
+	<p>
+		A scope of work is required with an application. A scope of work documents the current condition of the property, what repairs you will make to the property and how much you think each repair will cost.
+		Feel free to bring your contractor, knowledgeable friends or family or whomever you need along with you to the property visit.
+	</p>
+	<p>
+		You can download our scope of work template as a <a href="//www.renewindianapolis.org/wp-content/uploads/Example-Scope-of-Work-updated.xls" target="_blank">spreadsheet</a>
+		or as a <a href="http://www.renewindianapolis.org/wp-content/uploads/Example-Scope-of-Work-updated-printable.pdf" target="_blank">printable PDF</a>.
+	</p>
+</div>
+<div class="row">&nbsp</div>
+
+<div class="row">
+
+	<div class="col-md-7">
+<!-- the actual submission form -->
+
+		{% load crispy_forms_tags %}
+		{% crispy form %}
+
+<!-- end of column div-->
+	</div>
+
+	<!-- spacer -->
+
+
+	<div class="col-md-5">
+		<dl class="dl-horizontal">
+			<dt>Structure Type</dt> <dd id="structureType"></dd>
+			<dt>Price:</dt><dd id="price"></dd>
+			<dt><a href="http://www.renewindianapolis.org/nsp-requirements/" target="_blank">NSP</a>:</dt><dd id="nsp"></dd>
+			<dt>Status:</dt><dd id="status"></dd>
+			<dt>Homestead Only:</dt><dd id="homestead_only"></dd>
+		</dl>
+	</div>
+
+
+
+<!-- end of row div -->
+</div>
+
+
+<script>
+
+function boolean_to_yesno(boolean){
+	if (boolean == true)
+		return "Yes"
+	return "No"
+}
+
+// thanks http://stackoverflow.com/questions/2901102/how-to-print-a-number-with-commas-as-thousands-separators-in-javascript
+function numberWithCommas(x) {
+    return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+}
+
+jQuery(document).ready(function($) {
+	function get_property_attributions(){
+		var	term = $("#id_Property option:selected").text().match(/[0-9]{7}$/),
+			url = "{% url 'get_address_from_parcel' %}"
+
+		if (term !== null) {
+			var posting = $.get( url, { parcel: term[0] } );
+
+			// Put the results in a div
+			posting.done(function( data ) {
+				$( "#structureType" ).text(data[0].fields.structureType);
+				$( "#status" ).text(data[0].fields.status);
+				$( "#homestead_only" ).text(boolean_to_yesno(data[0].fields.homestead_only));
+				$( "#nsp" ).text(boolean_to_yesno(data[0].fields.nsp));
+				$( "#price" ).text('$'+numberWithCommas(data[0].fields.price));
+
+			});
+		}
+	}
+
+
+
+	$('#id_Property').change(function(){
+		get_property_attributions();
+	});
+
+
+	$('#id_Property').select2({
+		placeholder: "Enter address, street name, parcel number or select from dropdown"
+	});
+});
+</script>
+
+{% endblock content %}
