@@ -33,7 +33,7 @@ from property_inventory.forms import PropertySearchForm
 from property_inventory.filters import PropertySearchFilter
 
 def get_inventory_csv(request):
-    qs = Property.objects.all().values('parcel', 'streetAddress', 'zipcode__name', 'structureType','quiet_title_complete','nsp','zone__name','cdc__name', 'urban_garden', 'bep_demolition','homestead_only','applicant', 'status','area', 'price', 'price_obo', 'renew_owned')
+    qs = Property.objects.filter(is_active=True).values('parcel', 'streetAddress', 'zipcode__name', 'structureType','quiet_title_complete','nsp','zone__name','cdc__name', 'urban_garden', 'bep_demolition','homestead_only','applicant', 'status','area', 'price', 'price_obo', 'renew_owned')
     #qs = Property.objects.all().prefetch_related('cdc', 'zone', 'zipcode')
     return render_to_csv_response(qs)
 
